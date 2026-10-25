@@ -662,9 +662,11 @@
     g.setAttribute('transform', `translate(${state.textPos.x}, ${state.textPos.y})`);
     g.setAttribute('title', 'Haz clic y arrastra para mover el texto');
 
-    // Caja delimitadora con borde sutil para arrastre
+    // Caja delimitadora con borde sutil para arrastre (completamente transparente)
     const handleBox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     handleBox.setAttribute('class', 'drag-handle-box');
+    handleBox.setAttribute('fill', 'none');
+    handleBox.setAttribute('stroke', 'none');
     handleBox.setAttribute('x', '-115');
     handleBox.setAttribute('y', '-25');
     handleBox.setAttribute('width', '230');
@@ -696,9 +698,9 @@
       nickBox.setAttribute('width', `${boxW}`);
       nickBox.setAttribute('height', `${nickSize + 12}`);
       nickBox.setAttribute('rx', `${(nickSize + 12) / 2}`);
-      nickBox.setAttribute('fill', 'rgba(0,0,0,0.5)');
+      nickBox.setAttribute('fill', 'none'); // Fondo 100% transparente sin negro
       nickBox.setAttribute('stroke', color);
-      nickBox.setAttribute('stroke-width', '1');
+      nickBox.setAttribute('stroke-width', '1.5');
       g.appendChild(nickBox);
 
       const nickEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -742,6 +744,8 @@
 
     const handle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     handle.setAttribute('class', 'drag-handle-box');
+    handle.setAttribute('fill', 'none');
+    handle.setAttribute('stroke', 'none');
     handle.setAttribute('x', `-${state.logoSize / 2 + 4}`);
     handle.setAttribute('y', `-${state.logoSize / 2 + 4}`);
     handle.setAttribute('width', `${state.logoSize + 8}`);
@@ -924,8 +928,17 @@ ${extraDetails}
       return;
     }
 
-    const frontXml = new XMLSerializer().serializeToString(frontSvg);
-    const backXml = new XMLSerializer().serializeToString(backSvg);
+    // Clonar SVGs para limpiar elementos de interacción (como cajas de arrastre)
+    const frontClone = frontSvg.cloneNode(true);
+    const backClone = backSvg.cloneNode(true);
+
+    frontClone.querySelectorAll('.drag-handle-box').forEach(el => el.remove());
+    backClone.querySelectorAll('.drag-handle-box').forEach(el => el.remove());
+    frontClone.querySelectorAll('.active-selected-part').forEach(el => el.classList.remove('active-selected-part'));
+    backClone.querySelectorAll('.active-selected-part').forEach(el => el.classList.remove('active-selected-part'));
+
+    const frontXml = new XMLSerializer().serializeToString(frontClone);
+    const backXml = new XMLSerializer().serializeToString(backClone);
 
     const imgFront = new Image();
     const imgBack = new Image();
