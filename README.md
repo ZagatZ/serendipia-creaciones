@@ -2,7 +2,7 @@
 
 Sitio web oficial y catálogo interactivo de **Serendipia Creaciones**, taller textil profesional ubicado en **Chillán, Chile**, especializado en confección a medida, bordado industrial, digitalización de matrices y estampado DTF.
 
-![Serendipia Creaciones](assets/images/logo-serendipia.svg)
+![Serendipia Creaciones](assets/images/logo-serendipia.png)
 
 ---
 

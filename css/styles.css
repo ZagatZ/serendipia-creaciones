@@ -21,18 +21,24 @@
   --text-muted: #64748b;
   --text-light: #ffffff;
 
-  /* Colores de Acento Textil & Personalización */
-  --color-magenta: #ec4899;
+  /* Colores Oficiales del Logo Serendipia Creaciones */
+  --color-magenta: #e33391;
+  --color-magenta-light: #f05cae;
+  --color-magenta-glow: rgba(227, 51, 145, 0.35);
+  --color-cyan: #00b0d0;
+  --color-cyan-light: #33c9e6;
+  --color-cyan-glow: rgba(0, 176, 208, 0.35);
+
   --color-violet: #8b5cf6;
   --color-indigo: #6366f1;
-  --color-cyan: #06b6d4;
   --color-amber: #f59e0b;
   --color-emerald: #10b981;
   --color-whatsapp: #25d366;
 
-  /* Gradientes */
-  --grad-brand: linear-gradient(135deg, #ec4899 0%, #8b5cf6 50%, #3b82f6 100%);
-  --grad-cyan: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  /* Gradientes Inspirados en el Logo (Magenta #e33391 y Cyan #00b0d0) */
+  --grad-brand: linear-gradient(135deg, #e33391 0%, #9333ea 50%, #00b0d0 100%);
+  --grad-cyan: linear-gradient(135deg, #33c9e6 0%, #00b0d0 100%);
+  --grad-magenta: linear-gradient(135deg, #f05cae 0%, #e33391 100%);
   --grad-gold: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
   --grad-emerald: linear-gradient(135deg, #10b981 0%, #059669 100%);
   --grad-card: linear-gradient(180deg, rgba(30, 41, 59, 0.5) 0%, rgba(15, 23, 42, 0.7) 100%);
@@ -40,7 +46,8 @@
   /* Sombras y Luces */
   --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.35);
-  --shadow-glow-brand: 0 0 30px rgba(139, 92, 246, 0.3);
+  --shadow-glow-brand: 0 0 30px rgba(227, 51, 145, 0.38);
+  --shadow-glow-cyan: 0 0 30px rgba(0, 176, 208, 0.38);
   --shadow-glow-wa: 0 0 25px rgba(37, 211, 102, 0.4);
 
   /* Tipografía y Dimensiones */
@@ -93,7 +100,7 @@ body::before {
   transform: translateX(-50%);
   width: 900px;
   height: 600px;
-  background: radial-gradient(circle, rgba(139, 92, 246, 0.16) 0%, rgba(236, 72, 153, 0.08) 35%, transparent 70%);
+  background: radial-gradient(circle, rgba(227, 51, 145, 0.14) 0%, rgba(0, 176, 208, 0.09) 40%, transparent 70%);
   filter: blur(100px);
   z-index: -1;
   pointer-events: none;
@@ -228,15 +235,16 @@ textarea {
 }
 
 .brand-logo-img {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+  height: 48px;
+  width: auto;
+  max-width: 130px;
+  object-fit: contain;
   transition: transform var(--trans-smooth);
   flex-shrink: 0;
 }
 
 .nav-brand:hover .brand-logo-img {
-  transform: rotate(-6deg) scale(1.05);
+  transform: scale(1.05);
 }
 
 .brand-info {
@@ -437,9 +445,9 @@ textarea {
   gap: 10px;
   padding: 8px 18px;
   border-radius: var(--radius-full);
-  background: rgba(236, 72, 153, 0.1);
-  border: 1px solid rgba(236, 72, 153, 0.3);
-  color: #f472b6;
+  background: rgba(227, 51, 145, 0.12);
+  border: 1px solid rgba(227, 51, 145, 0.35);
+  color: #f05cae;
   font-size: 0.9rem;
   font-weight: 700;
   margin-bottom: 24px;
@@ -501,8 +509,8 @@ textarea {
    Alerta Destacada: Prendas Propias o de Terceros (Requisito Clave)
    ========================================================================== */
 .third-party-callout {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);
-  border: 1px solid rgba(139, 92, 246, 0.4);
+  background: linear-gradient(135deg, rgba(227, 51, 145, 0.12) 0%, rgba(0, 176, 208, 0.12) 100%);
+  border: 1px solid rgba(227, 51, 145, 0.35);
   border-radius: var(--radius-lg);
   padding: 32px 36px;
   margin: 40px auto;
@@ -531,7 +539,7 @@ textarea {
 
 .callout-tag {
   display: inline-block;
-  background: #ec4899;
+  background: #e33391;
   color: #ffffff;
   font-size: 0.78rem;
   font-weight: 800;
@@ -926,7 +934,7 @@ textarea {
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 700;
-  color: #f472b6;
+  color: #f05cae;
   text-transform: uppercase;
 }
 
@@ -1556,8 +1564,8 @@ textarea {
 
 .ig-reel-card:hover {
   transform: translateY(-8px) scale(1.02);
-  border-color: rgba(236, 72, 153, 0.5);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(220, 39, 67, 0.25);
+  border-color: rgba(227, 51, 145, 0.5);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(227, 51, 145, 0.25);
 }
 
 .ig-reel-thumb {
@@ -1597,7 +1605,7 @@ textarea {
 
 .ig-reel-tag {
   font-size: 0.8rem;
-  color: #f472b6;
+  color: #f05cae;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -1630,7 +1638,7 @@ textarea {
 
 .ig-embed-item:hover {
   transform: translateY(-5px);
-  border-color: rgba(236, 72, 153, 0.45);
+  border-color: rgba(227, 51, 145, 0.45);
   box-shadow: 0 14px 35px rgba(0, 0, 0, 0.45);
 }
 
@@ -1649,9 +1657,9 @@ textarea {
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(236, 72, 153, 0.15);
-  border: 1px solid rgba(236, 72, 153, 0.35);
-  color: #f472b6;
+  background: rgba(227, 51, 145, 0.15);
+  border: 1px solid rgba(227, 51, 145, 0.35);
+  color: #f05cae;
   white-space: nowrap;
 }
 
@@ -1685,7 +1693,7 @@ textarea {
 .ig-embed-link {
   font-size: 0.88rem;
   font-weight: 700;
-  color: #f472b6;
+  color: #f05cae;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -1827,8 +1835,9 @@ textarea {
   }
 
   .brand-logo-img {
-    width: 36px;
-    height: 36px;
+    height: 38px;
+    width: auto;
+    max-width: 100px;
   }
 
   .nav-btn-wa .btn-wa-text {
