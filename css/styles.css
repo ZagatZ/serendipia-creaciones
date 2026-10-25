@@ -176,12 +176,14 @@ textarea {
 .text-gradient {
   background: var(--grad-brand);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .text-gradient-cyan {
   background: var(--grad-cyan);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -249,6 +251,7 @@ textarea {
   letter-spacing: -0.02em;
   background: var(--grad-brand);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.2;
   white-space: nowrap;
