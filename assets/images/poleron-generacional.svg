@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="hoodieGenBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <linearGradient id="hoodieFabricGen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <linearGradient id="embroideryThread" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbbf24" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ec4899" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fondo base oscuro -->
+  <rect width="400" height="280" rx="16" fill="url(#hoodieGenBg)"/>
+  
+  <!-- Espalda de Polerón Generacional con Capucha y Gran Bordado -->
+  <g transform="translate(100, 25)">
+    <!-- Silueta de la espalda y mangas -->
+    <path d="M40 50 L10 90 L30 135 L50 115 V215 H150 V115 L170 135 L190 90 L160 50 Q100 65 40 50 Z" 
+          fill="url(#hoodieFabricGen)" 
+          stroke="#475569" 
+          stroke-width="2"/>
+    
+    <!-- Capucha caída sobre la espalda (vista posterior) -->
+    <path d="M65 50 Q100 80 135 50 Q100 100 65 50 Z" fill="#334155" stroke="#ec4899" stroke-width="1.8"/>
+
+    <!-- Costuras dobles de sisa y hombros -->
+    <path d="M42 52 L12 92 M158 52 L188 92" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3 2"/>
+
+    <!-- Bordado de Espalda de Gran Formato: GENERACIÓN 2026 -->
+    <rect x="52" y="90" width="96" height="58" rx="6" fill="rgba(251, 191, 36, 0.08)" stroke="rgba(251, 191, 36, 0.3)" stroke-width="1" stroke-dasharray="4 2"/>
+    
+    <!-- Texto bordado en arco simulado con puntada tatami de alta densidad -->
+    <text x="100" y="112" text-anchor="middle" fill="url(#embroideryThread)" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="900" letter-spacing="1.5">GENERACIÓN</text>
+    <text x="100" y="138" text-anchor="middle" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="22" font-weight="900" letter-spacing="3">2026</text>
+
+    <!-- Apodo bordado individual del alumno en la parte baja de la espalda -->
+    <rect x="68" y="160" width="64" height="20" rx="10" fill="rgba(139, 92, 246, 0.2)" stroke="#8b5cf6" stroke-width="1"/>
+    <text x="100" y="174" text-anchor="middle" fill="#c084fc" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700">#MATI • 4° MEDIO</text>
+
+    <!-- Cintura y puños con ribb elástico pesado -->
+    <rect x="50" y="205" width="100" height="10" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+  </g>
+
+  <!-- Tag identificador de polerones generacionales -->
+  <rect x="20" y="20" width="170" height="42" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="rgba(236, 72, 153, 0.4)"/>
+  <text x="30" y="38" fill="#f472b6" font-family="monospace" font-size="10" font-weight="bold">POLERONES DE GENERACIÓN</text>
+  <text x="30" y="51" fill="#94a3b8" font-family="monospace" font-size="9">4° Medio &amp; 8° Básico • Espalda Bordada</text>
+
+  <!-- Tag de producción propia en máquina industrial -->
+  <g transform="translate(225, 225)">
+    <rect width="145" height="34" rx="17" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b" stroke-width="1"/>
+    <text x="72" y="21" text-anchor="middle" fill="#fbbf24" font-family="sans-serif" font-size="11" font-weight="700">Espalda Bordada</text>
+  </g>
+</svg>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://serendipiacreaciones.cl/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://serendipiacreaciones.cl/assets/images/logo-serendipia.svg</image:loc>
+      <image:title>Logotipo Serendipia Creaciones Taller Textil Chillán</image:title>
+      <image:caption>Taller textil especializado en confección de polerones generacionales, buzos escolares, bordados industriales y matrices de bordado</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://serendipiacreaciones.cl/assets/images/poleron-generacional.svg</image:loc>
+      <image:title>Polerones Generacionales Escolares con Espalda Bordada</image:title>
+      <image:caption>Polerón de graduación para 4° Medio y 8° Básico con espalda bordada y apodos individuales en Chillán y todo Chile</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://serendipiacreaciones.cl/assets/images/embroidery-matrix.svg</image:loc>
+      <image:title>Servicio de Bordado Industrial Textil</image:title>
+      <image:caption>Bordado computarizado de alta definición sobre prendas de confección propia o de terceros</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://serendipiacreaciones.cl/assets/images/matrix-digitizing.svg</image:loc>
+      <image:title>Matrices de Bordado Digitalizadas DST PES EMB</image:title>
+      <image:caption>Digitalización y picaje computarizado de matrices de bordado para máquinas industriales</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://serendipiacreaciones.cl/assets/images/dtf-print.svg</image:loc>
+      <image:title>Estampado Textil DTF Direct to Film Full Color</image:title>
+      <image:caption>Estampado digital térmico de alta resolución y elasticidad para cualquier tipo de tela</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://serendipiacreaciones.cl/assets/images/school-hoodie.svg</image:loc>
+      <image:title>Buzos Escolares e Institucionales Colegios</image:title>
+      <image:caption>Confección de buzos escolares de frisa antipilling con insignias bordadas o estampadas</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://serendipiacreaciones.cl/assets/images/workwear.svg</image:loc>
+      <image:title>Ropa de Trabajo e Indumentaria Laboral Industrial</image:title>
+      <image:caption>Pantalones cargo, chaquetas térmicas y chalecos industriales con cintas reflectivas homologadas</image:caption>
+    </image:image>
+  </url>
+</urlset>

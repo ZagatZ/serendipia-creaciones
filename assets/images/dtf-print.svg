@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="filmBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b" />
+      <stop offset="100%" stop-color="#27272a" />
+    </linearGradient>
+    <linearGradient id="dtfVibrant" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="30%" stop-color="#ec4899" />
+      <stop offset="70%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+  </defs>
+
+  <!-- Base textil negra 100% algodón simulada -->
+  <rect width="400" height="260" rx="16" fill="url(#filmBg)"/>
+  
+  <!-- Textura de trama textil -->
+  <path d="M0 0h400v260H0z" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="2" stroke-dasharray="2 4"/>
+
+  <!-- Lámina DTF de alta definición con degradado vivo -->
+  <g transform="translate(80, 40)">
+    <!-- Base blanca de poliamida (capa subyacente DTF) -->
+    <rect x="-4" y="-4" width="248" height="158" rx="14" fill="none" stroke="rgba(255, 255, 255, 0.4)" stroke-width="1.5" stroke-dasharray="3 3"/>
+    
+    <!-- Diseño principal estampado DTF -->
+    <rect width="240" height="150" rx="12" fill="#09090b" stroke="rgba(255,255,255,0.1)"/>
+    
+    <!-- Elementos gráficos de alta resolución con cuatricromía vibrante -->
+    <circle cx="120" cy="70" r="45" fill="url(#dtfVibrant)" />
+    <path d="M75 110 C 95 80, 145 80, 165 110 Z" fill="#ffffff" opacity="0.9"/>
+    
+    <circle cx="120" cy="65" r="28" fill="#18181b" />
+    <polygon points="120,45 127,60 142,60 130,70 134,85 120,75 106,85 110,70 98,60 113,60" fill="#facc15" />
+    
+    <!-- Texto de muestra DTF -->
+    <text x="120" y="130" text-anchor="middle" fill="#f8fafc" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="800" letter-spacing="2">DTF FULL COLOR</text>
+  </g>
+
+  <!-- Datos técnicos DTF -->
+  <rect x="20" y="20" width="135" height="38" rx="8" fill="rgba(24, 24, 27, 0.9)" stroke="rgba(244, 63, 94, 0.3)"/>
+  <text x="30" y="36" fill="#fb7185" font-family="monospace" font-size="10" font-weight="bold">ESTAMPADO DTF</text>
+  <text x="30" y="49" fill="#a1a1aa" font-family="monospace" font-size="9">Resolución: 1440 DPI</text>
+
+  <!-- Tag de adherencia y lavado -->
+  <g transform="translate(245, 205)">
+    <rect width="135" height="34" rx="17" fill="rgba(6, 182, 212, 0.15)" stroke="#06b6d4" stroke-width="1"/>
+    <text x="67" y="21" text-anchor="middle" fill="#22d3ee" font-family="sans-serif" font-size="11" font-weight="600">Elasticidad &amp; Fijación</text>
+  </g>
+</svg>

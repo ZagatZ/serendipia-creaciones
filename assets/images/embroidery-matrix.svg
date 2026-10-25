@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="bgMat" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e1b4b" />
+    </linearGradient>
+    <pattern id="stitchGrid" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M 16 0 L 0 0 0 16" fill="none" stroke="rgba(99, 102, 241, 0.15)" stroke-width="1"/>
+      <circle cx="8" cy="8" r="1" fill="rgba(147, 197, 253, 0.25)" />
+    </pattern>
+    <linearGradient id="threadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ec4899" />
+      <stop offset="50%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+  </defs>
+
+  <!-- Base de software CAD / Matriz de bordado -->
+  <rect width="400" height="260" rx="16" fill="url(#bgMat)"/>
+  <rect width="400" height="260" rx="16" fill="url(#stitchGrid)"/>
+
+  <!-- Guías técnicas y cruces de centrado de bastidor -->
+  <circle cx="200" cy="130" r="85" stroke="rgba(236, 72, 153, 0.3)" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <circle cx="200" cy="130" r="115" stroke="rgba(56, 189, 248, 0.2)" stroke-width="1.5" stroke-dasharray="6 6"/>
+  <line x1="20" y1="130" x2="380" y2="130" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+  <line x1="200" y1="20" x2="200" y2="240" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1"/>
+
+  <!-- Escudo / Logotipo vectorial digitalizado con trazos de puntadas reales -->
+  <g transform="translate(140, 60)">
+    <!-- Silueta escudo con relleno simulando bordado Tatami -->
+    <path d="M60 10 L110 30 V80 C110 115 60 135 60 135 C60 135 10 115 10 80 V30 Z" 
+          fill="rgba(99, 102, 241, 0.2)" 
+          stroke="url(#threadGrad)" 
+          stroke-width="3" 
+          stroke-linejoin="round"/>
+    
+    <!-- Puntadas de relleno simuladas (satin stitch) -->
+    <path d="M25 45 H95 M20 55 H100 M18 65 H102 M16 75 H104 M20 85 H100 M28 95 H92 M40 105 H80 M50 115 H70" 
+          stroke="#a855f7" 
+          stroke-width="2" 
+          stroke-linecap="round" 
+          opacity="0.85"/>
+    
+    <!-- Corona o insignia central bordada -->
+    <path d="M40 70 L50 50 L60 62 L70 50 L80 70 Z" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
+    <circle cx="50" cy="46" r="2.5" fill="#fef08a" />
+    <circle cx="60" cy="58" r="2.5" fill="#fef08a" />
+    <circle cx="70" cy="46" r="2.5" fill="#fef08a" />
+  </g>
+
+  <!-- Puntos de coordenadas y datos de la matriz -->
+  <rect x="20" y="20" width="130" height="42" rx="8" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(255,255,255,0.1)"/>
+  <text x="30" y="38" fill="#38bdf8" font-family="monospace" font-size="10" font-weight="bold">MATRIZ: EMB-094</text>
+  <text x="30" y="52" fill="#94a3b8" font-family="monospace" font-size="9">Puntadas: 16.480 | 6 col.</text>
+
+  <!-- Badge de precisión -->
+  <g transform="translate(260, 205)">
+    <rect width="120" height="34" rx="17" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="1"/>
+    <circle cx="16" cy="17" r="4" fill="#10b981"/>
+    <text x="28" y="21" fill="#34d399" font-family="sans-serif" font-size="11" font-weight="600">Alta Densidad</text>
+  </g>
+</svg>

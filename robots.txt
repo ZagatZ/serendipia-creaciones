@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap oficial Serendipia Creaciones
+Sitemap: https://serendipiacreaciones.cl/sitemap.xml
