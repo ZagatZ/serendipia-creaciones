@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%" fill="none">
+  <defs>
+    <linearGradient id="capBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a101d" />
+      <stop offset="100%" stop-color="#161b2e" />
+    </linearGradient>
+    <linearGradient id="capFabric" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#090d16" />
+    </linearGradient>
+    <linearGradient id="visorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="embroideryGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f05cae" />
+      <stop offset="100%" stop-color="#e33391" />
+    </linearGradient>
+  </defs>
+
+  <rect width="400" height="260" rx="16" fill="url(#capBg)"/>
+
+  <!-- Ejes de centrado de bordadora -->
+  <line x1="20" y1="130" x2="380" y2="130" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4 4"/>
+  <line x1="200" y1="20" x2="200" y2="240" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4 4"/>
+
+  <!-- Jockey / Gorro con Visera y Bordado Frontal 3D -->
+  <g transform="translate(100, 35)">
+    <!-- Corona / Casquete del Jockey -->
+    <path d="M40 120 C35 70 80 40 130 40 C175 40 195 70 190 120 Z" 
+          fill="url(#capFabric)" 
+          stroke="#334155" 
+          stroke-width="2"/>
+    
+    <!-- Costuras de los 6 paneles del jockey -->
+    <path d="M130 40 Q130 80 130 120" stroke="#475569" stroke-width="1.5"/>
+    <path d="M130 40 Q85 70 48 115" stroke="#475569" stroke-width="1.2"/>
+    <path d="M130 40 Q170 70 185 115" stroke="#475569" stroke-width="1.2"/>
+
+    <!-- Ojetillos de ventilación bordados -->
+    <circle cx="85" cy="75" r="3" fill="#0f172a" stroke="#00b0d0" stroke-width="1.2"/>
+    <circle cx="130" cy="65" r="3" fill="#0f172a" stroke="#00b0d0" stroke-width="1.2"/>
+    <circle cx="165" cy="75" r="3" fill="#0f172a" stroke="#00b0d0" stroke-width="1.2"/>
+
+    <!-- Botón superior forrado -->
+    <ellipse cx="130" cy="40" rx="6" ry="4" fill="#334155" stroke="#64748b" stroke-width="1.2"/>
+
+    <!-- Visera curva con perspectiva -->
+    <path d="M38 120 C45 138 95 160 160 152 C195 148 205 130 190 120 C165 132 100 134 38 120 Z" 
+          fill="url(#visorGrad)" 
+          stroke="#475569" 
+          stroke-width="2"/>
+    
+    <!-- Pespuntes / costuras dobles de la visera -->
+    <path d="M48 125 C65 138 110 148 165 142" stroke="#64748b" stroke-width="1" stroke-dasharray="3 2"/>
+    <path d="M56 128 C75 140 120 150 172 144" stroke="#64748b" stroke-width="1" stroke-dasharray="3 2"/>
+
+    <!-- Escudo / Logotipo Frontal Bordado en 3D Relieve -->
+    <g transform="translate(100, 75)">
+      <!-- Sombra de relieve 3D -->
+      <rect x="2" y="2" width="46" height="34" rx="8" fill="rgba(0,0,0,0.6)"/>
+      <!-- Base de bordado frontal -->
+      <rect x="0" y="0" width="46" height="34" rx="8" fill="#0f172a" stroke="#e33391" stroke-width="2"/>
+      
+      <!-- 'S' bordada con puntada satinada en relieve (Serendipia) -->
+      <path d="M30 10 C30 5 16 5 16 12 C16 19 30 18 30 24 C30 30 15 30 15 25" 
+            stroke="url(#embroideryGlow)" 
+            stroke-width="3" 
+            stroke-linecap="round" 
+            fill="none"/>
+      <circle cx="34" cy="9" r="2" fill="#00b0d0"/>
+    </g>
+  </g>
+
+  <!-- Tag de producto -->
+  <rect x="20" y="20" width="165" height="42" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="rgba(227, 51, 145, 0.4)"/>
+  <text x="30" y="38" fill="#f05cae" font-family="monospace" font-size="10" font-weight="bold">JOCKEYS PERSONALIZADOS</text>
+  <text x="30" y="51" fill="#94a3b8" font-family="monospace" font-size="9">Bordado 3D • Estampado DTF</text>
+
+  <!-- Sello de relieve -->
+  <g transform="translate(240, 205)">
+    <rect width="140" height="34" rx="17" fill="rgba(227, 51, 145, 0.15)" stroke="#e33391" stroke-width="1"/>
+    <text x="70" y="21" text-anchor="middle" fill="#f472b6" font-family="sans-serif" font-size="11" font-weight="600">Bordado 3D &amp; DTF</text>
+  </g>
+</svg>

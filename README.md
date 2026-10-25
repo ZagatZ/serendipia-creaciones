@@ -22,9 +22,10 @@ Sitio web oficial y catálogo interactivo de **Serendipia Creaciones**, taller t
 4. **Estampado Textil DTF (Direct to Film)**
    - Impresión térmica full color a 1440 DPI.
    - Acabado suave, flexible y resistente a lavados intensos sobre cualquier tela.
-5. **Confección de Buzos Escolares & Ropa de Trabajo**
+5. **Confección de Buzos Escolares, Chaquetas Cortaviento & Jockeys**
    - Uniformes institucionales en franela de algodón antipilling.
-   - Indumentaria laboral en Gabardina y Twill de alta resistencia con cintas reflectivas reglamentarias.
+   - Chaquetas cortaviento impermeables con forro térmico y personalización en bordado o DTF.
+   - Jockeys estructurados con bordado 3D en relieve o estampado DTF full color.
 
 ---
 
