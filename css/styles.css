@@ -439,6 +439,47 @@ textarea {
   margin: 0 auto;
 }
 
+/* Logotipo Oficial Grande Destacado en Hero */
+.hero-logo-box {
+  margin: 0 auto 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 10px;
+}
+
+.hero-logo-box::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 320px;
+  height: 160px;
+  background: radial-gradient(ellipse, rgba(227, 51, 145, 0.35) 0%, rgba(0, 176, 208, 0.22) 50%, transparent 75%);
+  filter: blur(35px);
+  z-index: 0;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.hero-logo-main {
+  position: relative;
+  z-index: 1;
+  width: clamp(260px, 45vw, 420px);
+  height: auto;
+  max-height: 230px;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 25px rgba(227, 51, 145, 0.35));
+  transition: transform var(--trans-smooth), filter var(--trans-smooth);
+}
+
+.hero-logo-main:hover {
+  transform: translateY(-4px) scale(1.03);
+  filter: drop-shadow(0 18px 42px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 35px rgba(227, 51, 145, 0.5));
+}
+
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -1198,14 +1239,17 @@ textarea {
 }
 
 .wa-card-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 20px;
-  padding: 8px;
+  width: 140px;
+  height: 75px;
+  border-radius: 16px;
+  padding: 8px 14px;
   background: rgba(255, 255, 255, 0.06);
-  border: 2px solid rgba(37, 211, 102, 0.4);
+  border: 2px solid rgba(227, 51, 145, 0.4);
   margin: 0 auto 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .wa-card-avatar img {
@@ -1389,6 +1433,25 @@ textarea {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 20px;
+}
+
+.footer-brand {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-logo-main {
+  width: 190px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.45));
 }
 
 .footer-copy {
