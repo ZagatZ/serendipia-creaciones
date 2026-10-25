@@ -43,7 +43,7 @@
     <rect x="68" y="160" width="64" height="20" rx="10" fill="rgba(139, 92, 246, 0.2)" stroke="#8b5cf6" stroke-width="1"/>
     <text x="100" y="174" text-anchor="middle" fill="#c084fc" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700">#MATI • 4° MEDIO</text>
 
-    <!-- Cintura y puños con ribb elástico pesado -->
+    <!-- Cintura y puños con rib elástico resistente -->
     <rect x="50" y="205" width="100" height="10" fill="#0f172a" stroke="#334155" stroke-width="1"/>
   </g>
 

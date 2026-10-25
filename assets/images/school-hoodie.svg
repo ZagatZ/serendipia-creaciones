@@ -12,7 +12,7 @@
 
   <rect width="400" height="260" rx="16" fill="url(#hoodieBg)"/>
 
-  <!-- Buzo Escolar Frisa Invisible con Costura Reforzada -->
+  <!-- Buzo Escolar Franela de Algodón con Costura Reforzada -->
   <g transform="translate(110, 25)">
     <!-- Cuerpo y mangas del buzo -->
     <path d="M45 40 L10 75 L30 115 L50 95 V195 H130 V95 L150 115 L170 75 L135 40 Q90 55 45 40 Z" 
@@ -20,7 +20,7 @@
           stroke="#3b82f6" 
           stroke-width="2"/>
     
-    <!-- Cuello redondo con ribb elástico -->
+    <!-- Cuello redondo con rib elástico -->
     <path d="M60 40 Q90 60 120 40 Q90 50 60 40 Z" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1.5"/>
 
     <!-- Costuras dobles reforzadas en hombros y sisas -->
@@ -42,7 +42,7 @@
   <!-- Tag de terminaciones -->
   <rect x="20" y="20" width="135" height="42" rx="8" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(59, 130, 246, 0.3)"/>
   <text x="30" y="38" fill="#60a5fa" font-family="monospace" font-size="10" font-weight="bold">BUZOS ESCOLARES</text>
-  <text x="30" y="51" fill="#94a3b8" font-family="monospace" font-size="9">Frisa Invisible • Antipilling</text>
+  <text x="30" y="51" fill="#94a3b8" font-family="monospace" font-size="9">Franela Algodón • Antipilling</text>
 
   <!-- Sello de costuras -->
   <g transform="translate(250, 205)">

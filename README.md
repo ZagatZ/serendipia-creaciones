@@ -9,21 +9,21 @@ Sitio web oficial y catálogo interactivo de **Serendipia Creaciones**, taller t
 ## 🚀 Servicios Principales
 
 1. **Polerones Generacionales (4° Medio & 8° Básico)**
-   - Confección en frisa pesada de primera calidad.
+   - Confección en franela de algodón premium.
    - Espaldas bordadas en relieve de gran formato (año, curso, árbol de nombres).
    - Apodos individuales bordados para cada alumno.
 2. **Servicio de Bordados Industriales**
-   - Bordado computarizado de alta densidad sobre buzos, gorras, delantales, camisas y uniformes.
+   - Bordado computarizado de alta densidad sobre buzos, jockeys, delantales, camisas y uniformes.
    - Personalización sobre **prendas propias o traídas por el cliente**.
 3. **Diseño y Digitalización de Matrices de Bordado**
-   - Picaje técnico computarizado en software especializado (Wilcom).
+   - Digitalización técnica computarizada en software especializado (Wilcom).
    - Archivos listos para cualquier máquina bordadora (.DST, .PES, .EMB, .JEF).
 4. **Estampado Textil DTF (Direct to Film)**
    - Impresión térmica full color a 1440 DPI.
    - Acabado suave, flexible y resistente a lavados intensos sobre cualquier tela.
 5. **Confección de Buzos Escolares & Ropa de Trabajo**
-   - Uniformes institucionales en frisa antipilling.
-   - Indumentaria laboral en Grafa 70 y Gabardina con cintas reflectivas reglamentarias.
+   - Uniformes institucionales en franela de algodón antipilling.
+   - Indumentaria laboral en Gabardina y Twill de alta resistencia con cintas reflectivas reglamentarias.
 
 ---
 
