@@ -8,7 +8,8 @@ Sitio web oficial y catálogo interactivo de **Serendipia Creaciones**, taller t
 
 ## 🚀 Servicios Principales
 
-1. **Polerones Generacionales (4° Medio & 8° Básico)**
+1. **Polerones Generacionales y de Curso (Todos los niveles)**
+   - Confección para cualquier etapa escolar o superior (ej. 4° Medio, 8° Básico, kínder, carreras universitarias).
    - Confección en franela de algodón premium.
    - Espaldas bordadas en relieve de gran formato (año, curso, árbol de nombres).
    - Apodos individuales bordados para cada alumno.

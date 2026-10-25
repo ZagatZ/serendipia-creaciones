@@ -50,7 +50,7 @@
   <!-- Tag identificador de polerones generacionales -->
   <rect x="20" y="20" width="170" height="42" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="rgba(236, 72, 153, 0.4)"/>
   <text x="30" y="38" fill="#f472b6" font-family="monospace" font-size="10" font-weight="bold">POLERONES DE GENERACIÓN</text>
-  <text x="30" y="51" fill="#94a3b8" font-family="monospace" font-size="9">4° Medio &amp; 8° Básico • Espalda Bordada</text>
+  <text x="30" y="51" fill="#94a3b8" font-family="monospace" font-size="9">Todos los Cursos • Espalda Bordada</text>
 
   <!-- Tag de producción propia en máquina industrial -->
   <g transform="translate(225, 225)">
