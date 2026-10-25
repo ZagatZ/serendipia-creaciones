@@ -154,10 +154,16 @@
     // Personalizaciones adicionales
     customText: 'GENERACIÓN 2026',
     customNickname: '#MATI',
-    textFont: 'var(--font-varsity)',
+    textSize: 22,
+    nickSize: 13,
+    textPos: { x: 200, y: 170 },
+    textTargetView: 'espalda', // 'espalda' o 'frente'
+    textFont: "'Plus Jakarta Sans', sans-serif",
     textColor: '#ffffff',
     textPosition: 'espalda',
     uploadedLogoSrc: null,
+    logoPos: { x: 155, y: 140 },
+    logoSize: 36,
     activeView: 'frente' // Para visualización en móviles ('frente' o 'espalda')
   };
 
@@ -182,8 +188,22 @@
     inputTextContent: document.getElementById('inputTextContent'),
     inputNicknameContent: document.getElementById('inputNicknameContent'),
     fontOptionBtns: document.querySelectorAll('.font-option-btn'),
-    posOptionBtns: document.querySelectorAll('.pos-btn'),
     inputTextColor: document.getElementById('inputTextColor'),
+    sliderTextSize: document.getElementById('sliderTextSize'),
+    labelValTextSize: document.getElementById('labelValTextSize'),
+    btnTextSizeDown: document.getElementById('btnTextSizeDown'),
+    btnTextSizeUp: document.getElementById('btnTextSizeUp'),
+    sliderNickSize: document.getElementById('sliderNickSize'),
+    labelValNickSize: document.getElementById('labelValNickSize'),
+    btnNickSizeDown: document.getElementById('btnNickSizeDown'),
+    btnNickSizeUp: document.getElementById('btnNickSizeUp'),
+    viewTargetBtns: document.querySelectorAll('.view-target-btn'),
+    posQuickBtns: document.querySelectorAll('.position-selector-grid .pos-btn'),
+    btnMoveUp: document.getElementById('btnMoveUp'),
+    btnMoveDown: document.getElementById('btnMoveDown'),
+    btnMoveLeft: document.getElementById('btnMoveLeft'),
+    btnMoveRight: document.getElementById('btnMoveRight'),
+    btnMoveCenter: document.getElementById('btnMoveCenter'),
     // Logo
     logoFileInput: document.getElementById('logoFileInput'),
     uploadDropzone: document.getElementById('uploadDropzone'),
@@ -559,8 +579,63 @@
   }
 
   // -------------------------------------------------------------------------
-  // 12. TEXTOS Y BORDADOS DINÁMICOS
+  // 12. TEXTOS Y BORDADOS DINÁMICOS CON TAMAÑO Y ARRASTRE
   // -------------------------------------------------------------------------
+  function makeSvgDraggable(element, onDrag) {
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+
+    function getPointerSvgPoint(e, svg) {
+      const pt = svg.createSVGPoint();
+      if (e.touches && e.touches.length > 0) {
+        pt.x = e.touches[0].clientX;
+        pt.y = e.touches[0].clientY;
+      } else {
+        pt.x = e.clientX;
+        pt.y = e.clientY;
+      }
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function onStart(e) {
+      const svg = element.ownerSVGElement;
+      if (!svg) return;
+      isDragging = true;
+      const pt = getPointerSvgPoint(e, svg);
+      startX = pt.x;
+      startY = pt.y;
+
+      function onMove(ev) {
+        if (!isDragging) return;
+        ev.preventDefault();
+        const curPt = getPointerSvgPoint(ev, svg);
+        const dx = curPt.x - startX;
+        const dy = curPt.y - startY;
+        startX = curPt.x;
+        startY = curPt.y;
+        onDrag(dx, dy);
+      }
+
+      function onEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseup', onEnd);
+        window.removeEventListener('touchmove', onMove);
+        window.removeEventListener('touchend', onEnd);
+      }
+
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onEnd);
+      window.addEventListener('touchmove', onMove, { passive: false });
+      window.addEventListener('touchend', onEnd);
+    }
+
+    element.addEventListener('mousedown', onStart);
+    element.addEventListener('touchstart', onStart, { passive: false });
+  }
+
   function updateTextOverlays() {
     const frontOverlay = document.getElementById('layer-overlays-frente');
     const backOverlay = document.getElementById('layer-overlays-espalda');
@@ -571,53 +646,117 @@
     const text = state.customText || '';
     const nick = state.customNickname || '';
     const color = state.textColor || '#ffffff';
-    const font = state.textFont || 'sans-serif';
+    const font = state.textFont || "'Plus Jakarta Sans', sans-serif";
+    const textSize = state.textSize || 22;
+    const nickSize = state.nickSize || 13;
 
-    // Texto en la Espalda
-    if (backOverlay && (text || nick)) {
-      backOverlay.innerHTML = `
-        <g id="embroidered-back" transform="translate(200, 180)">
-          <!-- Texto principal curvado o centrado -->
-          <text x="0" y="0" text-anchor="middle" fill="${color}" font-family="${font}" font-size="20" font-weight="900" letter-spacing="2" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));">
-            ${escapeXml(text)}
-          </text>
-          ${nick ? `
-            <!-- Apodo inferior -->
-            <rect x="-60" y="32" width="120" height="24" rx="12" fill="rgba(0,0,0,0.5)" stroke="${color}" stroke-width="1"/>
-            <text x="0" y="48" text-anchor="middle" fill="${color}" font-family="${font}" font-size="12" font-weight="800">
-              ${escapeXml(nick)}
-            </text>
-          ` : ''}
-        </g>
-      `;
+    if (!text && !nick) return;
+
+    // Inyectar en el overlay según la vista objetivo elegida por el usuario
+    const targetOverlay = state.textTargetView === 'frente' ? frontOverlay : backOverlay;
+    if (!targetOverlay) return;
+
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'draggable-text-group');
+    g.setAttribute('id', 'draggableTextLayer');
+    g.setAttribute('transform', `translate(${state.textPos.x}, ${state.textPos.y})`);
+    g.setAttribute('title', 'Haz clic y arrastra para mover el texto');
+
+    // Caja delimitadora con borde sutil para arrastre
+    const handleBox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    handleBox.setAttribute('class', 'drag-handle-box');
+    handleBox.setAttribute('x', '-115');
+    handleBox.setAttribute('y', '-25');
+    handleBox.setAttribute('width', '230');
+    handleBox.setAttribute('height', nick ? (textSize + nickSize + 32).toString() : (textSize + 24).toString());
+    handleBox.setAttribute('rx', '8');
+    g.appendChild(handleBox);
+
+    if (text) {
+      const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      textEl.setAttribute('x', '0');
+      textEl.setAttribute('y', '0');
+      textEl.setAttribute('text-anchor', 'middle');
+      textEl.setAttribute('fill', color);
+      textEl.setAttribute('font-family', font);
+      textEl.setAttribute('font-size', textSize);
+      textEl.setAttribute('font-weight', '900');
+      textEl.setAttribute('letter-spacing', '2');
+      textEl.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))';
+      textEl.textContent = text;
+      g.appendChild(textEl);
     }
 
-    // Texto en el Pecho (Frente) si la posición es frente
-    if (frontOverlay && state.textPosition === 'pecho' && text) {
-      frontOverlay.innerHTML = `
-        <g id="embroidered-front" transform="translate(160, 145)">
-          <text x="0" y="0" text-anchor="middle" fill="${color}" font-family="${font}" font-size="11" font-weight="900" letter-spacing="1">
-            ${escapeXml(text)}
-          </text>
-        </g>
-      `;
+    if (nick) {
+      const nickY = text ? (textSize + 14) : 0;
+      const nickBox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      const boxW = Math.max(90, nick.length * (nickSize * 0.75) + 24);
+      nickBox.setAttribute('x', `-${boxW / 2}`);
+      nickBox.setAttribute('y', `${nickY - nickSize - 2}`);
+      nickBox.setAttribute('width', `${boxW}`);
+      nickBox.setAttribute('height', `${nickSize + 12}`);
+      nickBox.setAttribute('rx', `${(nickSize + 12) / 2}`);
+      nickBox.setAttribute('fill', 'rgba(0,0,0,0.5)');
+      nickBox.setAttribute('stroke', color);
+      nickBox.setAttribute('stroke-width', '1');
+      g.appendChild(nickBox);
+
+      const nickEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      nickEl.setAttribute('x', '0');
+      nickEl.setAttribute('y', `${nickY + 2}`);
+      nickEl.setAttribute('text-anchor', 'middle');
+      nickEl.setAttribute('fill', color);
+      nickEl.setAttribute('font-family', font);
+      nickEl.setAttribute('font-size', nickSize);
+      nickEl.setAttribute('font-weight', '800');
+      nickEl.textContent = nick;
+      g.appendChild(nickEl);
     }
+
+    targetOverlay.appendChild(g);
+
+    // Permitir arrastre suave
+    makeSvgDraggable(g, (dx, dy) => {
+      state.textPos.x = Math.max(50, Math.min(350, state.textPos.x + dx));
+      state.textPos.y = Math.max(60, Math.min(320, state.textPos.y + dy));
+      g.setAttribute('transform', `translate(${state.textPos.x}, ${state.textPos.y})`);
+    });
   }
 
   function updateLogoOverlay() {
     const frontOverlay = document.getElementById('layer-overlays-frente');
     if (!frontOverlay || !state.uploadedLogoSrc) return;
 
-    // Agregar imagen al pecho izquierdo
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('class', 'draggable-logo-group');
+    g.setAttribute('transform', `translate(${state.logoPos.x}, ${state.logoPos.y})`);
+
     const imgEl = document.createElementNS('http://www.w3.org/2000/svg', 'image');
     imgEl.setAttribute('href', state.uploadedLogoSrc);
-    imgEl.setAttribute('x', '150');
-    imgEl.setAttribute('y', '135');
-    imgEl.setAttribute('width', '34');
-    imgEl.setAttribute('height', '34');
+    imgEl.setAttribute('x', `-${state.logoSize / 2}`);
+    imgEl.setAttribute('y', `-${state.logoSize / 2}`);
+    imgEl.setAttribute('width', `${state.logoSize}`);
+    imgEl.setAttribute('height', `${state.logoSize}`);
     imgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     imgEl.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))';
-    frontOverlay.appendChild(imgEl);
+
+    const handle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    handle.setAttribute('class', 'drag-handle-box');
+    handle.setAttribute('x', `-${state.logoSize / 2 + 4}`);
+    handle.setAttribute('y', `-${state.logoSize / 2 + 4}`);
+    handle.setAttribute('width', `${state.logoSize + 8}`);
+    handle.setAttribute('height', `${state.logoSize + 8}`);
+    handle.setAttribute('rx', '4');
+
+    g.appendChild(handle);
+    g.appendChild(imgEl);
+    frontOverlay.appendChild(g);
+
+    makeSvgDraggable(g, (dx, dy) => {
+      state.logoPos.x = Math.max(50, Math.min(350, state.logoPos.x + dx));
+      state.logoPos.y = Math.max(60, Math.min(320, state.logoPos.y + dy));
+      g.setAttribute('transform', `translate(${state.logoPos.x}, ${state.logoPos.y})`);
+    });
   }
 
   function escapeXml(str) {
@@ -854,15 +993,124 @@ ${extraDetails}
       });
     });
 
-    // Opciones de posición
-    elements.posOptionBtns.forEach(btn => {
+    // Control de Tamaño de Texto Principal (Slider y Botones +/-)
+    if (elements.sliderTextSize) {
+      elements.sliderTextSize.addEventListener('input', (e) => {
+        state.textSize = parseInt(e.target.value, 10);
+        if (elements.labelValTextSize) elements.labelValTextSize.textContent = `${state.textSize}px`;
+        updateTextOverlays();
+      });
+    }
+
+    if (elements.btnTextSizeDown) {
+      elements.btnTextSizeDown.addEventListener('click', () => {
+        state.textSize = Math.max(10, state.textSize - 2);
+        if (elements.sliderTextSize) elements.sliderTextSize.value = state.textSize;
+        if (elements.labelValTextSize) elements.labelValTextSize.textContent = `${state.textSize}px`;
+        updateTextOverlays();
+      });
+    }
+
+    if (elements.btnTextSizeUp) {
+      elements.btnTextSizeUp.addEventListener('click', () => {
+        state.textSize = Math.min(48, state.textSize + 2);
+        if (elements.sliderTextSize) elements.sliderTextSize.value = state.textSize;
+        if (elements.labelValTextSize) elements.labelValTextSize.textContent = `${state.textSize}px`;
+        updateTextOverlays();
+      });
+    }
+
+    // Control de Tamaño del Apodo
+    if (elements.sliderNickSize) {
+      elements.sliderNickSize.addEventListener('input', (e) => {
+        state.nickSize = parseInt(e.target.value, 10);
+        if (elements.labelValNickSize) elements.labelValNickSize.textContent = `${state.nickSize}px`;
+        updateTextOverlays();
+      });
+    }
+
+    if (elements.btnNickSizeDown) {
+      elements.btnNickSizeDown.addEventListener('click', () => {
+        state.nickSize = Math.max(8, state.nickSize - 2);
+        if (elements.sliderNickSize) elements.sliderNickSize.value = state.nickSize;
+        if (elements.labelValNickSize) elements.labelValNickSize.textContent = `${state.nickSize}px`;
+        updateTextOverlays();
+      });
+    }
+
+    if (elements.btnNickSizeUp) {
+      elements.btnNickSizeUp.addEventListener('click', () => {
+        state.nickSize = Math.min(30, state.nickSize + 2);
+        if (elements.sliderNickSize) elements.sliderNickSize.value = state.nickSize;
+        if (elements.labelValNickSize) elements.labelValNickSize.textContent = `${state.nickSize}px`;
+        updateTextOverlays();
+      });
+    }
+
+    // Selector de Vista (Espalda / Frente)
+    elements.viewTargetBtns.forEach(btn => {
       btn.addEventListener('click', () => {
-        elements.posOptionBtns.forEach(b => b.classList.remove('active'));
+        elements.viewTargetBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        state.textPosition = btn.getAttribute('data-pos');
+        const target = btn.getAttribute('data-target');
+        state.textTargetView = target;
+        if (target === 'frente') {
+          state.textPos = { x: 200, y: 155 };
+        } else {
+          state.textPos = { x: 200, y: 170 };
+        }
+        updateTextOverlays();
+        showToast(`Texto ubicado en: ${target.toUpperCase()}`);
+      });
+    });
+
+    // Posiciones Rápidas
+    elements.posQuickBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        elements.posQuickBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const y = parseInt(btn.getAttribute('data-y') || '170', 10);
+        const x = parseInt(btn.getAttribute('data-x') || '200', 10);
+        state.textPos.x = x;
+        state.textPos.y = y;
         updateTextOverlays();
       });
     });
+
+    // Botones direccionales D-Pad
+    const step = 8;
+    if (elements.btnMoveUp) {
+      elements.btnMoveUp.addEventListener('click', () => {
+        state.textPos.y = Math.max(60, state.textPos.y - step);
+        updateTextOverlays();
+      });
+    }
+    if (elements.btnMoveDown) {
+      elements.btnMoveDown.addEventListener('click', () => {
+        state.textPos.y = Math.min(320, state.textPos.y + step);
+        updateTextOverlays();
+      });
+    }
+    if (elements.btnMoveLeft) {
+      elements.btnMoveLeft.addEventListener('click', () => {
+        state.textPos.x = Math.max(60, state.textPos.x - step);
+        updateTextOverlays();
+      });
+    }
+    if (elements.btnMoveRight) {
+      elements.btnMoveRight.addEventListener('click', () => {
+        state.textPos.x = Math.min(340, state.textPos.x + step);
+        updateTextOverlays();
+      });
+    }
+    if (elements.btnMoveCenter) {
+      elements.btnMoveCenter.addEventListener('click', () => {
+        state.textPos.x = 200;
+        state.textPos.y = 170;
+        updateTextOverlays();
+        showToast('Texto centrado');
+      });
+    }
 
     // Color del texto
     elements.inputTextColor.addEventListener('input', (e) => {
