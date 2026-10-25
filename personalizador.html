@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diseña tu Polerón Generacional en Vivo | Serendipia Creaciones Chillán</title>
+  
+  <meta name="description" content="Personalizador y creador de mockups interactivo para polerones generacionales y escolares en Chile. Elige tu modelo (Americano, Canguro, Zipper, Neck, Polo), combina colores de telas reales, agrega textos bordados y cotiza al instante por WhatsApp.">
+  <meta name="keywords" content="personalizador polerones generacionales, mockup poleron generacion, diseñar poleron 4 medio, polerones de curso chillan, confeccion polerones chile, simulador poleron bordado">
+  <meta name="author" content="Serendipia Creaciones">
+
+  <!-- Open Graph / Redes Sociales -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.serendipiacreaciones.cl/personalizador.html">
+  <meta property="og:title" content="Diseña tu Polerón Generacional Interactivo | Serendipia Creaciones">
+  <meta property="og:description" content="Crea tu mockup 2D en vivo con colores reales de confección, bordados de curso y apodos. Descarga la imagen y cotiza directamente por WhatsApp.">
+  <meta property="og:image" content="https://www.serendipiacreaciones.cl/assets/images/logo-serendipia.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Estilos del Personalizador -->
+  <link rel="stylesheet" href="css/personalizador.css">
+  <link rel="icon" type="image/png" href="assets/images/logo-serendipia.png">
+</head>
+<body>
+
+  <!-- =========================================================================
+       BARRA SUPERIOR / HEADER
+       ========================================================================= -->
+  <header class="customizer-header">
+    <div class="header-container">
+      
+      <!-- Marca y Enlace al Inicio -->
+      <a href="index.html" class="header-brand" title="Volver a Serendipia Creaciones">
+        <img src="assets/images/logo-serendipia.png" alt="Serendipia Creaciones Logo" class="header-logo">
+        <div class="header-title-box">
+          <span class="header-title">Serendipia Creaciones</span>
+          <span class="header-subtitle">Estudio de Diseño Textil</span>
+        </div>
+      </a>
+
+      <!-- Modelo Actual Seleccionado y Botón Cambiar -->
+      <div class="header-center-info">
+        <span class="current-model-tag">Modelo:</span>
+        <span class="current-model-name" id="currentModelName">Canguro / Regular</span>
+        <button type="button" class="btn-change-model" id="btnChangeModel" aria-label="Cambiar modelo de polerón">
+          <span>🔄</span>
+          <span>Cambiar Modelo</span>
+        </button>
+      </div>
+
+      <!-- Acciones de Cabecera -->
+      <div class="header-actions">
+        <a href="index.html" class="btn-back-home">
+          <span>←</span>
+          <span>Volver a la Tienda</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       ESPACIO DE TRABAJO (PANEL DE HERRAMIENTAS + LIENZO DE POLERÓN)
+       ========================================================================= -->
+  <main class="customizer-workspace">
+    
+    <!-- -----------------------------------------------------------------------
+         PANEL LATERAL: HERRAMIENTAS DE EDICIÓN
+         ----------------------------------------------------------------------- -->
+    <aside class="tools-panel" aria-label="Herramientas de Personalización">
+      
+      <!-- Pestañas de Navegación de Herramientas -->
+      <div class="tool-tabs" role="tablist">
+        <button type="button" class="tool-tab-btn active" data-tab="tab-colores" role="tab" aria-selected="true">
+          <span class="tab-icon">🎨</span>
+          <span>Colores</span>
+        </button>
+        <button type="button" class="tool-tab-btn" data-tab="tab-textos" role="tab" aria-selected="false">
+          <span class="tab-icon">🔤</span>
+          <span>Textos</span>
+        </button>
+        <button type="button" class="tool-tab-btn" data-tab="tab-logos" role="tab" aria-selected="false">
+          <span class="tab-icon">🏫</span>
+          <span>Insignia</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: ASIGNACIÓN DE COLORES -->
+      <div class="tab-pane active" id="tab-colores" role="tabpanel">
+        
+        <!-- Dropdown ¿Qué vas a pintar? -->
+        <div class="section-box">
+          <label class="section-label" for="partSelectorDropdown">
+            <span>✂️</span>
+            <span>¿Qué pieza deseas pintar?</span>
+          </label>
+          <select id="partSelectorDropdown" class="part-selector-dropdown">
+            <!-- Se llena dinámicamente según los cortes del modelo -->
+          </select>
+          <div class="color-current-indicator">
+            <span class="current-color-dot" id="currentColorDot" style="background-color: #162238;"></span>
+            <span class="current-color-text" id="currentColorText">Azul Marino</span>
+          </div>
+        </div>
+
+        <!-- Paleta de Telas Reales Chilenas -->
+        <div class="section-box">
+          <span class="section-label">
+            <span>🧵</span>
+            <span>Colores de Tela Reales (Franela Reactiva)</span>
+          </span>
+          <div class="palette-grid" id="paletteGrid">
+            <!-- Se generan dinámicamente las muestras con JS -->
+          </div>
+
+          <!-- Color Personalizado / Selector Hex -->
+          <div class="custom-hex-box">
+            <input type="color" id="inputNativeColor" class="input-color-native" value="#162238" title="Seleccionar color libre">
+            <label for="inputNativeColor" class="input-color-label">Color específico / Muestra especial</label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: TEXTOS Y APODOS (BORDADOS) -->
+      <div class="tab-pane" id="tab-textos" role="tabpanel">
+        
+        <div class="section-box">
+          <span class="section-label">
+            <span>🎓</span>
+            <span>Bordado de Generación o Curso</span>
+          </span>
+          <div class="form-group">
+            <label class="form-label" for="inputTextContent">Texto Espalda (ej. Curso o Generación)</label>
+            <input type="text" id="inputTextContent" class="text-input-field" value="GENERACIÓN 2026" placeholder="Ej. 4° MEDIO 2026">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inputNicknameContent">Apodo Individual del Alumno</label>
+            <input type="text" id="inputNicknameContent" class="text-input-field" value="#MATI" placeholder="Ej. #CAMI">
+          </div>
+        </div>
+
+        <div class="section-box">
+          <span class="section-label">
+            <span>✍️</span>
+            <span>Tipografía del Bordado</span>
+          </span>
+          <div class="font-selector-grid">
+            <button type="button" class="font-option-btn active" data-font="'Plus Jakarta Sans', sans-serif" style="font-weight: 900;">
+              Varsity / Deportiva
+            </button>
+            <button type="button" class="font-option-btn" data-font="'Impact', sans-serif" style="font-weight: 700;">
+              Impact Bold
+            </button>
+            <button type="button" class="font-option-btn" data-font="'Courier New', monospace" style="font-weight: bold;">
+              Monospace Retro
+            </button>
+            <button type="button" class="font-option-btn" data-font="'Georgia', serif" style="font-style: italic;">
+              Elegante Serif
+            </button>
+          </div>
+
+          <div class="form-group" style="margin-top: 10px;">
+            <label class="form-label" for="inputTextColor">Color del Hilo de Bordado</label>
+            <input type="color" id="inputTextColor" class="input-color-native" value="#ffffff" style="width: 100%;">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 3: INSIGNIA / LOGO -->
+      <div class="tab-pane" id="tab-logos" role="tabpanel">
+        
+        <div class="section-box">
+          <span class="section-label">
+            <span>🏫</span>
+            <span>Insignia de Colegio o Empresa</span>
+          </span>
+
+          <input type="file" id="logoFileInput" accept="image/png, image/jpeg, image/svg+xml" style="display: none;">
+          
+          <div class="upload-dropzone" id="uploadDropzone">
+            <span class="upload-icon">📤</span>
+            <span class="upload-text">Haz clic para subir tu insignia</span>
+            <span class="upload-hint">PNG o JPG con fondo transparente recomendado</span>
+          </div>
+
+          <div class="logo-preview-box" id="logoPreviewBox" style="display: none;">
+            <img src="" alt="Previsualización Logo" class="logo-thumb" id="logoThumb">
+            <div style="flex: 1; margin-left: 10px;">
+              <div style="font-size: 0.85rem; font-weight: 700;">Insignia cargada</div>
+              <div style="font-size: 0.72rem; color: #94a3b8;">Ubicada en el pecho</div>
+            </div>
+            <button type="button" class="btn-remove-logo" id="btnRemoveLogo">Quitar</button>
+          </div>
+        </div>
+
+      </div>
+
+    </aside>
+
+    <!-- -----------------------------------------------------------------------
+         ÁREA PRINCIPAL: LIENZO DE POLERÓN (FRENTE Y ESPALDA)
+         ----------------------------------------------------------------------- -->
+    <section class="mockup-stage-area">
+      
+      <!-- Barra Superior del Lienzo -->
+      <div class="stage-top-bar">
+        <!-- Alternador en dispositivos móviles -->
+        <div class="view-toggle-pills">
+          <button type="button" class="view-pill-btn active" data-view="ambos">Ambas Vistas</button>
+          <button type="button" class="view-pill-btn" data-view="frente">Solo Frente</button>
+          <button type="button" class="view-pill-btn" data-view="espalda">Solo Espalda</button>
+        </div>
+
+        <div class="interactive-hint">
+          <span>💡</span>
+          <span>Tip: Haz clic directamente en cualquier parte del polerón para pintarla</span>
+        </div>
+      </div>
+
+      <!-- Contenedor del Lienzo SVG -->
+      <div class="mockup-canvas-wrapper" id="mockupCanvasWrapper">
+        <div class="sweatshirt-dual-view">
+          
+          <!-- Vista Frente -->
+          <div class="view-card" id="viewCardFront">
+            <span class="view-card-badge">Vista Frontal</span>
+            <div id="frontSvgContainer" style="width: 100%; display: flex; justify-content: center;">
+              <!-- Se inyecta el SVG interactivo mediante JS -->
+            </div>
+          </div>
+
+          <!-- Vista Espalda -->
+          <div class="view-card" id="viewCardBack">
+            <span class="view-card-badge">Vista Espalda</span>
+            <div id="backSvgContainer" style="width: 100%; display: flex; justify-content: center;">
+              <!-- Se inyecta el SVG interactivo mediante JS -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Barra Inferior de Acciones Principales -->
+      <div class="stage-action-bar">
+        <div class="action-buttons-group">
+          <!-- Botón de Cotización por WhatsApp con Desglose -->
+          <button type="button" class="btn-action btn-whatsapp-quote" id="btnWhatsAppQuote">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+            </svg>
+            <span>Enviar Diseño por WhatsApp</span>
+          </button>
+
+          <!-- Descargar Mockup en PNG -->
+          <button type="button" class="btn-action btn-download-png" id="btnDownloadPng">
+            <span>📥</span>
+            <span>Descargar Imagen (PNG)</span>
+          </button>
+        </div>
+
+        <div>
+          <!-- Reiniciar Colores -->
+          <button type="button" class="btn-action btn-reset-all" id="btnResetAll">
+            <span>🗑️</span>
+            <span>Reiniciar Colores</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       MODAL DE SELECCIÓN DE MODELOS Y CORTES
+       ========================================================================= -->
+  <div class="model-picker-modal" id="modelPickerModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-dialog">
+      
+      <!-- Cabecera del Modal -->
+      <div class="modal-header">
+        <div class="modal-title-box">
+          <h3 id="modalTitle">Elige tu Modelo de Polerón</h3>
+          <p>Selecciona una categoría y el corte que deseas personalizar</p>
+        </div>
+        <button type="button" class="btn-close-modal" id="btnCloseModal" aria-label="Cerrar ventana">✕</button>
+      </div>
+
+      <!-- Categorías de Modelos (Pestañas Superiores) -->
+      <nav class="modal-categories-nav" id="modalCategoriesNav">
+        <!-- Generado dinámicamente con JS (Americano, Canguro, Neck, Polo, Zipper) -->
+      </nav>
+
+      <!-- Grilla de Cortes y Submodelos -->
+      <div class="modal-body-submodels">
+        <div class="submodels-grid" id="submodelsGrid">
+          <!-- Generado dinámicamente con JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Notificación Toast Flotante -->
+  <div class="toast-notice" id="toastNotice" role="status" aria-live="polite">
+    <span>✨</span>
+    <span id="toastMessage">Acción completada</span>
+  </div>
+
+  <!-- Motor Interactivo JavaScript -->
+  <script src="js/personalizador.js"></script>
+
+</body>
+</html>

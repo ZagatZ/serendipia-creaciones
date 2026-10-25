@@ -1991,3 +1991,47 @@ textarea {
     height: 54px;
   }
 }
+
+/* ==========================================================================
+   BOTÓN Y LLAMADA AL PERSONALIZADOR DE POLERONES
+   ========================================================================== */
+.nav-btn-customizer {
+  background: linear-gradient(135deg, #e33391, #00b0d0) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  padding: 8px 16px !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  box-shadow: 0 2px 12px rgba(227, 51, 145, 0.4);
+  transition: all 0.25s ease !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+}
+
+.nav-btn-customizer:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(0, 176, 208, 0.6);
+  filter: brightness(1.1);
+}
+
+.customizer-cta-card {
+  background: linear-gradient(135deg, rgba(227, 51, 145, 0.12), rgba(0, 176, 208, 0.12));
+  border: 2px solid rgba(227, 51, 145, 0.4);
+  border-radius: 16px;
+  padding: 24px;
+  margin: 32px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .customizer-cta-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
