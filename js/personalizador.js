@@ -1396,7 +1396,8 @@ ${extraDetails}
       showToast('Insignia eliminada');
     });
 
-    // Alternar vistas en celular (Pills Frente / Espalda)
+    // Alternar vistas (Ambas Vistas, Solo Frente, Solo Espalda)
+    const sweatshirtContainer = document.querySelector('.sweatshirt-dual-view');
     elements.viewPillBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         elements.viewPillBtns.forEach(b => b.classList.remove('active'));
@@ -1405,15 +1406,21 @@ ${extraDetails}
         state.activeView = view;
 
         if (view === 'frente') {
-          elements.viewCardFront.classList.remove('hidden-mobile');
-          elements.viewCardBack.classList.add('hidden-mobile');
+          if (sweatshirtContainer) sweatshirtContainer.classList.add('single-view');
+          elements.viewCardFront.classList.remove('view-hidden');
+          elements.viewCardBack.classList.add('view-hidden');
+          showToast('Vista: Solo Frente');
         } else if (view === 'espalda') {
-          elements.viewCardFront.classList.add('hidden-mobile');
-          elements.viewCardBack.classList.remove('hidden-mobile');
+          if (sweatshirtContainer) sweatshirtContainer.classList.add('single-view');
+          elements.viewCardFront.classList.add('view-hidden');
+          elements.viewCardBack.classList.remove('view-hidden');
+          showToast('Vista: Solo Espalda');
         } else {
           // Ambos
-          elements.viewCardFront.classList.remove('hidden-mobile');
-          elements.viewCardBack.classList.remove('hidden-mobile');
+          if (sweatshirtContainer) sweatshirtContainer.classList.remove('single-view');
+          elements.viewCardFront.classList.remove('view-hidden');
+          elements.viewCardBack.classList.remove('view-hidden');
+          showToast('Vista: Ambas Vistas');
         }
       });
     });

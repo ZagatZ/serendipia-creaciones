@@ -768,14 +768,22 @@ body {
   width: 100%;
   max-width: 1050px;
   align-items: center;
+  transition: max-width 0.3s ease;
+}
+
+/* Modos de vista única (Frente o Espalda ampliados y centrados) */
+.sweatshirt-dual-view.single-view {
+  grid-template-columns: 1fr;
+  max-width: 580px;
+}
+
+.sweatshirt-dual-view .view-card.view-hidden {
+  display: none !important;
 }
 
 @media (max-width: 768px) {
   .sweatshirt-dual-view {
     grid-template-columns: 1fr;
-  }
-  .sweatshirt-dual-view .view-card.hidden-mobile {
-    display: none;
   }
 }
 
