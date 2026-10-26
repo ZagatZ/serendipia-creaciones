@@ -260,21 +260,35 @@
   }
 
   // -------------------------------------------------------------------------
-  // 7. APLICACIÓN DE COLOR A LA PARTE ACTIVA
+  // 7. APLICACIÓN DE COLOR Y ACTUALIZACIÓN DE INDICADORES
   // -------------------------------------------------------------------------
+  function updateColorIndicators(hex) {
+    const effectiveHex = hex || state.colors[state.activePart] || state.selectedColorHex || '#162238';
+    state.selectedColorHex = effectiveHex;
+    elements.currentColorDot.style.backgroundColor = effectiveHex;
+    const foundColor = FABRIC_COLORS.find(c => c.hex.toLowerCase() === effectiveHex.toLowerCase());
+    elements.currentColorText.textContent = foundColor ? foundColor.name : effectiveHex;
+
+    // Actualizar clase activa en swatches
+    document.querySelectorAll('.color-swatch').forEach(s => {
+      s.classList.toggle('active', s.getAttribute('data-hex').toLowerCase() === effectiveHex.toLowerCase());
+    });
+  }
+
   function applyColor(hex, name) {
     state.selectedColorHex = hex;
     state.colors[state.activePart] = hex;
 
-    // Actualizar indicador visual
-    elements.currentColorDot.style.backgroundColor = hex;
-    const foundColor = FABRIC_COLORS.find(c => c.hex.toLowerCase() === hex.toLowerCase());
-    elements.currentColorText.textContent = foundColor ? foundColor.name : (name || hex);
+    // Sincronización interna de ribetes acanalados (Americano y otros)
+    if (state.activePart === 'cuello_pretinas') {
+      state.colors['pretina_punos'] = hex;
+      state.colors['cuello_rib'] = hex;
+    } else if (state.activePart === 'pretina_punos') {
+      state.colors['cuello_pretinas'] = hex;
+    }
 
-    // Actualizar clase activa en swatches
-    document.querySelectorAll('.color-swatch').forEach(s => {
-      s.classList.toggle('active', s.getAttribute('data-hex').toLowerCase() === hex.toLowerCase());
-    });
+    // Actualizar indicador visual
+    updateColorIndicators(hex);
 
     // Actualizar los SVG en tiempo real
     updateSvgColors();
@@ -301,20 +315,24 @@
       elements.partSelectorDropdown.appendChild(opt);
     });
 
-    // Por defecto, inicializar partes sin color a gris melange o negro
+    // Por defecto, inicializar partes sin color a tonos textiles armónicos
     state.activePart = sub.cuts[0];
     elements.partSelectorDropdown.value = state.activePart;
 
-    // Asignar colores por defecto elegantes si no existen
+    // Asignar colores por defecto si no existen
     sub.cuts.forEach(part => {
       if (!state.colors[part]) {
         if (part.includes('manga')) state.colors[part] = '#162238'; // Marino
         else if (part.includes('pecho') || part.includes('franja')) state.colors[part] = '#f8fafc'; // Blanco
         else if (part.includes('gorro_int')) state.colors[part] = '#581423'; // Burdeo
-        else if (part.includes('cordon') || part.includes('broches') || part.includes('cierre')) state.colors[part] = '#f8fafc';
+        else if (part.includes('cordon') || part.includes('broches') || part.includes('cierre') || part.includes('lineas_rib')) state.colors[part] = '#f8fafc';
+        else if (part === 'cuello_pretinas' || part === 'pretina_punos' || part === 'cuello_rib') state.colors[part] = '#162238';
         else state.colors[part] = '#162238'; // Marino base
       }
     });
+
+    // Sincronizar indicadores con la parte inicial
+    updateColorIndicators(state.colors[state.activePart]);
 
     // Renderizar SVGs Vectoriales de Frente y Espalda
     renderHoodieSvgs(sub);
@@ -327,10 +345,6 @@
   // 9. MOTOR RENDERIZADOR SVG MODULAR (VISTA FRENTE Y ESPALDA)
   // -------------------------------------------------------------------------
   function renderHoodieSvgs(submodel) {
-    const isAmericano = state.categoryKey === 'americano';
-    const isNeck = state.categoryKey === 'neck';
-    const isPolo = state.categoryKey === 'polo';
-    const isZipper = state.categoryKey === 'zipper';
     const subId = submodel.id;
 
     // Generar SVG Frente
@@ -353,6 +367,7 @@
 
   /**
    * Construye el SVG vectorial realista con sombras de tela, pliegues anatómicos y pespuntes
+   * Sincronizado al 100% con todos los submodelos y cortes del catálogo.
    */
   function buildSvgMarkup(opts) {
     const isFront = opts.view === 'frente';
@@ -365,15 +380,20 @@
     const isAmericano = cat === 'americano';
     const isNeck = cat === 'neck';
     const isPolo = cat === 'polo';
-    const isRanglan = subId.includes('ranglan');
+    const isRanglan = subId.includes('ranglan') || isNeck;
+    const hasRibLines = isAmericano && subId.includes('linea');
+    const isDoubleLine = subId.includes('doble_linea');
+
+    // En el modelo Americano, cuello, pretina y puños forman un solo corte conjunto: 'cuello_pretinas'
+    const ribPartKey = isAmericano ? 'cuello_pretinas' : 'pretina_punos';
 
     let bodyPaths = '';
     let sleevesPaths = '';
     let detailsPaths = '';
     let shadingPaths = '';
 
-    // A. MANGAS (Curvas anatómicas realistas con caída natural en hombros y codos)
-    if (subId.includes('mangas_dif')) {
+    // A. MANGAS (Curvas anatómicas con caída natural en hombros y codos)
+    if (subId.includes('mangas_dif') || subId.includes('bicolor')) {
       sleevesPaths = `
         <!-- Manga Izquierda Anatómica -->
         <path class="hoodie-part" data-part="manga_izq" d="M125 90 C100 95, 60 160, 48 230 C40 275, 36 300, 36 310 C50 320, 68 322, 78 305 C85 285, 96 230, 110 185 C122 150, 134 125, 134 125 Z" stroke="#1e293b" stroke-width="1.8"/>
@@ -395,40 +415,102 @@
       `;
     }
 
-    // Puños acanalados elásticos con textura sutil de rib
+    // Franja en mangas para Polo con 2 cortes
+    if (subId.includes('manga_2cortes') || (isPolo && isRanglan)) {
+      sleevesPaths += `
+        <!-- Franja decorativa en mangas -->
+        <path class="hoodie-part" data-part="manga_franja" d="M96 150 L64 200 L84 212 L112 165 Z" stroke="#1e293b" stroke-width="1.5"/>
+        <path class="hoodie-part" data-part="manga_franja" d="M304 150 L336 200 L316 212 L288 165 Z" stroke="#1e293b" stroke-width="1.5"/>
+      `;
+    }
+
+    // Puños acanalados elásticos con textura sutil de rib y líneas si corresponde
+    let cuffLines = '';
+    if (hasRibLines) {
+      if (isDoubleLine) {
+        cuffLines = `
+          <line class="hoodie-part" data-part="lineas_rib" x1="33" y1="316" x2="69" y2="313" stroke="#f8fafc" stroke-width="2"/>
+          <line class="hoodie-part" data-part="lineas_rib" x1="30" y1="322" x2="66" y2="319" stroke="#f8fafc" stroke-width="2"/>
+          <line class="hoodie-part" data-part="lineas_rib" x1="367" y1="316" x2="331" y2="313" stroke="#f8fafc" stroke-width="2"/>
+          <line class="hoodie-part" data-part="lineas_rib" x1="370" y1="322" x2="334" y2="319" stroke="#f8fafc" stroke-width="2"/>
+        `;
+      } else {
+        cuffLines = `
+          <line class="hoodie-part" data-part="lineas_rib" x1="31" y1="319" x2="67" y2="316" stroke="#f8fafc" stroke-width="2.5"/>
+          <line class="hoodie-part" data-part="lineas_rib" x1="369" y1="319" x2="333" y2="316" stroke="#f8fafc" stroke-width="2.5"/>
+        `;
+      }
+    }
+
     const cuffs = `
       <!-- Puño Izquierdo -->
       <g>
-        <path class="hoodie-part" data-part="pretina_punos" d="M36 310 L26 328 C34 336, 52 338, 62 325 L78 305 C66 318, 48 318, 36 310 Z" stroke="#1e293b" stroke-width="1.5"/>
+        <path class="hoodie-part" data-part="${ribPartKey}" d="M36 310 L26 328 C34 336, 52 338, 62 325 L78 305 C66 318, 48 318, 36 310 Z" stroke="#1e293b" stroke-width="1.5"/>
         <line x1="32" y1="318" x2="68" y2="315" stroke="rgba(0,0,0,0.2)" stroke-width="1" stroke-dasharray="2 1"/>
       </g>
       <!-- Puño Derecho -->
       <g>
-        <path class="hoodie-part" data-part="pretina_punos" d="M364 310 L374 328 C366 336, 348 338, 338 325 L322 305 C334 318, 352 318, 364 310 Z" stroke="#1e293b" stroke-width="1.5"/>
+        <path class="hoodie-part" data-part="${ribPartKey}" d="M364 310 L374 328 C366 336, 348 338, 338 325 L322 305 C334 318, 352 318, 364 310 Z" stroke="#1e293b" stroke-width="1.5"/>
         <line x1="368" y1="318" x2="332" y2="315" stroke="rgba(0,0,0,0.2)" stroke-width="1" stroke-dasharray="2 1"/>
       </g>
+      ${cuffLines}
     `;
 
     // B. TORSO REALISTA SEGÚN SUBMODELO
     if (subId.includes('franja_pecho')) {
       bodyPaths = `
-        <!-- Pecho Superior Curvo -->
         <path class="hoodie-part" data-part="pecho_sup" d="M125 90 C165 100, 235 100, 275 90 C265 110, 266 125, 268 140 C225 146, 175 146, 132 140 C134 125, 135 110, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
-        <!-- Franja de Pecho Anatómica -->
         <path class="hoodie-part" data-part="franja_pecho" d="M132 140 C175 146, 225 146, 268 140 C270 160, 271 180, 272 195 C225 201, 175 201, 128 195 C129 180, 130 160, 132 140 Z" stroke="#1e293b" stroke-width="1.8"/>
-        <!-- Cuerpo Inferior -->
         <path class="hoodie-part" data-part="cuerpo_inf" d="M128 195 C175 201, 225 201, 272 195 C273 235, 272 285, 268 325 C225 332, 175 332, 132 325 C128 285, 127 235, 128 195 Z" stroke="#1e293b" stroke-width="1.8"/>
       `;
-    } else if (subId.includes('franja_horizontal')) {
+    } else if (subId.includes('franja_horizontal') || (subId.includes('corte_horizontal') && subId.includes('polo'))) {
       bodyPaths = `
         <path class="hoodie-part" data-part="pecho_sup" d="M125 90 C165 100, 235 100, 275 90 C267 125, 270 150, 270 165 C225 170, 175 170, 130 165 C130 150, 133 125, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
         <path class="hoodie-part" data-part="franja_central" d="M130 165 C175 170, 225 170, 270 165 C271 185, 271 205, 271 218 C225 224, 175 224, 129 218 C129 205, 129 185, 130 165 Z" stroke="#1e293b" stroke-width="1.8"/>
         <path class="hoodie-part" data-part="cuerpo_inf" d="M129 218 C175 224, 225 224, 271 218 C271 255, 270 295, 268 325 C225 332, 175 332, 132 325 C130 295, 129 255, 129 218 Z" stroke="#1e293b" stroke-width="1.8"/>
       `;
-    } else if (subId.includes('punta_v') || subId.includes('diagonal')) {
+    } else if (subId.includes('doble_franja')) {
+      bodyPaths = `
+        <path class="hoodie-part" data-part="pecho_sup" d="M125 90 C165 100, 235 100, 275 90 C268 115, 269 130, 269 138 C225 143, 175 143, 131 138 C131 130, 132 115, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="franja_1" d="M131 138 C175 143, 225 143, 269 138 C270 155, 270 165, 271 172 C225 177, 175 177, 129 172 C130 165, 130 155, 131 138 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="franja_2" d="M129 172 C175 177, 225 177, 271 172 C271 190, 271 200, 272 208 C225 214, 175 214, 128 208 C129 200, 129 190, 129 172 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="cuerpo_inf" d="M128 208 C175 214, 225 214, 272 208 C272 245, 271 285, 268 325 C225 332, 175 332, 132 325 C129 285, 128 245, 128 208 Z" stroke="#1e293b" stroke-width="1.8"/>
+      `;
+    } else if (subId.includes('franja_diagonal')) {
+      bodyPaths = `
+        <path class="hoodie-part" data-part="pecho_sup" d="M125 90 C165 100, 235 100, 275 90 C272 105, 270 120, 270 130 L128 175 C128 150, 129 120, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="franja_diagonal" d="M128 175 L270 130 C271 150, 271 165, 271 175 L129 220 C128 205, 128 190, 128 175 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="cuerpo_inf" d="M129 220 L271 175 C271 225, 271 275, 268 325 C225 332, 175 332, 132 325 C129 285, 128 250, 129 220 Z" stroke="#1e293b" stroke-width="1.8"/>
+      `;
+    } else if (subId.includes('diagonal_triangulo')) {
+      bodyPaths = `
+        <path class="hoodie-part" data-part="pecho_triangulo" d="M125 90 C165 100, 235 100, 275 90 L271 185 L129 135 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="cuerpo_inf" d="M125 90 L129 135 L271 185 C271 230, 271 280, 268 325 C225 332, 175 332, 132 325 C128 285, 127 235, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
+      `;
+    } else if (subId.includes('diagonal')) {
+      bodyPaths = `
+        <path class="hoodie-part" data-part="pecho_diagonal" d="M125 90 C165 100, 235 100, 275 90 C271 125, 271 155, 271 180 L129 130 C128 115, 127 100, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="cuerpo_inf" d="M129 130 L271 180 C271 225, 271 275, 268 325 C225 332, 175 332, 132 325 C128 280, 128 220, 129 130 Z" stroke="#1e293b" stroke-width="1.8"/>
+      `;
+    } else if (subId.includes('zigzag')) {
+      bodyPaths = `
+        <path class="hoodie-part" data-part="pecho_zigzag" d="M125 90 C165 100, 235 100, 275 90 C269 125, 270 145, 270 160 L235 180 L200 160 L165 180 L130 160 C130 145, 131 125, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="cuerpo_inf" d="M130 160 L165 180 L200 160 L235 180 L270 160 C271 205, 270 280, 268 325 C225 332, 175 332, 132 325 C130 280, 129 205, 130 160 Z" stroke="#1e293b" stroke-width="1.8"/>
+      `;
+    } else if (subId.includes('punta_v')) {
       bodyPaths = `
         <path class="hoodie-part" data-part="pecho_v" d="M125 90 C165 100, 235 100, 275 90 C269 135, 270 160, 270 170 L200 215 L130 170 C130 160, 131 135, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
         <path class="hoodie-part" data-part="cuerpo_inf" d="M130 170 L200 215 L270 170 C271 210, 270 285, 268 325 C225 332, 175 332, 132 325 C130 285, 129 210, 130 170 Z" stroke="#1e293b" stroke-width="1.8"/>
+      `;
+    } else if (subId.includes('corte_bolsillo')) {
+      bodyPaths = `
+        <path class="hoodie-part" data-part="pecho_sup" d="M125 90 C165 100, 235 100, 275 90 C269 135, 271 185, 270 238 C225 244, 175 244, 130 238 C129 185, 131 135, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="cuerpo_inf" d="M130 238 C175 244, 225 244, 270 238 C271 265, 270 295, 268 325 C225 332, 175 332, 132 325 C130 295, 129 265, 130 238 Z" stroke="#1e293b" stroke-width="1.8"/>
+      `;
+    } else if (subId.includes('corte_superior') || subId.includes('corte_pecho') || (subId.includes('corte_horizontal') && !subId.includes('polo'))) {
+      bodyPaths = `
+        <path class="hoodie-part" data-part="pecho_sup" d="M125 90 C165 100, 235 100, 275 90 C268 115, 269 135, 269 148 C225 154, 175 154, 131 148 C131 135, 132 115, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="cuerpo_inf" d="M131 148 C175 154, 225 154, 269 148 C271 190, 271 260, 268 325 C225 332, 175 332, 132 325 C129 260, 129 190, 131 148 Z" stroke="#1e293b" stroke-width="1.8"/>
       `;
     } else if (subId.includes('bicolor')) {
       bodyPaths = `
@@ -443,11 +525,26 @@
     }
 
     // Pretina de cintura (rib elástico con textura realista y curva natural)
+    let waistLines = '';
+    if (hasRibLines) {
+      if (isDoubleLine) {
+        waistLines = `
+          <line class="hoodie-part" data-part="lineas_rib" x1="135" y1="334" x2="265" y2="334" stroke="#f8fafc" stroke-width="2"/>
+          <line class="hoodie-part" data-part="lineas_rib" x1="135" y1="343" x2="265" y2="343" stroke="#f8fafc" stroke-width="2"/>
+        `;
+      } else {
+        waistLines = `
+          <line class="hoodie-part" data-part="lineas_rib" x1="135" y1="338" x2="265" y2="338" stroke="#f8fafc" stroke-width="2.5"/>
+        `;
+      }
+    }
+
     const waistband = `
       <g>
-        <path class="hoodie-part" data-part="pretina_punos" d="M132 325 C175 332, 225 332, 268 325 L266 352 C225 359, 175 359, 134 352 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <path class="hoodie-part" data-part="${ribPartKey}" d="M132 325 C175 332, 225 332, 268 325 L266 352 C225 359, 175 359, 134 352 Z" stroke="#1e293b" stroke-width="1.8"/>
         <line x1="140" y1="338" x2="260" y2="338" stroke="rgba(0,0,0,0.18)" stroke-width="1.2" stroke-dasharray="3 1.5"/>
       </g>
+      ${waistLines}
     `;
 
     // C. DETALLES REALISTAS (Gorro con volumen 3D, Bolsillo Canguro con sombra, Cierres, etc.)
@@ -458,21 +555,41 @@
           <path class="hoodie-part" data-part="gorro_ext" d="M142 85 C126 40, 160 18, 200 16 C240 18, 274 40, 258 85 C250 110, 225 118, 200 118 C175 118, 150 110, 142 85 Z" stroke="#1e293b" stroke-width="2"/>
           <!-- Forro Interior de Capucha con Profundidad -->
           <path class="hoodie-part" data-part="gorro_int" d="M164 78 C158 45, 242 45, 236 78 C228 102, 172 102, 164 78 Z" stroke="#1e293b" stroke-width="1.5"/>
-          
-          <!-- Ojetillos Metálicos en el cuello -->
-          <circle cx="186" cy="98" r="3.2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
-          <circle cx="214" cy="98" r="3.2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
-
-          <!-- Cordones Tubulares con Gravedad Natural y Punteras Metálicas -->
-          <path class="hoodie-part" data-part="cordon" d="M186 98 C182 135, 178 155, 182 178" stroke="#f8fafc" stroke-width="3" stroke-linecap="round" fill="none"/>
-          <rect x="179.5" y="174" width="5" height="10" rx="2" fill="#cbd5e1" stroke="#475569" stroke-width="0.8"/>
-
-          <path class="hoodie-part" data-part="cordon" d="M214 98 C218 135, 222 155, 218 178" stroke="#f8fafc" stroke-width="3" stroke-linecap="round" fill="none"/>
-          <rect x="215.5" y="174" width="5" height="10" rx="2" fill="#cbd5e1" stroke="#475569" stroke-width="0.8"/>
         `;
-      } else if (isAmericano || isPolo) {
+        // Ojetillos y cordones solo en modelos que contemplan cordón en catálogo
+        if (cat !== 'americano') {
+          detailsPaths += `
+            <circle cx="186" cy="98" r="3.2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+            <circle cx="214" cy="98" r="3.2" fill="#94a3b8" stroke="#475569" stroke-width="1"/>
+            <path class="hoodie-part" data-part="cordon" d="M186 98 C182 135, 178 155, 182 178" stroke="#f8fafc" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <rect x="179.5" y="174" width="5" height="10" rx="2" fill="#cbd5e1" stroke="#475569" stroke-width="0.8"/>
+            <path class="hoodie-part" data-part="cordon" d="M214 98 C218 135, 222 155, 218 178" stroke="#f8fafc" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <rect x="215.5" y="174" width="5" height="10" rx="2" fill="#cbd5e1" stroke="#475569" stroke-width="0.8"/>
+          `;
+        }
+      } else if (isAmericano) {
+        let collarLines = '';
+        if (hasRibLines) {
+          if (isDoubleLine) {
+            collarLines = `
+              <path class="hoodie-part" data-part="lineas_rib" d="M153 85 C175 102, 225 102, 247 85" stroke="#f8fafc" stroke-width="1.8" fill="none"/>
+              <path class="hoodie-part" data-part="lineas_rib" d="M157 88 C175 105, 225 105, 243 88" stroke="#f8fafc" stroke-width="1.8" fill="none"/>
+            `;
+          } else {
+            collarLines = `
+              <path class="hoodie-part" data-part="lineas_rib" d="M155 86 C175 103, 225 103, 245 86" stroke="#f8fafc" stroke-width="2.2" fill="none"/>
+            `;
+          }
+        }
         detailsPaths += `
-          <!-- Cuello Rib Clásico Deportivo -->
+          <!-- Cuello Rib Clásico Deportivo Americano -->
+          <path class="hoodie-part" data-part="cuello_pretinas" d="M148 85 C175 110, 225 110, 252 85 C235 72, 165 72, 148 85 Z" stroke="#1e293b" stroke-width="2"/>
+          <path d="M152 87 C175 106, 225 106, 248 87" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-dasharray="3 2" fill="none"/>
+          ${collarLines}
+        `;
+      } else if (isPolo) {
+        detailsPaths += `
+          <!-- Cuello Rib Clásico Deportivo Polo -->
           <path class="hoodie-part" data-part="cuello_rib" d="M148 85 C175 110, 225 110, 252 85 C235 72, 165 72, 148 85 Z" stroke="#1e293b" stroke-width="2"/>
           <path d="M152 87 C175 106, 225 106, 248 87" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-dasharray="3 2" fill="none"/>
         `;
@@ -481,8 +598,14 @@
           <!-- Cuello Alto con Cierre 1/4 -->
           <path class="hoodie-part" data-part="cuello_alto" d="M156 88 L156 50 C185 45, 215 45, 244 50 L244 88 Z" stroke="#1e293b" stroke-width="2"/>
           <line class="hoodie-part" data-part="cierre" x1="200" y1="50" x2="200" y2="135" stroke="#cbd5e1" stroke-width="3.5" stroke-dasharray="3 1.5"/>
-          <!-- Deslizador de cierre metálico -->
           <polygon points="196,128 204,128 202,136 198,136" fill="#e2e8f0" stroke="#334155" stroke-width="1"/>
+          <!-- Bolsillos laterales discretos con cierre/tapeta -->
+          <g class="hoodie-part" data-part="bolsillos_laterales">
+            <path d="M136 260 L144 260 L142 305 L134 305 Z" stroke="#1e293b" stroke-width="1.2"/>
+            <line x1="139" y1="262" x2="137" y2="303" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="2 1"/>
+            <path d="M264 260 L256 260 L258 305 L266 305 Z" stroke="#1e293b" stroke-width="1.2"/>
+            <line x1="261" y1="262" x2="263" y2="303" stroke="#cbd5e1" stroke-width="1.5" stroke-dasharray="2 1"/>
+          </g>
         `;
       }
 
@@ -501,7 +624,6 @@
             <path d="M140 321 C175 328, 225 328, 260 321 C265 325, 225 330, 140 321 Z" fill="rgba(0,0,0,0.25)" filter="url(#softBlur)"/>
             <!-- Bolsillo Canguro 3D con Entradas Curvas para las Manos -->
             <path class="hoodie-part" data-part="bolsillo" d="M152 242 C175 245, 225 245, 248 242 C255 248, 262 278, 264 322 C225 329, 175 329, 136 322 C138 278, 145 248, 152 242 Z" stroke="#1e293b" stroke-width="1.8"/>
-            <!-- Costura doble reforzada en las aberturas de las manos -->
             <path d="M152 242 C146 270, 140 295, 137 322" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-dasharray="2 1.5" fill="none"/>
             <path d="M248 242 C254 270, 260 295, 263 322" stroke="rgba(255,255,255,0.3)" stroke-width="1.2" stroke-dasharray="2 1.5" fill="none"/>
           `;
@@ -522,15 +644,32 @@
         `;
       }
     } else {
-      // VISTA ESPALDA (Caída natural de capucha sobre la espalda)
+      // VISTA ESPALDA
       if (hasHood) {
         detailsPaths += `
           <!-- Capucha Caída Relajada con Pliegues Tridimensionales -->
           <path class="hoodie-part" data-part="gorro_ext" d="M142 85 C132 40, 268 40, 258 85 C248 135, 225 152, 200 152 C175 152, 152 135, 142 85 Z" stroke="#1e293b" stroke-width="2"/>
-          <!-- Doblez central de la capucha en la espalda -->
           <path d="M172 105 C190 135, 210 135, 228 105" stroke="rgba(0,0,0,0.3)" stroke-width="1.8" fill="none"/>
         `;
-      } else if (isAmericano || isPolo) {
+      } else if (isAmericano) {
+        let collarLinesBack = '';
+        if (hasRibLines) {
+          if (isDoubleLine) {
+            collarLinesBack = `
+              <path class="hoodie-part" data-part="lineas_rib" d="M154 81 C175 90, 225 90, 246 81" stroke="#f8fafc" stroke-width="1.8" fill="none"/>
+              <path class="hoodie-part" data-part="lineas_rib" d="M156 84 C175 93, 225 93, 244 84" stroke="#f8fafc" stroke-width="1.8" fill="none"/>
+            `;
+          } else {
+            collarLinesBack = `
+              <path class="hoodie-part" data-part="lineas_rib" d="M155 82 C175 91, 225 91, 245 82" stroke="#f8fafc" stroke-width="2.2" fill="none"/>
+            `;
+          }
+        }
+        detailsPaths += `
+          <path class="hoodie-part" data-part="cuello_pretinas" d="M150 82 C175 92, 225 92, 250 82 C235 70, 165 70, 150 82 Z" stroke="#1e293b" stroke-width="2"/>
+          ${collarLinesBack}
+        `;
+      } else if (isPolo) {
         detailsPaths += `
           <path class="hoodie-part" data-part="cuello_rib" d="M150 82 C175 92, 225 92, 250 82 C235 70, 165 70, 150 82 Z" stroke="#1e293b" stroke-width="2"/>
         `;
@@ -594,11 +733,31 @@
     const allSvgParts = document.querySelectorAll('.hoodie-part');
     allSvgParts.forEach(el => {
       const partKey = el.getAttribute('data-part');
-      const assignedHex = state.colors[partKey] || '#162238';
-      el.style.fill = assignedHex;
+      let assignedHex = state.colors[partKey];
 
-      // Resaltar si es la parte activa
-      if (partKey === state.activePart) {
+      // Herencia de color si pertenece al conjunto cuello_pretinas
+      if (!assignedHex) {
+        if ((partKey === 'pretina_punos' || partKey === 'cuello_rib') && state.colors['cuello_pretinas']) {
+          assignedHex = state.colors['cuello_pretinas'];
+        } else if (partKey === 'cuello_pretinas' && state.colors['pretina_punos']) {
+          assignedHex = state.colors['pretina_punos'];
+        }
+      }
+      assignedHex = assignedHex || '#162238';
+
+      // Si es una línea o trazo sin relleno, pintar el trazo; de lo contrario el relleno
+      if (el.tagName.toLowerCase() === 'line' || (el.getAttribute('fill') === 'none' && el.getAttribute('stroke') && el.getAttribute('stroke') !== 'none')) {
+        el.style.stroke = assignedHex;
+      } else {
+        el.style.fill = assignedHex;
+      }
+
+      // Resaltar si es la parte activa (o si forma parte del conjunto activo)
+      const isThisActive = (partKey === state.activePart) ||
+        (state.activePart === 'cuello_pretinas' && (partKey === 'pretina_punos' || partKey === 'cuello_rib')) ||
+        (state.activePart === 'pretina_punos' && partKey === 'cuello_pretinas');
+
+      if (isThisActive) {
         el.classList.add('active-selected-part');
       } else {
         el.classList.remove('active-selected-part');
@@ -614,15 +773,40 @@
     parts.forEach(el => {
       el.addEventListener('click', (e) => {
         e.stopPropagation();
-        const partKey = el.getAttribute('data-part');
-        if (partKey) {
-          state.activePart = partKey;
-          elements.partSelectorDropdown.value = partKey;
+        let partKey = el.getAttribute('data-part');
+        if (!partKey) return;
 
-          // Si el usuario hace clic en una pieza, aplicamos de inmediato el color seleccionado
-          applyColor(state.selectedColorHex);
-          showToast(`Pintando: ${PART_LABELS[partKey] || partKey}`);
+        // Verificar si la parte existe directamente en las opciones del dropdown
+        const availableOptions = Array.from(elements.partSelectorDropdown.options).map(o => o.value);
+        
+        if (!availableOptions.includes(partKey)) {
+          // Mapeos inteligentes para que nunca quede en blanco
+          if ((partKey === 'pretina_punos' || partKey === 'cuello_rib') && availableOptions.includes('cuello_pretinas')) {
+            partKey = 'cuello_pretinas';
+          } else if (partKey === 'cuello_pretinas' && availableOptions.includes('pretina_punos')) {
+            partKey = 'pretina_punos';
+          } else if ((partKey === 'manga_izq' || partKey === 'manga_der') && availableOptions.includes('mangas')) {
+            partKey = 'mangas';
+          } else if (partKey === 'mangas_ranglan' && availableOptions.includes('mangas')) {
+            partKey = 'mangas';
+          } else if (partKey === 'mangas' && availableOptions.includes('mangas_ranglan')) {
+            partKey = 'mangas_ranglan';
+          } else if ((partKey === 'mitad_izq' || partKey === 'mitad_der') && availableOptions.includes('torso')) {
+            partKey = 'torso';
+          }
         }
+
+        // Si la parte aún no está en el dropdown, fallback a la primera opción válida
+        if (!availableOptions.includes(partKey) && availableOptions.length > 0) {
+          partKey = availableOptions[0];
+        }
+
+        state.activePart = partKey;
+        elements.partSelectorDropdown.value = partKey;
+
+        // Al hacer clic directo en la pieza, aplicar el color seleccionado actualmente a esta pieza
+        applyColor(state.selectedColorHex);
+        showToast(`Pieza seleccionada: ${PART_LABELS[partKey] || partKey}`);
       });
     });
   }
@@ -1026,6 +1210,8 @@ ${extraDetails}
     // Selector de parte desde dropdown
     elements.partSelectorDropdown.addEventListener('change', (e) => {
       state.activePart = e.target.value;
+      const currentColorOfPart = state.colors[state.activePart] || state.selectedColorHex;
+      updateColorIndicators(currentColorOfPart);
       updateSvgColors();
     });
 
