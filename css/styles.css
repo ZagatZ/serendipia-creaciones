@@ -217,6 +217,11 @@ textarea {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
+.header .container.navbar {
+  max-width: 1400px;
+  padding: 0 clamp(16px, 2vw, 32px);
+}
+
 .navbar {
   display: flex;
   align-items: center;
@@ -235,9 +240,9 @@ textarea {
 }
 
 .brand-logo-img {
-  height: 48px;
+  height: 44px;
   width: auto;
-  max-width: 130px;
+  max-width: 115px;
   object-fit: contain;
   transition: transform var(--trans-smooth);
   flex-shrink: 0;
@@ -254,7 +259,7 @@ textarea {
 }
 
 .brand-name {
-  font-size: 1.18rem;
+  font-size: 1.12rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   background: var(--grad-brand);
@@ -266,29 +271,29 @@ textarea {
 }
 
 .brand-sub {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   white-space: nowrap;
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: clamp(10px, 1.4vw, 22px);
+  gap: clamp(8px, 1.1vw, 16px);
   margin: 0;
   padding: 0;
   flex-shrink: 1;
 }
 
 .nav-link {
-  font-size: 0.9rem;
+  font-size: 0.86rem;
   font-weight: 600;
   color: var(--text-secondary);
   position: relative;
-  padding: 6px 0;
+  padding: 6px 2px;
   white-space: nowrap;
   transition: color var(--trans-fast);
 }
@@ -316,13 +321,13 @@ textarea {
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-shrink: 0;
 }
 
 .nav-actions .btn {
-  padding: 8px 16px;
-  font-size: 0.88rem;
+  padding: 7px 14px;
+  font-size: 0.84rem;
 }
 
 .mobile-nav-actions {
@@ -1999,7 +2004,8 @@ textarea {
   background: linear-gradient(135deg, #e33391, #00b0d0) !important;
   color: #ffffff !important;
   font-weight: 800 !important;
-  padding: 8px 16px !important;
+  font-size: 0.82rem !important;
+  padding: 7px 14px !important;
   border-radius: 999px !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -2008,6 +2014,7 @@ textarea {
   transition: all 0.25s ease !important;
   border: 1px solid rgba(255, 255, 255, 0.2);
   text-decoration: none;
+  white-space: nowrap !important;
 }
 
 .nav-btn-customizer:hover {
