@@ -211,6 +211,13 @@ textarea {
   transition: all var(--trans-smooth);
 }
 
+.header .container.navbar {
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 2.5vw, 36px);
+}
+
 .header.scrolled {
   background: rgba(10, 14, 23, 0.95);
   border-bottom-color: var(--border-medium);
@@ -218,10 +225,10 @@ textarea {
 }
 
 .navbar {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
-  gap: 16px;
+  justify-content: space-between;
+  gap: clamp(12px, 1.8vw, 24px);
   height: 100%;
   width: 100%;
 }
@@ -231,12 +238,10 @@ textarea {
   align-items: center;
   gap: 12px;
   flex-shrink: 0;
-  min-width: 0;
-  justify-self: start;
 }
 
 .brand-logo-img {
-  height: 48px;
+  height: 46px;
   width: auto;
   max-width: 130px;
   object-fit: contain;
@@ -245,17 +250,23 @@ textarea {
 }
 
 .nav-brand:hover .brand-logo-img {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .brand-info {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+  display: none;
+}
+
+@media (min-width: 1400px) {
+  .brand-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
 }
 
 .brand-name {
-  font-size: 1.18rem;
+  font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   background: var(--grad-brand);
@@ -267,7 +278,7 @@ textarea {
 }
 
 .brand-sub {
-  font-size: 0.72rem;
+  font-size: 0.70rem;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
@@ -279,19 +290,19 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(10px, 1.4vw, 22px);
-  margin: 0 auto;
+  gap: clamp(8px, 1.2vw, 20px);
+  margin: 0;
   padding: 0;
-  flex-shrink: 1;
-  justify-self: center;
+  flex: 1;
+  min-width: 0;
 }
 
 .nav-link {
-  font-size: 0.9rem;
+  font-size: clamp(0.82rem, 0.9vw, 0.9rem);
   font-weight: 600;
   color: var(--text-secondary);
   position: relative;
-  padding: 6px 0;
+  padding: 6px 4px;
   white-space: nowrap;
   transition: color var(--trans-fast);
 }
@@ -321,12 +332,17 @@ textarea {
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
-  justify-self: end;
 }
 
 .nav-actions .btn {
-  padding: 8px 16px;
-  font-size: 0.88rem;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 1280px) {
+  .nav-btn-quote {
+    display: none !important;
+  }
 }
 
 .mobile-nav-actions {
@@ -1776,19 +1792,19 @@ textarea {
    Diseño Adaptativo (Responsive Breakpoints)
    ========================================================================== */
 
-/* 1. Laptops y Pantallas Medianas (1180px) */
-@media (max-width: 1180px) {
+/* 1. Laptops y Pantallas Medianas (1280px) */
+@media (max-width: 1280px) {
   .nav-btn-quote {
-    display: none;
+    display: none !important;
   }
 
   .nav-links {
-    gap: 14px;
+    gap: clamp(8px, 1.1vw, 14px);
   }
 }
 
-/* 2. Tablets y Pantallas Compactas (1024px) */
-@media (max-width: 1024px) {
+/* 2. Tablets y Pantallas Compactas (1120px) */
+@media (max-width: 1120px) {
   .menu-toggle {
     display: flex;
   }
