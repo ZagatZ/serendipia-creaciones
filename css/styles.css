@@ -218,9 +218,9 @@ textarea {
 }
 
 .navbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   height: 100%;
   width: 100%;
@@ -232,6 +232,7 @@ textarea {
   gap: 12px;
   flex-shrink: 0;
   min-width: 0;
+  justify-self: start;
 }
 
 .brand-logo-img {
@@ -277,10 +278,12 @@ textarea {
 .nav-links {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: clamp(10px, 1.4vw, 22px);
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   flex-shrink: 1;
+  justify-self: center;
 }
 
 .nav-link {
@@ -318,6 +321,7 @@ textarea {
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  justify-self: end;
 }
 
 .nav-actions .btn {
@@ -516,7 +520,8 @@ textarea {
   justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 48px;
+  margin: 0 auto 48px;
+  width: 100%;
 }
 
 /* Barra de beneficios rápidos en Hero */
@@ -1850,13 +1855,21 @@ textarea {
     font-size: 0.95rem;
   }
 
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   .nav-actions {
     display: flex;
+    align-items: center;
     gap: 8px;
   }
 
+  .nav-btn-customizer,
   .nav-btn-quote {
-    display: none;
+    display: none !important;
   }
 
   .nav-btn-wa {

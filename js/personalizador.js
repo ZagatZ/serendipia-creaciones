@@ -149,25 +149,42 @@
     submodelId: 'canguro_regular',
     activePart: 'torso',
     selectedColorHex: '#162238',
-    // Mapeo de colores asignados por pieza
     colors: {},
-    // Personalizaciones adicionales
-    customText: 'GENERACIÓN 2026',
-    customNickname: '#MATI',
-    textSize: 22,
-    nickSize: 13,
-    textPos: { x: 200, y: 170 },
-    textTargetView: 'espalda', // 'espalda' o 'frente'
-    textFont: "'Plus Jakarta Sans', sans-serif",
-    textColor: '#ffffff',
-    textPosition: 'espalda',
-    uploadedLogoSrc: null,
-    logoPos: { x: 155, y: 140 },
-    logoSize: 38,
-    uploadedBackImageSrc: null,
-    backImagePos: { x: 200, y: 220 },
-    backImageSize: 95,
-    activeView: 'frente' // Para visualización en móviles ('frente' o 'espalda')
+    // Textos múltiples tanto en frente como en espalda
+    texts: [
+      {
+        id: 't_gen',
+        text: 'GENERACIÓN 2026',
+        view: 'espalda', // 'espalda' | 'frente'
+        x: 200,
+        y: 160,
+        size: 22,
+        font: "'Plus Jakarta Sans', sans-serif",
+        color: '#ffffff',
+        isNick: false
+      },
+      {
+        id: 't_nick',
+        text: '#MATI',
+        view: 'espalda',
+        x: 200,
+        y: 200,
+        size: 13,
+        font: "'Plus Jakarta Sans', sans-serif",
+        color: '#ffffff',
+        isNick: true
+      }
+    ],
+    activeTextId: 't_gen',
+
+    // Imágenes múltiples tanto en frente como en espalda
+    images: [],
+    activeImageId: null,
+
+    // Destino seleccionado para la próxima imagen subida
+    newImageUploadTarget: 'frente',
+
+    activeView: 'ambos' // 'ambos', 'frente', o 'espalda'
   };
 
   // -------------------------------------------------------------------------
@@ -187,60 +204,56 @@
     inputNativeColor: document.getElementById('inputNativeColor'),
     toolTabBtns: document.querySelectorAll('.tool-tab-btn'),
     tabPanes: document.querySelectorAll('.tab-pane'),
-    // Texto
+
+    // GESTIÓN DE TEXTOS MULTICAPA
+    btnAddText: document.getElementById('btnAddText'),
+    textLayersList: document.getElementById('textLayersList'),
+    activeTextEditor: document.getElementById('activeTextEditor'),
+    activeTextEditorTitle: document.getElementById('activeTextEditorTitle'),
     inputTextContent: document.getElementById('inputTextContent'),
-    inputNicknameContent: document.getElementById('inputNicknameContent'),
-    fontOptionBtns: document.querySelectorAll('.font-option-btn'),
-    inputTextColor: document.getElementById('inputTextColor'),
+    btnTextTargetFrente: document.getElementById('btnTextTargetFrente'),
+    btnTextTargetEspalda: document.getElementById('btnTextTargetEspalda'),
+    btnTextStyleNormal: document.getElementById('btnTextStyleNormal'),
+    btnTextStyleNick: document.getElementById('btnTextStyleNick'),
     sliderTextSize: document.getElementById('sliderTextSize'),
     labelValTextSize: document.getElementById('labelValTextSize'),
     btnTextSizeDown: document.getElementById('btnTextSizeDown'),
     btnTextSizeUp: document.getElementById('btnTextSizeUp'),
-    sliderNickSize: document.getElementById('sliderNickSize'),
-    labelValNickSize: document.getElementById('labelValNickSize'),
-    btnNickSizeDown: document.getElementById('btnNickSizeDown'),
-    btnNickSizeUp: document.getElementById('btnNickSizeUp'),
-    viewTargetBtns: document.querySelectorAll('.view-target-btn'),
-    posQuickBtns: document.querySelectorAll('.position-selector-grid .pos-btn'),
-    btnMoveUp: document.getElementById('btnMoveUp'),
-    btnMoveDown: document.getElementById('btnMoveDown'),
-    btnMoveLeft: document.getElementById('btnMoveLeft'),
-    btnMoveRight: document.getElementById('btnMoveRight'),
-    btnMoveCenter: document.getElementById('btnMoveCenter'),
-    // Insignia Pecho (Frente)
-    logoFileInput: document.getElementById('logoFileInput'),
-    uploadDropzone: document.getElementById('uploadDropzone'),
-    logoPreviewBox: document.getElementById('logoPreviewBox'),
-    logoThumb: document.getElementById('logoThumb'),
-    btnRemoveLogo: document.getElementById('btnRemoveLogo'),
-    groupFrontLogoControls: document.getElementById('groupFrontLogoControls'),
-    sliderFrontLogoSize: document.getElementById('sliderFrontLogoSize'),
-    labelValFrontLogoSize: document.getElementById('labelValFrontLogoSize'),
-    btnFrontLogoSizeDown: document.getElementById('btnFrontLogoSizeDown'),
-    btnFrontLogoSizeUp: document.getElementById('btnFrontLogoSizeUp'),
-    btnFrontLogoPosLeft: document.getElementById('btnFrontLogoPosLeft'),
-    btnFrontLogoPosCenter: document.getElementById('btnFrontLogoPosCenter'),
-    btnFrontLogoPosRight: document.getElementById('btnFrontLogoPosRight'),
-    // Estampado / Imagen Espalda
-    backImageFileInput: document.getElementById('backImageFileInput'),
-    uploadDropzoneBack: document.getElementById('uploadDropzoneBack'),
-    backImagePreviewBox: document.getElementById('backImagePreviewBox'),
-    backImageThumb: document.getElementById('backImageThumb'),
-    btnRemoveBackImage: document.getElementById('btnRemoveBackImage'),
-    groupBackImageControls: document.getElementById('groupBackImageControls'),
-    sliderBackImageSize: document.getElementById('sliderBackImageSize'),
-    labelValBackImageSize: document.getElementById('labelValBackImageSize'),
-    btnBackImageSizeDown: document.getElementById('btnBackImageSizeDown'),
-    btnBackImageSizeUp: document.getElementById('btnBackImageSizeUp'),
-    btnBackImgPosUp: document.getElementById('btnBackImgPosUp'),
-    btnBackImgPosCenter: document.getElementById('btnBackImgPosCenter'),
-    btnBackImgPosDown: document.getElementById('btnBackImgPosDown'),
+    fontOptionBtns: document.querySelectorAll('.font-option-btn'),
+    inputTextColor: document.getElementById('inputTextColor'),
+    btnPosArriba: document.getElementById('btnPosArriba'),
+    btnPosCentro: document.getElementById('btnPosCentro'),
+    btnPosAbajo: document.getElementById('btnPosAbajo'),
+    btnPosPechoIzq: document.getElementById('btnPosPechoIzq'),
+    btnDeleteCurrentText: document.getElementById('btnDeleteCurrentText'),
+
+    // GESTIÓN DE IMÁGENES MULTICAPA
+    btnUploadTargetFrente: document.getElementById('btnUploadTargetFrente'),
+    btnUploadTargetEspalda: document.getElementById('btnUploadTargetEspalda'),
+    imageFileInputUniversal: document.getElementById('imageFileInputUniversal'),
+    uploadDropzoneUniversal: document.getElementById('uploadDropzoneUniversal'),
+    imageLayersList: document.getElementById('imageLayersList'),
+    activeImageEditor: document.getElementById('activeImageEditor'),
+    activeImageEditorTitle: document.getElementById('activeImageEditorTitle'),
+    btnImgTargetFrente: document.getElementById('btnImgTargetFrente'),
+    btnImgTargetEspalda: document.getElementById('btnImgTargetEspalda'),
+    sliderImageSize: document.getElementById('sliderImageSize'),
+    labelValImageSize: document.getElementById('labelValImageSize'),
+    btnImageSizeDown: document.getElementById('btnImageSizeDown'),
+    btnImageSizeUp: document.getElementById('btnImageSizeUp'),
+    btnImgPosArriba: document.getElementById('btnImgPosArriba'),
+    btnImgPosCentro: document.getElementById('btnImgPosCentro'),
+    btnImgPosAbajo: document.getElementById('btnImgPosAbajo'),
+    btnImgPosPechoIzq: document.getElementById('btnImgPosPechoIzq'),
+    btnDeleteCurrentImage: document.getElementById('btnDeleteCurrentImage'),
+
     // Canvas y SVGs
     frontSvgContainer: document.getElementById('frontSvgContainer'),
     backSvgContainer: document.getElementById('backSvgContainer'),
     viewPillBtns: document.querySelectorAll('.view-pill-btn'),
     viewCardFront: document.getElementById('viewCardFront'),
     viewCardBack: document.getElementById('viewCardBack'),
+
     // Acciones
     btnWhatsAppQuote: document.getElementById('btnWhatsAppQuote'),
     btnDownloadPng: document.getElementById('btnDownloadPng'),
@@ -255,6 +268,8 @@
   function init() {
     renderPaletteSwatches();
     setSubmodel('canguro', 'canguro_regular');
+    renderTextList();
+    renderImageList();
     setupEventListeners();
     setupTabNavigation();
   }
@@ -897,6 +912,256 @@
     element.addEventListener('touchstart', onStart, { passive: false });
   }
 
+  // -------------------------------------------------------------------------
+  // 12. GESTIÓN MULTICAPA DE TEXTOS E IMÁGENES
+  // -------------------------------------------------------------------------
+  function getActiveText() {
+    return state.texts.find(t => t.id === state.activeTextId) || state.texts[0] || null;
+  }
+
+  function renderTextList() {
+    if (!elements.textLayersList) return;
+    elements.textLayersList.innerHTML = '';
+
+    if (state.texts.length === 0) {
+      elements.textLayersList.innerHTML = `<div class="layers-empty-hint">Sin textos en el polerón. Presiona "➕ Agregar Texto" para añadir bordados.</div>`;
+      if (elements.activeTextEditor) elements.activeTextEditor.style.display = 'none';
+      return;
+    }
+
+    if (elements.activeTextEditor) elements.activeTextEditor.style.display = 'block';
+
+    const activeItem = getActiveText();
+    if (!activeItem && state.texts.length > 0) {
+      state.activeTextId = state.texts[0].id;
+    }
+
+    state.texts.forEach((item) => {
+      const card = document.createElement('div');
+      card.className = `layer-item-card ${item.id === state.activeTextId ? 'active' : ''}`;
+      card.setAttribute('data-id', item.id);
+
+      const isEspalda = item.view === 'espalda';
+      const icon = item.isNick ? '#' : '🔤';
+
+      card.innerHTML = `
+        <div class="layer-card-left">
+          <span>${icon}</span>
+          <span class="layer-card-title">${item.text || '(Texto vacío)'}</span>
+          <span class="layer-card-badge ${isEspalda ? 'espalda' : ''}">${isEspalda ? 'Espalda' : 'Frente'}</span>
+        </div>
+        <button type="button" class="layer-btn-delete" title="Eliminar texto">✕</button>
+      `;
+
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.layer-btn-delete')) return;
+        state.activeTextId = item.id;
+        renderTextList();
+        renderActiveTextEditor();
+        updateTextOverlays();
+      });
+
+      const delBtn = card.querySelector('.layer-btn-delete');
+      if (delBtn) {
+        delBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteText(item.id);
+        });
+      }
+
+      elements.textLayersList.appendChild(card);
+    });
+
+    renderActiveTextEditor();
+  }
+
+  function renderActiveTextEditor() {
+    const item = getActiveText();
+    if (!item || !elements.activeTextEditor) return;
+
+    if (elements.activeTextEditorTitle) {
+      elements.activeTextEditorTitle.textContent = `Editar: ${item.text || 'Texto'}`;
+    }
+
+    if (elements.inputTextContent) {
+      elements.inputTextContent.value = item.text || '';
+    }
+
+    if (elements.btnTextTargetFrente && elements.btnTextTargetEspalda) {
+      elements.btnTextTargetFrente.classList.toggle('active', item.view === 'frente');
+      elements.btnTextTargetEspalda.classList.toggle('active', item.view === 'espalda');
+    }
+
+    if (elements.btnTextStyleNormal && elements.btnTextStyleNick) {
+      elements.btnTextStyleNormal.classList.toggle('active', !item.isNick);
+      elements.btnTextStyleNick.classList.toggle('active', !!item.isNick);
+    }
+
+    if (elements.sliderTextSize) {
+      elements.sliderTextSize.value = item.size;
+    }
+    if (elements.labelValTextSize) {
+      elements.labelValTextSize.textContent = `${item.size}px`;
+    }
+
+    if (elements.fontOptionBtns) {
+      elements.fontOptionBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-font') === item.font);
+      });
+    }
+
+    if (elements.inputTextColor) {
+      elements.inputTextColor.value = item.color || '#ffffff';
+    }
+  }
+
+  function addNewText() {
+    const newId = 't_' + Date.now();
+    const newText = {
+      id: newId,
+      text: 'NUEVO TEXTO',
+      view: 'frente',
+      x: 200,
+      y: 155,
+      size: 20,
+      font: "'Plus Jakarta Sans', sans-serif",
+      color: '#ffffff',
+      isNick: false
+    };
+    state.texts.push(newText);
+    state.activeTextId = newId;
+    renderTextList();
+    updateTextOverlays();
+    showToast('Nuevo texto agregado al polerón');
+  }
+
+  function deleteText(id) {
+    const idx = state.texts.findIndex(t => t.id === id);
+    if (idx !== -1) {
+      state.texts.splice(idx, 1);
+      if (state.activeTextId === id) {
+        state.activeTextId = state.texts.length > 0 ? state.texts[Math.max(0, idx - 1)].id : null;
+      }
+      renderTextList();
+      updateTextOverlays();
+      showToast('Texto eliminado');
+    }
+  }
+
+  function getActiveImage() {
+    return state.images.find(img => img.id === state.activeImageId) || state.images[0] || null;
+  }
+
+  function renderImageList() {
+    if (!elements.imageLayersList) return;
+    elements.imageLayersList.innerHTML = '';
+
+    if (state.images.length === 0) {
+      elements.imageLayersList.innerHTML = `<div class="layers-empty-hint">Aún no hay imágenes. Sube logos, escudos o estampados arriba.</div>`;
+      if (elements.activeImageEditor) elements.activeImageEditor.style.display = 'none';
+      return;
+    }
+
+    if (elements.activeImageEditor) elements.activeImageEditor.style.display = 'block';
+
+    const activeItem = getActiveImage();
+    if (!activeItem && state.images.length > 0) {
+      state.activeImageId = state.images[0].id;
+    }
+
+    state.images.forEach((img, index) => {
+      const card = document.createElement('div');
+      card.className = `layer-item-card ${img.id === state.activeImageId ? 'active' : ''}`;
+      card.setAttribute('data-id', img.id);
+
+      const isEspalda = img.view === 'espalda';
+
+      card.innerHTML = `
+        <div class="layer-card-left">
+          <img src="${img.src}" class="layer-card-thumb" alt="Miniatura">
+          <span class="layer-card-title">Imagen ${index + 1} (${img.size}px)</span>
+          <span class="layer-card-badge ${isEspalda ? 'espalda' : ''}">${isEspalda ? 'Espalda' : 'Frente'}</span>
+        </div>
+        <button type="button" class="layer-btn-delete" title="Eliminar imagen">✕</button>
+      `;
+
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.layer-btn-delete')) return;
+        state.activeImageId = img.id;
+        renderImageList();
+        renderActiveImageEditor();
+        updateImagesOverlays();
+      });
+
+      const delBtn = card.querySelector('.layer-btn-delete');
+      if (delBtn) {
+        delBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteImage(img.id);
+        });
+      }
+
+      elements.imageLayersList.appendChild(card);
+    });
+
+    renderActiveImageEditor();
+  }
+
+  function renderActiveImageEditor() {
+    const item = getActiveImage();
+    if (!item || !elements.activeImageEditor) return;
+
+    if (elements.activeImageEditorTitle) {
+      elements.activeImageEditorTitle.textContent = `Ajustar Imagen (${item.view.toUpperCase()})`;
+    }
+
+    if (elements.btnImgTargetFrente && elements.btnImgTargetEspalda) {
+      elements.btnImgTargetFrente.classList.toggle('active', item.view === 'frente');
+      elements.btnImgTargetEspalda.classList.toggle('active', item.view === 'espalda');
+    }
+
+    if (elements.sliderImageSize) {
+      elements.sliderImageSize.value = item.size;
+    }
+    if (elements.labelValImageSize) {
+      elements.labelValImageSize.textContent = `${item.size}px`;
+    }
+  }
+
+  function addNewImage(dataUrl, view) {
+    const newId = 'img_' + Date.now();
+    const defaultPos = view === 'frente' ? { x: 155, y: 140 } : { x: 200, y: 220 };
+    const defaultSize = view === 'frente' ? 45 : 95;
+
+    const newImg = {
+      id: newId,
+      src: dataUrl,
+      view: view,
+      x: defaultPos.x,
+      y: defaultPos.y,
+      size: defaultSize
+    };
+
+    state.images.push(newImg);
+    state.activeImageId = newId;
+    renderImageList();
+    updateImagesOverlays();
+    showToast(`Imagen agregada en: ${view.toUpperCase()}`);
+  }
+
+  function deleteImage(id) {
+    const idx = state.images.findIndex(img => img.id === id);
+    if (idx !== -1) {
+      state.images.splice(idx, 1);
+      if (state.activeImageId === id) {
+        state.activeImageId = state.images.length > 0 ? state.images[Math.max(0, idx - 1)].id : null;
+      }
+      renderImageList();
+      updateImagesOverlays();
+      showToast('Imagen eliminada');
+    }
+  }
+
   function updateTextOverlays() {
     const frontTextLayer = document.getElementById('layer-texts-frente') || document.getElementById('layer-overlays-frente');
     const backTextLayer = document.getElementById('layer-texts-espalda') || document.getElementById('layer-overlays-espalda');
@@ -904,85 +1169,97 @@
     if (frontTextLayer) frontTextLayer.innerHTML = '';
     if (backTextLayer) backTextLayer.innerHTML = '';
 
-    const text = state.customText || '';
-    const nick = state.customNickname || '';
-    const color = state.textColor || '#ffffff';
-    const font = state.textFont || "'Plus Jakarta Sans', sans-serif";
-    const textSize = state.textSize || 22;
-    const nickSize = state.nickSize || 13;
+    state.texts.forEach(item => {
+      if (!item.text && !item.isNick) return;
+      const targetLayer = item.view === 'frente' ? frontTextLayer : backTextLayer;
+      if (!targetLayer) return;
 
-    if (!text && !nick) return;
+      const isSelected = item.id === state.activeTextId;
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', `draggable-text-group ${isSelected ? 'layer-selected' : ''}`);
+      g.setAttribute('id', `group-text-${item.id}`);
+      g.setAttribute('transform', `translate(${item.x}, ${item.y})`);
+      g.setAttribute('title', 'Haz clic para seleccionar o arrastra para mover');
 
-    // Inyectar en el overlay según la vista objetivo elegida por el usuario
-    const targetOverlay = state.textTargetView === 'frente' ? frontTextLayer : backTextLayer;
-    if (!targetOverlay) return;
+      const color = item.color || '#ffffff';
+      const font = item.font || "'Plus Jakarta Sans', sans-serif";
+      const size = item.size || 22;
 
-    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    g.setAttribute('class', 'draggable-text-group');
-    g.setAttribute('id', 'draggableTextLayer');
-    g.setAttribute('transform', `translate(${state.textPos.x}, ${state.textPos.y})`);
-    g.setAttribute('title', 'Haz clic y arrastra para mover el texto');
+      if (item.isNick) {
+        const text = item.text || '#APODO';
+        const boxW = Math.max(80, text.length * (size * 0.75) + 20);
+        const boxH = size + 12;
 
-    // Caja delimitadora con borde sutil para arrastre (completamente transparente)
-    const handleBox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    handleBox.setAttribute('class', 'drag-handle-box');
-    handleBox.setAttribute('fill', 'none');
-    handleBox.setAttribute('stroke', 'none');
-    handleBox.setAttribute('x', '-115');
-    handleBox.setAttribute('y', '-25');
-    handleBox.setAttribute('width', '230');
-    handleBox.setAttribute('height', nick ? (textSize + nickSize + 32).toString() : (textSize + 24).toString());
-    handleBox.setAttribute('rx', '8');
-    g.appendChild(handleBox);
+        const handleBox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        handleBox.setAttribute('class', 'drag-handle-box');
+        handleBox.setAttribute('x', `-${boxW / 2 + 4}`);
+        handleBox.setAttribute('y', `-${size + 6}`);
+        handleBox.setAttribute('width', `${boxW + 8}`);
+        handleBox.setAttribute('height', `${boxH + 8}`);
+        handleBox.setAttribute('rx', '6');
+        g.appendChild(handleBox);
 
-    if (text) {
-      const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      textEl.setAttribute('x', '0');
-      textEl.setAttribute('y', '0');
-      textEl.setAttribute('text-anchor', 'middle');
-      textEl.setAttribute('fill', color);
-      textEl.setAttribute('font-family', font);
-      textEl.setAttribute('font-size', textSize);
-      textEl.setAttribute('font-weight', '900');
-      textEl.setAttribute('letter-spacing', '2');
-      textEl.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))';
-      textEl.textContent = text;
-      g.appendChild(textEl);
-    }
+        const nickBox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        nickBox.setAttribute('x', `-${boxW / 2}`);
+        nickBox.setAttribute('y', `-${size - 2}`);
+        nickBox.setAttribute('width', `${boxW}`);
+        nickBox.setAttribute('height', `${boxH}`);
+        nickBox.setAttribute('rx', `${boxH / 2}`);
+        nickBox.setAttribute('fill', 'none');
+        nickBox.setAttribute('stroke', color);
+        nickBox.setAttribute('stroke-width', '1.5');
+        g.appendChild(nickBox);
 
-    if (nick) {
-      const nickY = text ? (textSize + 14) : 0;
-      const nickBox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      const boxW = Math.max(90, nick.length * (nickSize * 0.75) + 24);
-      nickBox.setAttribute('x', `-${boxW / 2}`);
-      nickBox.setAttribute('y', `${nickY - nickSize - 2}`);
-      nickBox.setAttribute('width', `${boxW}`);
-      nickBox.setAttribute('height', `${nickSize + 12}`);
-      nickBox.setAttribute('rx', `${(nickSize + 12) / 2}`);
-      nickBox.setAttribute('fill', 'none'); // Fondo 100% transparente sin negro
-      nickBox.setAttribute('stroke', color);
-      nickBox.setAttribute('stroke-width', '1.5');
-      g.appendChild(nickBox);
+        const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textEl.setAttribute('x', '0');
+        textEl.setAttribute('y', '3');
+        textEl.setAttribute('text-anchor', 'middle');
+        textEl.setAttribute('fill', color);
+        textEl.setAttribute('font-family', font);
+        textEl.setAttribute('font-size', size);
+        textEl.setAttribute('font-weight', '800');
+        textEl.textContent = text;
+        g.appendChild(textEl);
+      } else {
+        const text = item.text || '';
+        const approxW = Math.max(60, text.length * (size * 0.65) + 20);
+        const handleBox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        handleBox.setAttribute('class', 'drag-handle-box');
+        handleBox.setAttribute('x', `-${approxW / 2}`);
+        handleBox.setAttribute('y', `-${size + 6}`);
+        handleBox.setAttribute('width', `${approxW}`);
+        handleBox.setAttribute('height', `${size + 14}`);
+        handleBox.setAttribute('rx', '6');
+        g.appendChild(handleBox);
 
-      const nickEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      nickEl.setAttribute('x', '0');
-      nickEl.setAttribute('y', `${nickY + 2}`);
-      nickEl.setAttribute('text-anchor', 'middle');
-      nickEl.setAttribute('fill', color);
-      nickEl.setAttribute('font-family', font);
-      nickEl.setAttribute('font-size', nickSize);
-      nickEl.setAttribute('font-weight', '800');
-      nickEl.textContent = nick;
-      g.appendChild(nickEl);
-    }
+        const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        textEl.setAttribute('x', '0');
+        textEl.setAttribute('y', '0');
+        textEl.setAttribute('text-anchor', 'middle');
+        textEl.setAttribute('fill', color);
+        textEl.setAttribute('font-family', font);
+        textEl.setAttribute('font-size', size);
+        textEl.setAttribute('font-weight', '900');
+        textEl.setAttribute('letter-spacing', '2');
+        textEl.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))';
+        textEl.textContent = text;
+        g.appendChild(textEl);
+      }
 
-    targetOverlay.appendChild(g);
+      targetLayer.appendChild(g);
 
-    // Permitir arrastre suave
-    makeSvgDraggable(g, (dx, dy) => {
-      state.textPos.x = Math.max(50, Math.min(350, state.textPos.x + dx));
-      state.textPos.y = Math.max(60, Math.min(320, state.textPos.y + dy));
-      g.setAttribute('transform', `translate(${state.textPos.x}, ${state.textPos.y})`);
+      g.addEventListener('click', () => {
+        state.activeTextId = item.id;
+        renderTextList();
+        renderActiveTextEditor();
+        updateTextOverlays();
+      });
+
+      makeSvgDraggable(g, (dx, dy) => {
+        item.x = Math.max(40, Math.min(360, item.x + dx));
+        item.y = Math.max(60, Math.min(330, item.y + dy));
+        g.setAttribute('transform', `translate(${item.x}, ${item.y})`);
+      });
     });
   }
 
@@ -993,81 +1270,51 @@
     if (frontImagesLayer) frontImagesLayer.innerHTML = '';
     if (backImagesLayer) backImagesLayer.innerHTML = '';
 
-    // 1. Insignia Frontal (Pecho)
-    if (frontImagesLayer && state.uploadedLogoSrc) {
-      const gFront = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      gFront.setAttribute('class', 'draggable-logo-group');
-      gFront.setAttribute('id', 'draggableFrontLogo');
-      gFront.setAttribute('transform', `translate(${state.logoPos.x}, ${state.logoPos.y})`);
-      gFront.setAttribute('title', 'Haz clic y arrastra la insignia');
+    state.images.forEach(imgItem => {
+      const targetLayer = imgItem.view === 'frente' ? frontImagesLayer : backImagesLayer;
+      if (!targetLayer) return;
 
-      const imgFront = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      imgFront.setAttribute('href', state.uploadedLogoSrc);
-      imgFront.setAttribute('x', `-${state.logoSize / 2}`);
-      imgFront.setAttribute('y', `-${state.logoSize / 2}`);
-      imgFront.setAttribute('width', `${state.logoSize}`);
-      imgFront.setAttribute('height', `${state.logoSize}`);
-      imgFront.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-      imgFront.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))';
+      const isSelected = imgItem.id === state.activeImageId;
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('class', `draggable-logo-group ${isSelected ? 'layer-selected' : ''}`);
+      g.setAttribute('id', `group-img-${imgItem.id}`);
+      g.setAttribute('transform', `translate(${imgItem.x}, ${imgItem.y})`);
+      g.setAttribute('title', 'Haz clic para seleccionar o arrastra para mover');
 
-      const handleFront = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      handleFront.setAttribute('class', 'drag-handle-box');
-      handleFront.setAttribute('fill', 'none');
-      handleFront.setAttribute('stroke', 'none');
-      handleFront.setAttribute('x', `-${state.logoSize / 2 + 4}`);
-      handleFront.setAttribute('y', `-${state.logoSize / 2 + 4}`);
-      handleFront.setAttribute('width', `${state.logoSize + 8}`);
-      handleFront.setAttribute('height', `${state.logoSize + 8}`);
-      handleFront.setAttribute('rx', '4');
+      const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+      img.setAttribute('href', imgItem.src);
+      img.setAttribute('x', `-${imgItem.size / 2}`);
+      img.setAttribute('y', `-${imgItem.size / 2}`);
+      img.setAttribute('width', `${imgItem.size}`);
+      img.setAttribute('height', `${imgItem.size}`);
+      img.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      img.style.filter = 'drop-shadow(0 2px 5px rgba(0,0,0,0.6))';
 
-      gFront.appendChild(handleFront);
-      gFront.appendChild(imgFront);
-      frontImagesLayer.appendChild(gFront);
+      const handle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      handle.setAttribute('class', 'drag-handle-box');
+      handle.setAttribute('x', `-${imgItem.size / 2 + 4}`);
+      handle.setAttribute('y', `-${imgItem.size / 2 + 4}`);
+      handle.setAttribute('width', `${imgItem.size + 8}`);
+      handle.setAttribute('height', `${imgItem.size + 8}`);
+      handle.setAttribute('rx', '4');
 
-      makeSvgDraggable(gFront, (dx, dy) => {
-        state.logoPos.x = Math.max(50, Math.min(350, state.logoPos.x + dx));
-        state.logoPos.y = Math.max(60, Math.min(320, state.logoPos.y + dy));
-        gFront.setAttribute('transform', `translate(${state.logoPos.x}, ${state.logoPos.y})`);
+      g.appendChild(handle);
+      g.appendChild(img);
+      targetLayer.appendChild(g);
+
+      g.addEventListener('click', () => {
+        state.activeImageId = imgItem.id;
+        renderImageList();
+        renderActiveImageEditor();
+        updateImagesOverlays();
       });
-    }
 
-    // 2. Estampado / Imagen de Espalda
-    if (backImagesLayer && state.uploadedBackImageSrc) {
-      const gBack = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      gBack.setAttribute('class', 'draggable-logo-group');
-      gBack.setAttribute('id', 'draggableBackImage');
-      gBack.setAttribute('transform', `translate(${state.backImagePos.x}, ${state.backImagePos.y})`);
-      gBack.setAttribute('title', 'Haz clic y arrastra el estampado');
-
-      const imgBack = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-      imgBack.setAttribute('href', state.uploadedBackImageSrc);
-      imgBack.setAttribute('x', `-${state.backImageSize / 2}`);
-      imgBack.setAttribute('y', `-${state.backImageSize / 2}`);
-      imgBack.setAttribute('width', `${state.backImageSize}`);
-      imgBack.setAttribute('height', `${state.backImageSize}`);
-      imgBack.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-      imgBack.style.filter = 'drop-shadow(0 3px 6px rgba(0,0,0,0.6))';
-
-      const handleBack = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      handleBack.setAttribute('class', 'drag-handle-box');
-      handleBack.setAttribute('fill', 'none');
-      handleBack.setAttribute('stroke', 'none');
-      handleBack.setAttribute('x', `-${state.backImageSize / 2 + 6}`);
-      handleBack.setAttribute('y', `-${state.backImageSize / 2 + 6}`);
-      handleBack.setAttribute('width', `${state.backImageSize + 12}`);
-      handleBack.setAttribute('height', `${state.backImageSize + 12}`);
-      handleBack.setAttribute('rx', '6');
-
-      gBack.appendChild(handleBack);
-      gBack.appendChild(imgBack);
-      backImagesLayer.appendChild(gBack);
-
-      makeSvgDraggable(gBack, (dx, dy) => {
-        state.backImagePos.x = Math.max(50, Math.min(350, state.backImagePos.x + dx));
-        state.backImagePos.y = Math.max(60, Math.min(320, state.backImagePos.y + dy));
-        gBack.setAttribute('transform', `translate(${state.backImagePos.x}, ${state.backImagePos.y})`);
+      makeSvgDraggable(g, (dx, dy) => {
+        imgItem.x = Math.max(40, Math.min(360, imgItem.x + dx));
+        imgItem.y = Math.max(60, Math.min(330, imgItem.y + dy));
+        g.setAttribute('transform', `translate(${imgItem.x}, ${imgItem.y})`);
       });
-    }
+    });
   }
 
   function escapeXml(str) {
@@ -1178,10 +1425,22 @@
     });
 
     let extraDetails = '';
-    if (state.customText) extraDetails += `🔤 *Texto Espalda:* ${state.customText}\n`;
-    if (state.customNickname) extraDetails += `🏷️ *Apodo:* ${state.customNickname}\n`;
-    if (state.uploadedLogoSrc) extraDetails += `🏫 *Insignia Frente:* Sí, escudo bordado cargado en el pecho\n`;
-    if (state.uploadedBackImageSrc) extraDetails += `🎨 *Estampado Espalda:* Sí, imagen/ilustración cargada en la espalda\n`;
+    if (state.texts.length > 0) {
+      extraDetails += `\n📝 *Textos y Bordados:*\n`;
+      state.texts.forEach((t) => {
+        const viewStr = t.view === 'frente' ? 'Pecho/Frente' : 'Espalda';
+        const typeStr = t.isNick ? 'Apodo (#)' : 'Texto';
+        extraDetails += `• [${viewStr}] ${typeStr}: *${t.text}*\n`;
+      });
+    }
+
+    if (state.images.length > 0) {
+      extraDetails += `\n🖼️ *Imágenes y Estampados:*\n`;
+      state.images.forEach((img, i) => {
+        const viewStr = img.view === 'frente' ? 'Pecho/Frente' : 'Espalda';
+        extraDetails += `• [${viewStr}] Imagen ${i + 1} (${img.size}px)\n`;
+      });
+    }
 
     const message = `¡Hola Serendipia Creaciones! 👋
 Acabo de crear este diseño en su *Personalizador de Polerones* y quisiera cotizarlo para mi curso:
@@ -1295,321 +1554,337 @@ ${extraDetails}
       applyColor(e.target.value, 'Color Personalizado');
     });
 
-    // Inputs de texto
-    elements.inputTextContent.addEventListener('input', (e) => {
-      state.customText = e.target.value;
-      updateTextOverlays();
-    });
+    // -----------------------------------------------------------------------
+    // GESTIÓN DE TEXTOS MULTICAPA (LISTENERS)
+    // -----------------------------------------------------------------------
+    if (elements.btnAddText) {
+      elements.btnAddText.addEventListener('click', addNewText);
+    }
 
-    elements.inputNicknameContent.addEventListener('input', (e) => {
-      state.customNickname = e.target.value;
-      updateTextOverlays();
-    });
-
-    // Opciones de tipografía
-    elements.fontOptionBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        elements.fontOptionBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        state.textFont = btn.getAttribute('data-font');
-        updateTextOverlays();
+    if (elements.inputTextContent) {
+      elements.inputTextContent.addEventListener('input', (e) => {
+        const item = getActiveText();
+        if (item) {
+          item.text = e.target.value;
+          renderTextList();
+          updateTextOverlays();
+        }
       });
-    });
+    }
 
-    // Control de Tamaño de Texto Principal (Slider y Botones +/-)
+    if (elements.btnTextTargetFrente) {
+      elements.btnTextTargetFrente.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.view = 'frente';
+          item.x = 200;
+          item.y = 155;
+          renderTextList();
+          updateTextOverlays();
+          showToast('Texto movido a: FRENTE');
+        }
+      });
+    }
+
+    if (elements.btnTextTargetEspalda) {
+      elements.btnTextTargetEspalda.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.view = 'espalda';
+          item.x = 200;
+          item.y = 160;
+          renderTextList();
+          updateTextOverlays();
+          showToast('Texto movido a: ESPALDA');
+        }
+      });
+    }
+
+    if (elements.btnTextStyleNormal) {
+      elements.btnTextStyleNormal.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.isNick = false;
+          renderTextList();
+          updateTextOverlays();
+        }
+      });
+    }
+
+    if (elements.btnTextStyleNick) {
+      elements.btnTextStyleNick.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.isNick = true;
+          renderTextList();
+          updateTextOverlays();
+        }
+      });
+    }
+
     if (elements.sliderTextSize) {
       elements.sliderTextSize.addEventListener('input', (e) => {
-        state.textSize = parseInt(e.target.value, 10);
-        if (elements.labelValTextSize) elements.labelValTextSize.textContent = `${state.textSize}px`;
-        updateTextOverlays();
+        const item = getActiveText();
+        if (item) {
+          item.size = parseInt(e.target.value, 10);
+          if (elements.labelValTextSize) elements.labelValTextSize.textContent = `${item.size}px`;
+          updateTextOverlays();
+        }
       });
     }
 
     if (elements.btnTextSizeDown) {
       elements.btnTextSizeDown.addEventListener('click', () => {
-        state.textSize = Math.max(10, state.textSize - 2);
-        if (elements.sliderTextSize) elements.sliderTextSize.value = state.textSize;
-        if (elements.labelValTextSize) elements.labelValTextSize.textContent = `${state.textSize}px`;
-        updateTextOverlays();
+        const item = getActiveText();
+        if (item) {
+          item.size = Math.max(10, item.size - 2);
+          if (elements.sliderTextSize) elements.sliderTextSize.value = item.size;
+          if (elements.labelValTextSize) elements.labelValTextSize.textContent = `${item.size}px`;
+          updateTextOverlays();
+        }
       });
     }
 
     if (elements.btnTextSizeUp) {
       elements.btnTextSizeUp.addEventListener('click', () => {
-        state.textSize = Math.min(48, state.textSize + 2);
-        if (elements.sliderTextSize) elements.sliderTextSize.value = state.textSize;
-        if (elements.labelValTextSize) elements.labelValTextSize.textContent = `${state.textSize}px`;
-        updateTextOverlays();
-      });
-    }
-
-    // Control de Tamaño del Apodo
-    if (elements.sliderNickSize) {
-      elements.sliderNickSize.addEventListener('input', (e) => {
-        state.nickSize = parseInt(e.target.value, 10);
-        if (elements.labelValNickSize) elements.labelValNickSize.textContent = `${state.nickSize}px`;
-        updateTextOverlays();
-      });
-    }
-
-    if (elements.btnNickSizeDown) {
-      elements.btnNickSizeDown.addEventListener('click', () => {
-        state.nickSize = Math.max(8, state.nickSize - 2);
-        if (elements.sliderNickSize) elements.sliderNickSize.value = state.nickSize;
-        if (elements.labelValNickSize) elements.labelValNickSize.textContent = `${state.nickSize}px`;
-        updateTextOverlays();
-      });
-    }
-
-    if (elements.btnNickSizeUp) {
-      elements.btnNickSizeUp.addEventListener('click', () => {
-        state.nickSize = Math.min(30, state.nickSize + 2);
-        if (elements.sliderNickSize) elements.sliderNickSize.value = state.nickSize;
-        if (elements.labelValNickSize) elements.labelValNickSize.textContent = `${state.nickSize}px`;
-        updateTextOverlays();
-      });
-    }
-
-    // Selector de Vista (Espalda / Frente)
-    elements.viewTargetBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        elements.viewTargetBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const target = btn.getAttribute('data-target');
-        state.textTargetView = target;
-        if (target === 'frente') {
-          state.textPos = { x: 200, y: 155 };
-        } else {
-          state.textPos = { x: 200, y: 170 };
+        const item = getActiveText();
+        if (item) {
+          item.size = Math.min(48, item.size + 2);
+          if (elements.sliderTextSize) elements.sliderTextSize.value = item.size;
+          if (elements.labelValTextSize) elements.labelValTextSize.textContent = `${item.size}px`;
+          updateTextOverlays();
         }
-        updateTextOverlays();
-        showToast(`Texto ubicado en: ${target.toUpperCase()}`);
-      });
-    });
-
-    // Posiciones Rápidas
-    elements.posQuickBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        elements.posQuickBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const y = parseInt(btn.getAttribute('data-y') || '170', 10);
-        const x = parseInt(btn.getAttribute('data-x') || '200', 10);
-        state.textPos.x = x;
-        state.textPos.y = y;
-        updateTextOverlays();
-      });
-    });
-
-    // Botones direccionales D-Pad
-    const step = 8;
-    if (elements.btnMoveUp) {
-      elements.btnMoveUp.addEventListener('click', () => {
-        state.textPos.y = Math.max(60, state.textPos.y - step);
-        updateTextOverlays();
-      });
-    }
-    if (elements.btnMoveDown) {
-      elements.btnMoveDown.addEventListener('click', () => {
-        state.textPos.y = Math.min(320, state.textPos.y + step);
-        updateTextOverlays();
-      });
-    }
-    if (elements.btnMoveLeft) {
-      elements.btnMoveLeft.addEventListener('click', () => {
-        state.textPos.x = Math.max(60, state.textPos.x - step);
-        updateTextOverlays();
-      });
-    }
-    if (elements.btnMoveRight) {
-      elements.btnMoveRight.addEventListener('click', () => {
-        state.textPos.x = Math.min(340, state.textPos.x + step);
-        updateTextOverlays();
-      });
-    }
-    if (elements.btnMoveCenter) {
-      elements.btnMoveCenter.addEventListener('click', () => {
-        state.textPos.x = 200;
-        state.textPos.y = 170;
-        updateTextOverlays();
-        showToast('Texto centrado');
       });
     }
 
-    // Color del texto
-    elements.inputTextColor.addEventListener('input', (e) => {
-      state.textColor = e.target.value;
-      updateTextOverlays();
-    });
+    if (elements.fontOptionBtns) {
+      elements.fontOptionBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const item = getActiveText();
+          if (item) {
+            item.font = btn.getAttribute('data-font');
+            renderActiveTextEditor();
+            updateTextOverlays();
+          }
+        });
+      });
+    }
+
+    if (elements.inputTextColor) {
+      elements.inputTextColor.addEventListener('input', (e) => {
+        const item = getActiveText();
+        if (item) {
+          item.color = e.target.value;
+          updateTextOverlays();
+        }
+      });
+    }
+
+    if (elements.btnPosArriba) {
+      elements.btnPosArriba.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.y = 125;
+          updateTextOverlays();
+          showToast('Texto ubicado arriba');
+        }
+      });
+    }
+
+    if (elements.btnPosCentro) {
+      elements.btnPosCentro.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.x = 200;
+          item.y = item.view === 'frente' ? 155 : 170;
+          updateTextOverlays();
+          showToast('Texto centrado');
+        }
+      });
+    }
+
+    if (elements.btnPosAbajo) {
+      elements.btnPosAbajo.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.y = 235;
+          updateTextOverlays();
+          showToast('Texto ubicado abajo');
+        }
+      });
+    }
+
+    if (elements.btnPosPechoIzq) {
+      elements.btnPosPechoIzq.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.view = 'frente';
+          item.x = 150;
+          item.y = 145;
+          renderTextList();
+          updateTextOverlays();
+          showToast('Texto ubicado en pecho izquierdo');
+        }
+      });
+    }
+
+    if (elements.btnDeleteCurrentText) {
+      elements.btnDeleteCurrentText.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          deleteText(item.id);
+        }
+      });
+    }
 
     // -----------------------------------------------------------------------
-    // GESTIÓN DE IMÁGENES: INSIGNIA DELANTERA Y ESTAMPADO DE ESPALDA
+    // GESTIÓN DE IMÁGENES MULTICAPA (LISTENERS)
     // -----------------------------------------------------------------------
-    
-    // A. Estampado / Imagen de Espalda
-    if (elements.uploadDropzoneBack && elements.backImageFileInput) {
-      elements.uploadDropzoneBack.addEventListener('click', () => {
-        elements.backImageFileInput.click();
+    if (elements.btnUploadTargetFrente && elements.btnUploadTargetEspalda) {
+      elements.btnUploadTargetFrente.addEventListener('click', () => {
+        state.newImageUploadTarget = 'frente';
+        elements.btnUploadTargetFrente.classList.add('active');
+        elements.btnUploadTargetEspalda.classList.remove('active');
+      });
+      elements.btnUploadTargetEspalda.addEventListener('click', () => {
+        state.newImageUploadTarget = 'espalda';
+        elements.btnUploadTargetEspalda.classList.add('active');
+        elements.btnUploadTargetFrente.classList.remove('active');
+      });
+    }
+
+    if (elements.uploadDropzoneUniversal && elements.imageFileInputUniversal) {
+      elements.uploadDropzoneUniversal.addEventListener('click', () => {
+        elements.imageFileInputUniversal.click();
       });
 
-      elements.backImageFileInput.addEventListener('change', (e) => {
+      elements.imageFileInputUniversal.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
           const reader = new FileReader();
           reader.onload = (event) => {
-            state.uploadedBackImageSrc = event.target.result;
-            if (elements.backImageThumb) elements.backImageThumb.src = state.uploadedBackImageSrc;
-            if (elements.backImagePreviewBox) elements.backImagePreviewBox.style.display = 'flex';
-            if (elements.uploadDropzoneBack) elements.uploadDropzoneBack.style.display = 'none';
-            if (elements.groupBackImageControls) elements.groupBackImageControls.style.display = 'block';
-            updateImagesOverlays();
-            showToast('¡Estampado de espalda cargado!');
+            addNewImage(event.target.result, state.newImageUploadTarget || 'frente');
+            elements.imageFileInputUniversal.value = '';
           };
           reader.readAsDataURL(file);
         }
       });
     }
 
-    if (elements.btnRemoveBackImage) {
-      elements.btnRemoveBackImage.addEventListener('click', () => {
-        state.uploadedBackImageSrc = null;
-        if (elements.backImagePreviewBox) elements.backImagePreviewBox.style.display = 'none';
-        if (elements.uploadDropzoneBack) elements.uploadDropzoneBack.style.display = 'flex';
-        if (elements.groupBackImageControls) elements.groupBackImageControls.style.display = 'none';
-        if (elements.backImageFileInput) elements.backImageFileInput.value = '';
-        updateImagesOverlays();
-        showToast('Estampado de espalda eliminado');
+    if (elements.btnImgTargetFrente && elements.btnImgTargetEspalda) {
+      elements.btnImgTargetFrente.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.view = 'frente';
+          item.x = 155;
+          item.y = 140;
+          renderImageList();
+          updateImagesOverlays();
+          showToast('Imagen movida a: FRENTE');
+        }
       });
-    }
-
-    // Tamaño de imagen espalda
-    if (elements.sliderBackImageSize) {
-      elements.sliderBackImageSize.addEventListener('input', (e) => {
-        state.backImageSize = parseInt(e.target.value, 10);
-        if (elements.labelValBackImageSize) elements.labelValBackImageSize.textContent = `${state.backImageSize}px`;
-        updateImagesOverlays();
-      });
-    }
-    if (elements.btnBackImageSizeDown) {
-      elements.btnBackImageSizeDown.addEventListener('click', () => {
-        state.backImageSize = Math.max(40, state.backImageSize - 10);
-        if (elements.sliderBackImageSize) elements.sliderBackImageSize.value = state.backImageSize;
-        if (elements.labelValBackImageSize) elements.labelValBackImageSize.textContent = `${state.backImageSize}px`;
-        updateImagesOverlays();
-      });
-    }
-    if (elements.btnBackImageSizeUp) {
-      elements.btnBackImageSizeUp.addEventListener('click', () => {
-        state.backImageSize = Math.min(220, state.backImageSize + 10);
-        if (elements.sliderBackImageSize) elements.sliderBackImageSize.value = state.backImageSize;
-        if (elements.labelValBackImageSize) elements.labelValBackImageSize.textContent = `${state.backImageSize}px`;
-        updateImagesOverlays();
-      });
-    }
-
-    // Posiciones rápidas imagen espalda
-    if (elements.btnBackImgPosUp) {
-      elements.btnBackImgPosUp.addEventListener('click', () => {
-        state.backImagePos = { x: 200, y: 145 };
-        updateImagesOverlays();
-        showToast('Estampado ubicado arriba');
-      });
-    }
-    if (elements.btnBackImgPosCenter) {
-      elements.btnBackImgPosCenter.addEventListener('click', () => {
-        state.backImagePos = { x: 200, y: 220 };
-        updateImagesOverlays();
-        showToast('Estampado centrado');
-      });
-    }
-    if (elements.btnBackImgPosDown) {
-      elements.btnBackImgPosDown.addEventListener('click', () => {
-        state.backImagePos = { x: 200, y: 275 };
-        updateImagesOverlays();
-        showToast('Estampado ubicado abajo');
-      });
-    }
-
-    // B. Insignia Frontal (Pecho)
-    if (elements.uploadDropzone && elements.logoFileInput) {
-      elements.uploadDropzone.addEventListener('click', () => {
-        elements.logoFileInput.click();
-      });
-
-      elements.logoFileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            state.uploadedLogoSrc = event.target.result;
-            if (elements.logoThumb) elements.logoThumb.src = state.uploadedLogoSrc;
-            if (elements.logoPreviewBox) elements.logoPreviewBox.style.display = 'flex';
-            if (elements.uploadDropzone) elements.uploadDropzone.style.display = 'none';
-            if (elements.groupFrontLogoControls) elements.groupFrontLogoControls.style.display = 'block';
-            updateImagesOverlays();
-            showToast('Insignia agregada al pecho');
-          };
-          reader.readAsDataURL(file);
+      elements.btnImgTargetEspalda.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.view = 'espalda';
+          item.x = 200;
+          item.y = 220;
+          renderImageList();
+          updateImagesOverlays();
+          showToast('Imagen movida a: ESPALDA');
         }
       });
     }
 
-    if (elements.btnRemoveLogo) {
-      elements.btnRemoveLogo.addEventListener('click', () => {
-        state.uploadedLogoSrc = null;
-        if (elements.logoPreviewBox) elements.logoPreviewBox.style.display = 'none';
-        if (elements.uploadDropzone) elements.uploadDropzone.style.display = 'flex';
-        if (elements.groupFrontLogoControls) elements.groupFrontLogoControls.style.display = 'none';
-        if (elements.logoFileInput) elements.logoFileInput.value = '';
-        updateImagesOverlays();
-        showToast('Insignia eliminada');
+    if (elements.sliderImageSize) {
+      elements.sliderImageSize.addEventListener('input', (e) => {
+        const item = getActiveImage();
+        if (item) {
+          item.size = parseInt(e.target.value, 10);
+          if (elements.labelValImageSize) elements.labelValImageSize.textContent = `${item.size}px`;
+          updateImagesOverlays();
+        }
       });
     }
 
-    // Tamaño de insignia frontal
-    if (elements.sliderFrontLogoSize) {
-      elements.sliderFrontLogoSize.addEventListener('input', (e) => {
-        state.logoSize = parseInt(e.target.value, 10);
-        if (elements.labelValFrontLogoSize) elements.labelValFrontLogoSize.textContent = `${state.logoSize}px`;
-        updateImagesOverlays();
-      });
-    }
-    if (elements.btnFrontLogoSizeDown) {
-      elements.btnFrontLogoSizeDown.addEventListener('click', () => {
-        state.logoSize = Math.max(20, state.logoSize - 4);
-        if (elements.sliderFrontLogoSize) elements.sliderFrontLogoSize.value = state.logoSize;
-        if (elements.labelValFrontLogoSize) elements.labelValFrontLogoSize.textContent = `${state.logoSize}px`;
-        updateImagesOverlays();
-      });
-    }
-    if (elements.btnFrontLogoSizeUp) {
-      elements.btnFrontLogoSizeUp.addEventListener('click', () => {
-        state.logoSize = Math.min(80, state.logoSize + 4);
-        if (elements.sliderFrontLogoSize) elements.sliderFrontLogoSize.value = state.logoSize;
-        if (elements.labelValFrontLogoSize) elements.labelValFrontLogoSize.textContent = `${state.logoSize}px`;
-        updateImagesOverlays();
+    if (elements.btnImageSizeDown) {
+      elements.btnImageSizeDown.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.size = Math.max(20, item.size - 8);
+          if (elements.sliderImageSize) elements.sliderImageSize.value = item.size;
+          if (elements.labelValImageSize) elements.labelValImageSize.textContent = `${item.size}px`;
+          updateImagesOverlays();
+        }
       });
     }
 
-    // Posiciones rápidas insignia frontal
-    if (elements.btnFrontLogoPosLeft) {
-      elements.btnFrontLogoPosLeft.addEventListener('click', () => {
-        state.logoPos = { x: 155, y: 140 };
-        updateImagesOverlays();
-        showToast('Insignia en pecho izquierdo');
+    if (elements.btnImageSizeUp) {
+      elements.btnImageSizeUp.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.size = Math.min(230, item.size + 8);
+          if (elements.sliderImageSize) elements.sliderImageSize.value = item.size;
+          if (elements.labelValImageSize) elements.labelValImageSize.textContent = `${item.size}px`;
+          updateImagesOverlays();
+        }
       });
     }
-    if (elements.btnFrontLogoPosCenter) {
-      elements.btnFrontLogoPosCenter.addEventListener('click', () => {
-        state.logoPos = { x: 200, y: 160 };
-        updateImagesOverlays();
-        showToast('Insignia en centro');
+
+    if (elements.btnImgPosArriba) {
+      elements.btnImgPosArriba.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.y = item.view === 'frente' ? 130 : 145;
+          updateImagesOverlays();
+          showToast('Imagen ubicada arriba');
+        }
       });
     }
-    if (elements.btnFrontLogoPosRight) {
-      elements.btnFrontLogoPosRight.addEventListener('click', () => {
-        state.logoPos = { x: 245, y: 140 };
-        updateImagesOverlays();
-        showToast('Insignia en pecho derecho');
+
+    if (elements.btnImgPosCentro) {
+      elements.btnImgPosCentro.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.x = 200;
+          item.y = item.view === 'frente' ? 160 : 220;
+          updateImagesOverlays();
+          showToast('Imagen centrada');
+        }
+      });
+    }
+
+    if (elements.btnImgPosAbajo) {
+      elements.btnImgPosAbajo.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.y = 265;
+          updateImagesOverlays();
+          showToast('Imagen ubicada abajo');
+        }
+      });
+    }
+
+    if (elements.btnImgPosPechoIzq) {
+      elements.btnImgPosPechoIzq.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.view = 'frente';
+          item.x = 155;
+          item.y = 140;
+          renderImageList();
+          updateImagesOverlays();
+          showToast('Imagen en pecho izquierdo');
+        }
+      });
+    }
+
+    if (elements.btnDeleteCurrentImage) {
+      elements.btnDeleteCurrentImage.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          deleteImage(item.id);
+        }
       });
     }
 
@@ -1649,14 +1924,35 @@ ${extraDetails}
     elements.btnResetAll.addEventListener('click', () => {
       if (confirm('¿Deseas reiniciar los colores y diseño de este modelo?')) {
         state.colors = {};
-        state.uploadedLogoSrc = null;
-        state.uploadedBackImageSrc = null;
-        if (elements.logoPreviewBox) elements.logoPreviewBox.style.display = 'none';
-        if (elements.uploadDropzone) elements.uploadDropzone.style.display = 'flex';
-        if (elements.groupFrontLogoControls) elements.groupFrontLogoControls.style.display = 'none';
-        if (elements.backImagePreviewBox) elements.backImagePreviewBox.style.display = 'none';
-        if (elements.uploadDropzoneBack) elements.uploadDropzoneBack.style.display = 'flex';
-        if (elements.groupBackImageControls) elements.groupBackImageControls.style.display = 'none';
+        state.images = [];
+        state.activeImageId = null;
+        state.texts = [
+          {
+            id: 't_gen',
+            text: 'GENERACIÓN 2026',
+            view: 'espalda',
+            x: 200,
+            y: 160,
+            size: 22,
+            font: "'Plus Jakarta Sans', sans-serif",
+            color: '#ffffff',
+            isNick: false
+          },
+          {
+            id: 't_nick',
+            text: '#MATI',
+            view: 'espalda',
+            x: 200,
+            y: 200,
+            size: 13,
+            font: "'Plus Jakarta Sans', sans-serif",
+            color: '#ffffff',
+            isNick: true
+          }
+        ];
+        state.activeTextId = 't_gen';
+        renderTextList();
+        renderImageList();
         setSubmodel(state.categoryKey, state.submodelId);
         showToast('Diseño reiniciado');
       }
