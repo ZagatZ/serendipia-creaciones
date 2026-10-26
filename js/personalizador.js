@@ -992,6 +992,10 @@
       elements.btnTextTargetEspalda.classList.toggle('active', item.view === 'espalda');
     }
 
+    if (elements.btnPosPechoIzq) {
+      elements.btnPosPechoIzq.style.display = item.view === 'espalda' ? 'none' : '';
+    }
+
     if (elements.btnTextStyleNormal && elements.btnTextStyleNick) {
       elements.btnTextStyleNormal.classList.toggle('active', !item.isNick);
       elements.btnTextStyleNick.classList.toggle('active', !!item.isNick);
@@ -1118,6 +1122,10 @@
     if (elements.btnImgTargetFrente && elements.btnImgTargetEspalda) {
       elements.btnImgTargetFrente.classList.toggle('active', item.view === 'frente');
       elements.btnImgTargetEspalda.classList.toggle('active', item.view === 'espalda');
+    }
+
+    if (elements.btnImgPosPechoIzq) {
+      elements.btnImgPosPechoIzq.style.display = item.view === 'espalda' ? 'none' : '';
     }
 
     if (elements.sliderImageSize) {
@@ -1717,11 +1725,9 @@ ${extraDetails}
     if (elements.btnPosPechoIzq) {
       elements.btnPosPechoIzq.addEventListener('click', () => {
         const item = getActiveText();
-        if (item) {
-          item.view = 'frente';
+        if (item && item.view === 'frente') {
           item.x = 150;
           item.y = 145;
-          renderTextList();
           updateTextOverlays();
           showToast('Texto ubicado en pecho izquierdo');
         }
@@ -1835,6 +1841,7 @@ ${extraDetails}
       elements.btnImgPosArriba.addEventListener('click', () => {
         const item = getActiveImage();
         if (item) {
+          item.x = 200;
           item.y = item.view === 'frente' ? 130 : 145;
           updateImagesOverlays();
           showToast('Imagen ubicada arriba');
@@ -1858,6 +1865,7 @@ ${extraDetails}
       elements.btnImgPosAbajo.addEventListener('click', () => {
         const item = getActiveImage();
         if (item) {
+          item.x = 200;
           item.y = 265;
           updateImagesOverlays();
           showToast('Imagen ubicada abajo');
@@ -1868,11 +1876,9 @@ ${extraDetails}
     if (elements.btnImgPosPechoIzq) {
       elements.btnImgPosPechoIzq.addEventListener('click', () => {
         const item = getActiveImage();
-        if (item) {
-          item.view = 'frente';
+        if (item && item.view === 'frente') {
           item.x = 155;
           item.y = 140;
-          renderImageList();
           updateImagesOverlays();
           showToast('Imagen en pecho izquierdo');
         }
