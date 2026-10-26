@@ -84,8 +84,8 @@
           <span>Textos</span>
         </button>
         <button type="button" class="tool-tab-btn" data-tab="tab-logos" role="tab" aria-selected="false">
-          <span class="tab-icon">🏫</span>
-          <span>Insignia</span>
+          <span class="tab-icon">🖼️</span>
+          <span>Imágenes</span>
         </button>
       </div>
 
@@ -248,30 +248,107 @@
 
       </div>
 
-      <!-- TAB 3: INSIGNIA / LOGO -->
+      <!-- TAB 3: IMÁGENES / ESTAMPADOS Y LOGOS -->
       <div class="tab-pane" id="tab-logos" role="tabpanel">
         
+        <!-- SECCIÓN 1: ESTAMPADO / IMAGEN DE ESPALDA -->
         <div class="section-box">
           <span class="section-label">
-            <span>🏫</span>
-            <span>Insignia de Colegio o Empresa</span>
+            <span>🎨</span>
+            <span>Estampado / Imagen de Espalda</span>
           </span>
+          <p style="font-size: 0.76rem; color: #94a3b8; margin: 4px 0 10px 0;">
+            Ilustración de curso, caricatura, árbol de huellas o logo trasero.
+          </p>
 
-          <input type="file" id="logoFileInput" accept="image/png, image/jpeg, image/svg+xml" style="display: none;">
+          <input type="file" id="backImageFileInput" accept="image/png, image/jpeg, image/svg+xml, image/webp" style="display: none;">
           
-          <div class="upload-dropzone" id="uploadDropzone">
+          <div class="upload-dropzone" id="uploadDropzoneBack">
             <span class="upload-icon">📤</span>
-            <span class="upload-text">Haz clic para subir tu insignia</span>
+            <span class="upload-text">Subir imagen para la espalda</span>
             <span class="upload-hint">PNG o JPG con fondo transparente recomendado</span>
           </div>
 
+          <div class="logo-preview-box" id="backImagePreviewBox" style="display: none;">
+            <img src="" alt="Previsualización Imagen Espalda" class="logo-thumb" id="backImageThumb">
+            <div style="flex: 1; margin-left: 10px;">
+              <div style="font-size: 0.85rem; font-weight: 700;">Estampado en Espalda</div>
+              <div style="font-size: 0.72rem; color: var(--brand-cyan);">Arrastrable en el polerón</div>
+            </div>
+            <button type="button" class="btn-remove-logo" id="btnRemoveBackImage">Quitar</button>
+          </div>
+
+          <!-- Controles de tamaño y posición de imagen espalda -->
+          <div class="form-group" id="groupBackImageControls" style="display: none; margin-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label class="form-label" for="sliderBackImageSize">Tamaño del Estampado</label>
+              <span id="labelValBackImageSize" class="size-badge">95px</span>
+            </div>
+            <div class="size-control-row">
+              <button type="button" class="btn-step-size" id="btnBackImageSizeDown" aria-label="Reducir estampado">−</button>
+              <input type="range" id="sliderBackImageSize" min="40" max="220" value="95" class="range-slider">
+              <button type="button" class="btn-step-size" id="btnBackImageSizeUp" aria-label="Aumentar estampado">+</button>
+            </div>
+
+            <!-- Posiciones rápidas espalda -->
+            <label class="form-label" style="margin-top: 10px; display: block;">Posición Rápida</label>
+            <div class="position-selector-grid" style="grid-template-columns: repeat(3, 1fr);">
+              <button type="button" class="pos-btn" id="btnBackImgPosUp">Arriba</button>
+              <button type="button" class="pos-btn active" id="btnBackImgPosCenter">Centro</button>
+              <button type="button" class="pos-btn" id="btnBackImgPosDown">Abajo</button>
+            </div>
+            <div style="font-size: 0.73rem; color: var(--brand-cyan); margin-top: 8px; text-align: center;">
+              👆 Tip: También puedes arrastrar la imagen directamente con el mouse o dedo
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN 2: INSIGNIA DELANTERA (PECHO) -->
+        <div class="section-box">
+          <span class="section-label">
+            <span>🏫</span>
+            <span>Insignia Frontal (Pecho)</span>
+          </span>
+          <p style="font-size: 0.76rem; color: #94a3b8; margin: 4px 0 10px 0;">
+            Escudo bordado de colegio, club o empresa.
+          </p>
+
+          <input type="file" id="logoFileInput" accept="image/png, image/jpeg, image/svg+xml, image/webp" style="display: none;">
+          
+          <div class="upload-dropzone" id="uploadDropzone">
+            <span class="upload-icon">📤</span>
+            <span class="upload-text">Subir insignia delantera</span>
+            <span class="upload-hint">PNG o JPG para bordado en el pecho</span>
+          </div>
+
           <div class="logo-preview-box" id="logoPreviewBox" style="display: none;">
-            <img src="" alt="Previsualización Logo" class="logo-thumb" id="logoThumb">
+            <img src="" alt="Previsualización Insignia" class="logo-thumb" id="logoThumb">
             <div style="flex: 1; margin-left: 10px;">
               <div style="font-size: 0.85rem; font-weight: 700;">Insignia cargada</div>
               <div style="font-size: 0.72rem; color: #94a3b8;">Ubicada en el pecho</div>
             </div>
             <button type="button" class="btn-remove-logo" id="btnRemoveLogo">Quitar</button>
+          </div>
+
+          <!-- Controles de tamaño de insignia frontal -->
+          <div class="form-group" id="groupFrontLogoControls" style="display: none; margin-top: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label class="form-label" for="sliderFrontLogoSize">Tamaño de Insignia</label>
+              <span id="labelValFrontLogoSize" class="size-badge">38px</span>
+            </div>
+            <div class="size-control-row">
+              <button type="button" class="btn-step-size" id="btnFrontLogoSizeDown" aria-label="Reducir insignia">−</button>
+              <input type="range" id="sliderFrontLogoSize" min="20" max="80" value="38" class="range-slider">
+              <button type="button" class="btn-step-size" id="btnFrontLogoSizeUp" aria-label="Aumentar insignia">+</button>
+            </div>
+
+            <!-- Posiciones rápidas insignia -->
+            <label class="form-label" style="margin-top: 10px; display: block;">Posición Rápida</label>
+            <div class="position-selector-grid" style="grid-template-columns: repeat(3, 1fr);">
+              <button type="button" class="pos-btn active" id="btnFrontLogoPosLeft">Pecho Izq.</button>
+              <button type="button" class="pos-btn" id="btnFrontLogoPosCenter">Centro</button>
+              <button type="button" class="pos-btn" id="btnFrontLogoPosRight">Pecho Der.</button>
+            </div>
           </div>
         </div>
 

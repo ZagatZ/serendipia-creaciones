@@ -163,7 +163,10 @@
     textPosition: 'espalda',
     uploadedLogoSrc: null,
     logoPos: { x: 155, y: 140 },
-    logoSize: 36,
+    logoSize: 38,
+    uploadedBackImageSrc: null,
+    backImagePos: { x: 200, y: 220 },
+    backImageSize: 95,
     activeView: 'frente' // Para visualización en móviles ('frente' o 'espalda')
   };
 
@@ -204,12 +207,34 @@
     btnMoveLeft: document.getElementById('btnMoveLeft'),
     btnMoveRight: document.getElementById('btnMoveRight'),
     btnMoveCenter: document.getElementById('btnMoveCenter'),
-    // Logo
+    // Insignia Pecho (Frente)
     logoFileInput: document.getElementById('logoFileInput'),
     uploadDropzone: document.getElementById('uploadDropzone'),
     logoPreviewBox: document.getElementById('logoPreviewBox'),
     logoThumb: document.getElementById('logoThumb'),
     btnRemoveLogo: document.getElementById('btnRemoveLogo'),
+    groupFrontLogoControls: document.getElementById('groupFrontLogoControls'),
+    sliderFrontLogoSize: document.getElementById('sliderFrontLogoSize'),
+    labelValFrontLogoSize: document.getElementById('labelValFrontLogoSize'),
+    btnFrontLogoSizeDown: document.getElementById('btnFrontLogoSizeDown'),
+    btnFrontLogoSizeUp: document.getElementById('btnFrontLogoSizeUp'),
+    btnFrontLogoPosLeft: document.getElementById('btnFrontLogoPosLeft'),
+    btnFrontLogoPosCenter: document.getElementById('btnFrontLogoPosCenter'),
+    btnFrontLogoPosRight: document.getElementById('btnFrontLogoPosRight'),
+    // Estampado / Imagen Espalda
+    backImageFileInput: document.getElementById('backImageFileInput'),
+    uploadDropzoneBack: document.getElementById('uploadDropzoneBack'),
+    backImagePreviewBox: document.getElementById('backImagePreviewBox'),
+    backImageThumb: document.getElementById('backImageThumb'),
+    btnRemoveBackImage: document.getElementById('btnRemoveBackImage'),
+    groupBackImageControls: document.getElementById('groupBackImageControls'),
+    sliderBackImageSize: document.getElementById('sliderBackImageSize'),
+    labelValBackImageSize: document.getElementById('labelValBackImageSize'),
+    btnBackImageSizeDown: document.getElementById('btnBackImageSizeDown'),
+    btnBackImageSizeUp: document.getElementById('btnBackImageSizeUp'),
+    btnBackImgPosUp: document.getElementById('btnBackImgPosUp'),
+    btnBackImgPosCenter: document.getElementById('btnBackImgPosCenter'),
+    btnBackImgPosDown: document.getElementById('btnBackImgPosDown'),
     // Canvas y SVGs
     frontSvgContainer: document.getElementById('frontSvgContainer'),
     backSvgContainer: document.getElementById('backSvgContainer'),
@@ -338,7 +363,7 @@
     renderHoodieSvgs(sub);
     updateSvgColors();
     updateTextOverlays();
-    updateLogoOverlay();
+    updateImagesOverlays();
   }
 
   // -------------------------------------------------------------------------
@@ -721,7 +746,10 @@
         <g id="layer-shading" style="pointer-events: none;">${shadingPaths}</g>
 
         <!-- Capa 7: Textos y Logos Dinámicos -->
-        <g id="layer-overlays-${opts.view}"></g>
+        <g id="layer-overlays-${opts.view}">
+          <g id="layer-images-${opts.view}"></g>
+          <g id="layer-texts-${opts.view}"></g>
+        </g>
       </svg>
     `;
   }
@@ -870,11 +898,11 @@
   }
 
   function updateTextOverlays() {
-    const frontOverlay = document.getElementById('layer-overlays-frente');
-    const backOverlay = document.getElementById('layer-overlays-espalda');
+    const frontTextLayer = document.getElementById('layer-texts-frente') || document.getElementById('layer-overlays-frente');
+    const backTextLayer = document.getElementById('layer-texts-espalda') || document.getElementById('layer-overlays-espalda');
 
-    if (frontOverlay) frontOverlay.innerHTML = '';
-    if (backOverlay) backOverlay.innerHTML = '';
+    if (frontTextLayer) frontTextLayer.innerHTML = '';
+    if (backTextLayer) backTextLayer.innerHTML = '';
 
     const text = state.customText || '';
     const nick = state.customNickname || '';
@@ -886,7 +914,7 @@
     if (!text && !nick) return;
 
     // Inyectar en el overlay según la vista objetivo elegida por el usuario
-    const targetOverlay = state.textTargetView === 'frente' ? frontOverlay : backOverlay;
+    const targetOverlay = state.textTargetView === 'frente' ? frontTextLayer : backTextLayer;
     if (!targetOverlay) return;
 
     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -958,42 +986,88 @@
     });
   }
 
-  function updateLogoOverlay() {
-    const frontOverlay = document.getElementById('layer-overlays-frente');
-    if (!frontOverlay || !state.uploadedLogoSrc) return;
+  function updateImagesOverlays() {
+    const frontImagesLayer = document.getElementById('layer-images-frente') || document.getElementById('layer-overlays-frente');
+    const backImagesLayer = document.getElementById('layer-images-espalda') || document.getElementById('layer-overlays-espalda');
 
-    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    g.setAttribute('class', 'draggable-logo-group');
-    g.setAttribute('transform', `translate(${state.logoPos.x}, ${state.logoPos.y})`);
+    if (frontImagesLayer) frontImagesLayer.innerHTML = '';
+    if (backImagesLayer) backImagesLayer.innerHTML = '';
 
-    const imgEl = document.createElementNS('http://www.w3.org/2000/svg', 'image');
-    imgEl.setAttribute('href', state.uploadedLogoSrc);
-    imgEl.setAttribute('x', `-${state.logoSize / 2}`);
-    imgEl.setAttribute('y', `-${state.logoSize / 2}`);
-    imgEl.setAttribute('width', `${state.logoSize}`);
-    imgEl.setAttribute('height', `${state.logoSize}`);
-    imgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-    imgEl.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))';
+    // 1. Insignia Frontal (Pecho)
+    if (frontImagesLayer && state.uploadedLogoSrc) {
+      const gFront = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      gFront.setAttribute('class', 'draggable-logo-group');
+      gFront.setAttribute('id', 'draggableFrontLogo');
+      gFront.setAttribute('transform', `translate(${state.logoPos.x}, ${state.logoPos.y})`);
+      gFront.setAttribute('title', 'Haz clic y arrastra la insignia');
 
-    const handle = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    handle.setAttribute('class', 'drag-handle-box');
-    handle.setAttribute('fill', 'none');
-    handle.setAttribute('stroke', 'none');
-    handle.setAttribute('x', `-${state.logoSize / 2 + 4}`);
-    handle.setAttribute('y', `-${state.logoSize / 2 + 4}`);
-    handle.setAttribute('width', `${state.logoSize + 8}`);
-    handle.setAttribute('height', `${state.logoSize + 8}`);
-    handle.setAttribute('rx', '4');
+      const imgFront = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+      imgFront.setAttribute('href', state.uploadedLogoSrc);
+      imgFront.setAttribute('x', `-${state.logoSize / 2}`);
+      imgFront.setAttribute('y', `-${state.logoSize / 2}`);
+      imgFront.setAttribute('width', `${state.logoSize}`);
+      imgFront.setAttribute('height', `${state.logoSize}`);
+      imgFront.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      imgFront.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))';
 
-    g.appendChild(handle);
-    g.appendChild(imgEl);
-    frontOverlay.appendChild(g);
+      const handleFront = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      handleFront.setAttribute('class', 'drag-handle-box');
+      handleFront.setAttribute('fill', 'none');
+      handleFront.setAttribute('stroke', 'none');
+      handleFront.setAttribute('x', `-${state.logoSize / 2 + 4}`);
+      handleFront.setAttribute('y', `-${state.logoSize / 2 + 4}`);
+      handleFront.setAttribute('width', `${state.logoSize + 8}`);
+      handleFront.setAttribute('height', `${state.logoSize + 8}`);
+      handleFront.setAttribute('rx', '4');
 
-    makeSvgDraggable(g, (dx, dy) => {
-      state.logoPos.x = Math.max(50, Math.min(350, state.logoPos.x + dx));
-      state.logoPos.y = Math.max(60, Math.min(320, state.logoPos.y + dy));
-      g.setAttribute('transform', `translate(${state.logoPos.x}, ${state.logoPos.y})`);
-    });
+      gFront.appendChild(handleFront);
+      gFront.appendChild(imgFront);
+      frontImagesLayer.appendChild(gFront);
+
+      makeSvgDraggable(gFront, (dx, dy) => {
+        state.logoPos.x = Math.max(50, Math.min(350, state.logoPos.x + dx));
+        state.logoPos.y = Math.max(60, Math.min(320, state.logoPos.y + dy));
+        gFront.setAttribute('transform', `translate(${state.logoPos.x}, ${state.logoPos.y})`);
+      });
+    }
+
+    // 2. Estampado / Imagen de Espalda
+    if (backImagesLayer && state.uploadedBackImageSrc) {
+      const gBack = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      gBack.setAttribute('class', 'draggable-logo-group');
+      gBack.setAttribute('id', 'draggableBackImage');
+      gBack.setAttribute('transform', `translate(${state.backImagePos.x}, ${state.backImagePos.y})`);
+      gBack.setAttribute('title', 'Haz clic y arrastra el estampado');
+
+      const imgBack = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+      imgBack.setAttribute('href', state.uploadedBackImageSrc);
+      imgBack.setAttribute('x', `-${state.backImageSize / 2}`);
+      imgBack.setAttribute('y', `-${state.backImageSize / 2}`);
+      imgBack.setAttribute('width', `${state.backImageSize}`);
+      imgBack.setAttribute('height', `${state.backImageSize}`);
+      imgBack.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      imgBack.style.filter = 'drop-shadow(0 3px 6px rgba(0,0,0,0.6))';
+
+      const handleBack = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      handleBack.setAttribute('class', 'drag-handle-box');
+      handleBack.setAttribute('fill', 'none');
+      handleBack.setAttribute('stroke', 'none');
+      handleBack.setAttribute('x', `-${state.backImageSize / 2 + 6}`);
+      handleBack.setAttribute('y', `-${state.backImageSize / 2 + 6}`);
+      handleBack.setAttribute('width', `${state.backImageSize + 12}`);
+      handleBack.setAttribute('height', `${state.backImageSize + 12}`);
+      handleBack.setAttribute('rx', '6');
+
+      gBack.appendChild(handleBack);
+      gBack.appendChild(imgBack);
+      backImagesLayer.appendChild(gBack);
+
+      makeSvgDraggable(gBack, (dx, dy) => {
+        state.backImagePos.x = Math.max(50, Math.min(350, state.backImagePos.x + dx));
+        state.backImagePos.y = Math.max(60, Math.min(320, state.backImagePos.y + dy));
+        gBack.setAttribute('transform', `translate(${state.backImagePos.x}, ${state.backImagePos.y})`);
+      });
+    }
   }
 
   function escapeXml(str) {
@@ -1106,7 +1180,8 @@
     let extraDetails = '';
     if (state.customText) extraDetails += `🔤 *Texto Espalda:* ${state.customText}\n`;
     if (state.customNickname) extraDetails += `🏷️ *Apodo:* ${state.customNickname}\n`;
-    if (state.uploadedLogoSrc) extraDetails += `🏫 *Insignia:* Sí, logo cargado en el diseño\n`;
+    if (state.uploadedLogoSrc) extraDetails += `🏫 *Insignia Frente:* Sí, escudo bordado cargado en el pecho\n`;
+    if (state.uploadedBackImageSrc) extraDetails += `🎨 *Estampado Espalda:* Sí, imagen/ilustración cargada en la espalda\n`;
 
     const message = `¡Hola Serendipia Creaciones! 👋
 Acabo de crear este diseño en su *Personalizador de Polerones* y quisiera cotizarlo para mi curso:
@@ -1366,35 +1441,177 @@ ${extraDetails}
       updateTextOverlays();
     });
 
-    // Subida de logo
-    elements.uploadDropzone.addEventListener('click', () => {
-      elements.logoFileInput.click();
-    });
+    // -----------------------------------------------------------------------
+    // GESTIÓN DE IMÁGENES: INSIGNIA DELANTERA Y ESTAMPADO DE ESPALDA
+    // -----------------------------------------------------------------------
+    
+    // A. Estampado / Imagen de Espalda
+    if (elements.uploadDropzoneBack && elements.backImageFileInput) {
+      elements.uploadDropzoneBack.addEventListener('click', () => {
+        elements.backImageFileInput.click();
+      });
 
-    elements.logoFileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          state.uploadedLogoSrc = event.target.result;
-          elements.logoThumb.src = state.uploadedLogoSrc;
-          elements.logoPreviewBox.style.display = 'flex';
-          elements.uploadDropzone.style.display = 'none';
-          updateLogoOverlay();
-          showToast('Insignia agregada al pecho');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
+      elements.backImageFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            state.uploadedBackImageSrc = event.target.result;
+            if (elements.backImageThumb) elements.backImageThumb.src = state.uploadedBackImageSrc;
+            if (elements.backImagePreviewBox) elements.backImagePreviewBox.style.display = 'flex';
+            if (elements.uploadDropzoneBack) elements.uploadDropzoneBack.style.display = 'none';
+            if (elements.groupBackImageControls) elements.groupBackImageControls.style.display = 'block';
+            updateImagesOverlays();
+            showToast('¡Estampado de espalda cargado!');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
 
-    elements.btnRemoveLogo.addEventListener('click', () => {
-      state.uploadedLogoSrc = null;
-      elements.logoPreviewBox.style.display = 'none';
-      elements.uploadDropzone.style.display = 'flex';
-      elements.logoFileInput.value = '';
-      updateTextOverlays();
-      showToast('Insignia eliminada');
-    });
+    if (elements.btnRemoveBackImage) {
+      elements.btnRemoveBackImage.addEventListener('click', () => {
+        state.uploadedBackImageSrc = null;
+        if (elements.backImagePreviewBox) elements.backImagePreviewBox.style.display = 'none';
+        if (elements.uploadDropzoneBack) elements.uploadDropzoneBack.style.display = 'flex';
+        if (elements.groupBackImageControls) elements.groupBackImageControls.style.display = 'none';
+        if (elements.backImageFileInput) elements.backImageFileInput.value = '';
+        updateImagesOverlays();
+        showToast('Estampado de espalda eliminado');
+      });
+    }
+
+    // Tamaño de imagen espalda
+    if (elements.sliderBackImageSize) {
+      elements.sliderBackImageSize.addEventListener('input', (e) => {
+        state.backImageSize = parseInt(e.target.value, 10);
+        if (elements.labelValBackImageSize) elements.labelValBackImageSize.textContent = `${state.backImageSize}px`;
+        updateImagesOverlays();
+      });
+    }
+    if (elements.btnBackImageSizeDown) {
+      elements.btnBackImageSizeDown.addEventListener('click', () => {
+        state.backImageSize = Math.max(40, state.backImageSize - 10);
+        if (elements.sliderBackImageSize) elements.sliderBackImageSize.value = state.backImageSize;
+        if (elements.labelValBackImageSize) elements.labelValBackImageSize.textContent = `${state.backImageSize}px`;
+        updateImagesOverlays();
+      });
+    }
+    if (elements.btnBackImageSizeUp) {
+      elements.btnBackImageSizeUp.addEventListener('click', () => {
+        state.backImageSize = Math.min(220, state.backImageSize + 10);
+        if (elements.sliderBackImageSize) elements.sliderBackImageSize.value = state.backImageSize;
+        if (elements.labelValBackImageSize) elements.labelValBackImageSize.textContent = `${state.backImageSize}px`;
+        updateImagesOverlays();
+      });
+    }
+
+    // Posiciones rápidas imagen espalda
+    if (elements.btnBackImgPosUp) {
+      elements.btnBackImgPosUp.addEventListener('click', () => {
+        state.backImagePos = { x: 200, y: 145 };
+        updateImagesOverlays();
+        showToast('Estampado ubicado arriba');
+      });
+    }
+    if (elements.btnBackImgPosCenter) {
+      elements.btnBackImgPosCenter.addEventListener('click', () => {
+        state.backImagePos = { x: 200, y: 220 };
+        updateImagesOverlays();
+        showToast('Estampado centrado');
+      });
+    }
+    if (elements.btnBackImgPosDown) {
+      elements.btnBackImgPosDown.addEventListener('click', () => {
+        state.backImagePos = { x: 200, y: 275 };
+        updateImagesOverlays();
+        showToast('Estampado ubicado abajo');
+      });
+    }
+
+    // B. Insignia Frontal (Pecho)
+    if (elements.uploadDropzone && elements.logoFileInput) {
+      elements.uploadDropzone.addEventListener('click', () => {
+        elements.logoFileInput.click();
+      });
+
+      elements.logoFileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            state.uploadedLogoSrc = event.target.result;
+            if (elements.logoThumb) elements.logoThumb.src = state.uploadedLogoSrc;
+            if (elements.logoPreviewBox) elements.logoPreviewBox.style.display = 'flex';
+            if (elements.uploadDropzone) elements.uploadDropzone.style.display = 'none';
+            if (elements.groupFrontLogoControls) elements.groupFrontLogoControls.style.display = 'block';
+            updateImagesOverlays();
+            showToast('Insignia agregada al pecho');
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    if (elements.btnRemoveLogo) {
+      elements.btnRemoveLogo.addEventListener('click', () => {
+        state.uploadedLogoSrc = null;
+        if (elements.logoPreviewBox) elements.logoPreviewBox.style.display = 'none';
+        if (elements.uploadDropzone) elements.uploadDropzone.style.display = 'flex';
+        if (elements.groupFrontLogoControls) elements.groupFrontLogoControls.style.display = 'none';
+        if (elements.logoFileInput) elements.logoFileInput.value = '';
+        updateImagesOverlays();
+        showToast('Insignia eliminada');
+      });
+    }
+
+    // Tamaño de insignia frontal
+    if (elements.sliderFrontLogoSize) {
+      elements.sliderFrontLogoSize.addEventListener('input', (e) => {
+        state.logoSize = parseInt(e.target.value, 10);
+        if (elements.labelValFrontLogoSize) elements.labelValFrontLogoSize.textContent = `${state.logoSize}px`;
+        updateImagesOverlays();
+      });
+    }
+    if (elements.btnFrontLogoSizeDown) {
+      elements.btnFrontLogoSizeDown.addEventListener('click', () => {
+        state.logoSize = Math.max(20, state.logoSize - 4);
+        if (elements.sliderFrontLogoSize) elements.sliderFrontLogoSize.value = state.logoSize;
+        if (elements.labelValFrontLogoSize) elements.labelValFrontLogoSize.textContent = `${state.logoSize}px`;
+        updateImagesOverlays();
+      });
+    }
+    if (elements.btnFrontLogoSizeUp) {
+      elements.btnFrontLogoSizeUp.addEventListener('click', () => {
+        state.logoSize = Math.min(80, state.logoSize + 4);
+        if (elements.sliderFrontLogoSize) elements.sliderFrontLogoSize.value = state.logoSize;
+        if (elements.labelValFrontLogoSize) elements.labelValFrontLogoSize.textContent = `${state.logoSize}px`;
+        updateImagesOverlays();
+      });
+    }
+
+    // Posiciones rápidas insignia frontal
+    if (elements.btnFrontLogoPosLeft) {
+      elements.btnFrontLogoPosLeft.addEventListener('click', () => {
+        state.logoPos = { x: 155, y: 140 };
+        updateImagesOverlays();
+        showToast('Insignia en pecho izquierdo');
+      });
+    }
+    if (elements.btnFrontLogoPosCenter) {
+      elements.btnFrontLogoPosCenter.addEventListener('click', () => {
+        state.logoPos = { x: 200, y: 160 };
+        updateImagesOverlays();
+        showToast('Insignia en centro');
+      });
+    }
+    if (elements.btnFrontLogoPosRight) {
+      elements.btnFrontLogoPosRight.addEventListener('click', () => {
+        state.logoPos = { x: 245, y: 140 };
+        updateImagesOverlays();
+        showToast('Insignia en pecho derecho');
+      });
+    }
 
     // Alternar vistas (Ambas Vistas, Solo Frente, Solo Espalda)
     const sweatshirtContainer = document.querySelector('.sweatshirt-dual-view');
@@ -1430,10 +1647,18 @@ ${extraDetails}
     elements.btnDownloadPng.addEventListener('click', downloadMockupPng);
 
     elements.btnResetAll.addEventListener('click', () => {
-      if (confirm('¿Deseas reiniciar los colores de este modelo?')) {
+      if (confirm('¿Deseas reiniciar los colores y diseño de este modelo?')) {
         state.colors = {};
+        state.uploadedLogoSrc = null;
+        state.uploadedBackImageSrc = null;
+        if (elements.logoPreviewBox) elements.logoPreviewBox.style.display = 'none';
+        if (elements.uploadDropzone) elements.uploadDropzone.style.display = 'flex';
+        if (elements.groupFrontLogoControls) elements.groupFrontLogoControls.style.display = 'none';
+        if (elements.backImagePreviewBox) elements.backImagePreviewBox.style.display = 'none';
+        if (elements.uploadDropzoneBack) elements.uploadDropzoneBack.style.display = 'flex';
+        if (elements.groupBackImageControls) elements.groupBackImageControls.style.display = 'none';
         setSubmodel(state.categoryKey, state.submodelId);
-        showToast('Colores reiniciados');
+        showToast('Diseño reiniciado');
       }
     });
   }
