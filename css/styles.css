@@ -1858,12 +1858,21 @@ textarea {
   .nav-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
   }
 
-  .nav-actions .nav-btn-customizer,
   .nav-actions .nav-btn-quote {
     display: none !important;
+  }
+
+  .nav-actions .nav-btn-customizer {
+    display: inline-flex !important;
+    padding: 6px 11px !important;
+    font-size: 0.75rem !important;
+    border-radius: 999px !important;
+    font-weight: 800 !important;
+    white-space: nowrap !important;
+    gap: 4px !important;
   }
 
   .nav-btn-wa {
@@ -1900,8 +1909,8 @@ textarea {
   }
 
   .navbar {
-    gap: 10px;
-    padding: 0 16px;
+    gap: 8px;
+    padding: 0 12px;
   }
 
   .brand-info {
@@ -1911,7 +1920,12 @@ textarea {
   .brand-logo-img {
     height: 36px;
     width: auto;
-    max-width: 95px;
+    max-width: 85px;
+  }
+
+  .nav-actions .nav-btn-customizer {
+    padding: 5px 9px !important;
+    font-size: 0.72rem !important;
   }
 
   .nav-btn-wa .btn-wa-text {
@@ -1919,8 +1933,8 @@ textarea {
   }
 
   .nav-btn-wa {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     padding: 0;
     display: inline-flex;
     align-items: center;
@@ -1930,8 +1944,8 @@ textarea {
   }
 
   .menu-toggle {
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     flex-shrink: 0;
   }
 
