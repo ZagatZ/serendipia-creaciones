@@ -1195,37 +1195,26 @@
 
       if (item.isNick) {
         const text = item.text || '#APODO';
-        const boxW = Math.max(80, text.length * (size * 0.75) + 20);
-        const boxH = size + 12;
+        const approxW = Math.max(60, text.length * (size * 0.65) + 20);
 
         const handleBox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
         handleBox.setAttribute('class', 'drag-handle-box');
-        handleBox.setAttribute('x', `-${boxW / 2 + 4}`);
-        handleBox.setAttribute('y', `-${size + 6}`);
-        handleBox.setAttribute('width', `${boxW + 8}`);
-        handleBox.setAttribute('height', `${boxH + 8}`);
+        handleBox.setAttribute('x', `-${approxW / 2}`);
+        handleBox.setAttribute('y', `-${size + 4}`);
+        handleBox.setAttribute('width', `${approxW}`);
+        handleBox.setAttribute('height', `${size + 12}`);
         handleBox.setAttribute('rx', '6');
         g.appendChild(handleBox);
 
-        const nickBox = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-        nickBox.setAttribute('x', `-${boxW / 2}`);
-        nickBox.setAttribute('y', `-${size - 2}`);
-        nickBox.setAttribute('width', `${boxW}`);
-        nickBox.setAttribute('height', `${boxH}`);
-        nickBox.setAttribute('rx', `${boxH / 2}`);
-        nickBox.setAttribute('fill', 'none');
-        nickBox.setAttribute('stroke', color);
-        nickBox.setAttribute('stroke-width', '1.5');
-        g.appendChild(nickBox);
-
         const textEl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         textEl.setAttribute('x', '0');
-        textEl.setAttribute('y', '3');
+        textEl.setAttribute('y', '0');
         textEl.setAttribute('text-anchor', 'middle');
         textEl.setAttribute('fill', color);
         textEl.setAttribute('font-family', font);
         textEl.setAttribute('font-size', size);
         textEl.setAttribute('font-weight', '800');
+        textEl.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))';
         textEl.textContent = text;
         g.appendChild(textEl);
       } else {
