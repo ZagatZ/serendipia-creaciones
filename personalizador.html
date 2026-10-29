@@ -186,6 +186,22 @@
             </div>
           </div>
 
+          <!-- Controles de Rotación de Texto -->
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label class="form-label" for="sliderTextRotate">Rotación / Giro</label>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span id="labelValTextRotate" class="size-badge">0°</span>
+                <button type="button" class="btn-step-size" id="btnTextRotateReset" title="Enderezar (0°)" style="width: auto; height: 24px; padding: 0 8px; font-size: 0.72rem;">0°</button>
+              </div>
+            </div>
+            <div class="size-control-row">
+              <button type="button" class="btn-step-size" id="btnTextRotateLeft" aria-label="Girar a la izquierda" title="Girar -15°">↺</button>
+              <input type="range" id="sliderTextRotate" min="-180" max="180" value="0" class="range-slider">
+              <button type="button" class="btn-step-size" id="btnTextRotateRight" aria-label="Girar a la derecha" title="Girar +15°">↻</button>
+            </div>
+          </div>
+
           <!-- Tipografía y Color -->
           <div class="form-group">
             <label class="form-label">Tipografía</label>
@@ -221,6 +237,7 @@
               <button type="button" class="pos-btn active" id="btnPosCentro">Centro</button>
               <button type="button" class="pos-btn" id="btnPosAbajo">Abajo</button>
               <button type="button" class="pos-btn" id="btnPosPechoIzq">Pecho Izq</button>
+              <button type="button" class="pos-btn" id="btnPosPechoDer">Pecho Der</button>
             </div>
           </div>
 
@@ -301,6 +318,22 @@
             </div>
           </div>
 
+          <!-- Controles de Rotación de Imagen -->
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <label class="form-label" for="sliderImageRotate">Rotación / Giro</label>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span id="labelValImageRotate" class="size-badge">0°</span>
+                <button type="button" class="btn-step-size" id="btnImageRotateReset" title="Enderezar (0°)" style="width: auto; height: 24px; padding: 0 8px; font-size: 0.72rem;">0°</button>
+              </div>
+            </div>
+            <div class="size-control-row">
+              <button type="button" class="btn-step-size" id="btnImageRotateLeft" aria-label="Girar imagen a la izquierda" title="Girar -15°">↺</button>
+              <input type="range" id="sliderImageRotate" min="-180" max="180" value="0" class="range-slider">
+              <button type="button" class="btn-step-size" id="btnImageRotateRight" aria-label="Girar imagen a la derecha" title="Girar +15°">↻</button>
+            </div>
+          </div>
+
           <!-- Posiciones Rápidas -->
           <div class="form-group">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -312,6 +345,7 @@
               <button type="button" class="pos-btn active" id="btnImgPosCentro">Centro</button>
               <button type="button" class="pos-btn" id="btnImgPosAbajo">Abajo</button>
               <button type="button" class="pos-btn" id="btnImgPosPechoIzq">Pecho Izq</button>
+              <button type="button" class="pos-btn" id="btnImgPosPechoDer">Pecho Der</button>
             </div>
           </div>
 

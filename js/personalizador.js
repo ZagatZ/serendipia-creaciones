@@ -219,12 +219,18 @@
     labelValTextSize: document.getElementById('labelValTextSize'),
     btnTextSizeDown: document.getElementById('btnTextSizeDown'),
     btnTextSizeUp: document.getElementById('btnTextSizeUp'),
+    sliderTextRotate: document.getElementById('sliderTextRotate'),
+    labelValTextRotate: document.getElementById('labelValTextRotate'),
+    btnTextRotateLeft: document.getElementById('btnTextRotateLeft'),
+    btnTextRotateRight: document.getElementById('btnTextRotateRight'),
+    btnTextRotateReset: document.getElementById('btnTextRotateReset'),
     fontOptionBtns: document.querySelectorAll('.font-option-btn'),
     inputTextColor: document.getElementById('inputTextColor'),
     btnPosArriba: document.getElementById('btnPosArriba'),
     btnPosCentro: document.getElementById('btnPosCentro'),
     btnPosAbajo: document.getElementById('btnPosAbajo'),
     btnPosPechoIzq: document.getElementById('btnPosPechoIzq'),
+    btnPosPechoDer: document.getElementById('btnPosPechoDer'),
     btnDeleteCurrentText: document.getElementById('btnDeleteCurrentText'),
 
     // GESTIÓN DE IMÁGENES MULTICAPA
@@ -241,10 +247,16 @@
     labelValImageSize: document.getElementById('labelValImageSize'),
     btnImageSizeDown: document.getElementById('btnImageSizeDown'),
     btnImageSizeUp: document.getElementById('btnImageSizeUp'),
+    sliderImageRotate: document.getElementById('sliderImageRotate'),
+    labelValImageRotate: document.getElementById('labelValImageRotate'),
+    btnImageRotateLeft: document.getElementById('btnImageRotateLeft'),
+    btnImageRotateRight: document.getElementById('btnImageRotateRight'),
+    btnImageRotateReset: document.getElementById('btnImageRotateReset'),
     btnImgPosArriba: document.getElementById('btnImgPosArriba'),
     btnImgPosCentro: document.getElementById('btnImgPosCentro'),
     btnImgPosAbajo: document.getElementById('btnImgPosAbajo'),
     btnImgPosPechoIzq: document.getElementById('btnImgPosPechoIzq'),
+    btnImgPosPechoDer: document.getElementById('btnImgPosPechoDer'),
     btnDeleteCurrentImage: document.getElementById('btnDeleteCurrentImage'),
 
     // Canvas y SVGs
@@ -442,10 +454,10 @@
       `;
     } else if (isRanglan) {
       sleevesPaths = `
-        <!-- Manga Ranglan Izquierda -->
-        <path class="hoodie-part" data-part="mangas_ranglan" d="M165 78 C140 85, 75 160, 52 235 C42 275, 36 300, 36 310 C50 320, 68 322, 78 305 C86 280, 98 220, 112 180 C125 145, 138 120, 138 120 C145 105, 155 90, 165 78 Z" stroke="#1e293b" stroke-width="1.8"/>
-        <!-- Manga Ranglan Derecha -->
-        <path class="hoodie-part" data-part="mangas_ranglan" d="M235 78 C260 85, 325 160, 348 235 C358 275, 364 300, 364 310 C350 320, 332 322, 322 305 C314 280, 302 220, 288 180 C275 145, 262 120, 262 120 C255 105, 245 90, 235 78 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <!-- Manga Ranglan Izquierda (Hombro completo y brazo ancho anatómico) -->
+        <path class="hoodie-part" data-part="mangas_ranglan" d="M156 82 C138 82, 122 85, 112 94 C82 120, 50 188, 34 308 C48 318, 68 317, 82 303 C95 262, 112 208, 128 168 C138 138, 147 110, 156 82 Z" stroke="#1e293b" stroke-width="1.8"/>
+        <!-- Manga Ranglan Derecha (Hombro completo y brazo ancho anatómico) -->
+        <path class="hoodie-part" data-part="mangas_ranglan" d="M244 82 C262 82, 278 85, 288 94 C318 120, 350 188, 366 308 C352 318, 332 317, 318 303 C305 262, 288 208, 272 168 C262 138, 253 110, 244 82 Z" stroke="#1e293b" stroke-width="1.8"/>
       `;
     } else {
       sleevesPaths = `
@@ -456,11 +468,17 @@
     }
 
     // Franja en mangas para Polo con 2 cortes
-    if (subId.includes('manga_2cortes') || (isPolo && isRanglan)) {
+    if (subId.includes('manga_2cortes')) {
       sleevesPaths += `
         <!-- Franja decorativa en mangas -->
         <path class="hoodie-part" data-part="manga_franja" d="M96 150 L64 200 L84 212 L112 165 Z" stroke="#1e293b" stroke-width="1.5"/>
         <path class="hoodie-part" data-part="manga_franja" d="M304 150 L336 200 L316 212 L288 165 Z" stroke="#1e293b" stroke-width="1.5"/>
+      `;
+    } else if (isPolo && isRanglan) {
+      sleevesPaths += `
+        <!-- Franja decorativa en mangas ranglan -->
+        <path class="hoodie-part" data-part="manga_franja" d="M68 165 L56 202 L112 212 L126 172 Z" stroke="#1e293b" stroke-width="1.5"/>
+        <path class="hoodie-part" data-part="manga_franja" d="M332 165 L344 202 L288 212 L274 172 Z" stroke="#1e293b" stroke-width="1.5"/>
       `;
     }
 
@@ -482,7 +500,19 @@
       }
     }
 
-    const cuffs = `
+    const cuffs = isRanglan ? `
+      <!-- Puño Izquierdo Ranglan -->
+      <g>
+        <path class="hoodie-part" data-part="${ribPartKey}" d="M34 308 L24 326 C34 336, 54 338, 66 324 L82 303 C68 317, 48 318, 34 308 Z" stroke="#1e293b" stroke-width="1.5"/>
+        <line x1="30" y1="317" x2="71" y2="313" stroke="rgba(0,0,0,0.2)" stroke-width="1" stroke-dasharray="2 1"/>
+      </g>
+      <!-- Puño Derecho Ranglan -->
+      <g>
+        <path class="hoodie-part" data-part="${ribPartKey}" d="M366 308 L376 326 C366 336, 346 338, 334 324 L318 303 C332 317, 352 318, 366 308 Z" stroke="#1e293b" stroke-width="1.5"/>
+        <line x1="370" y1="317" x2="329" y2="313" stroke="rgba(0,0,0,0.2)" stroke-width="1" stroke-dasharray="2 1"/>
+      </g>
+      ${cuffLines}
+    ` : `
       <!-- Puño Izquierdo -->
       <g>
         <path class="hoodie-part" data-part="${ribPartKey}" d="M36 310 L26 328 C34 336, 52 338, 62 325 L78 305 C66 318, 48 318, 36 310 Z" stroke="#1e293b" stroke-width="1.5"/>
@@ -556,6 +586,11 @@
       bodyPaths = `
         <path class="hoodie-part" data-part="mitad_izq" d="M125 90 C155 98, 195 98, 200 98 L200 329 C175 331, 145 329, 132 325 C128 285, 127 235, 128 175 C133 130, 128 105, 125 90 Z" stroke="#1e293b" stroke-width="1.8"/>
         <path class="hoodie-part" data-part="mitad_der" d="M200 98 C205 98, 245 98, 275 90 C272 105, 267 130, 272 175 C273 235, 272 285, 268 325 C255 329, 225 331, 200 329 Z" stroke="#1e293b" stroke-width="1.8"/>
+      `;
+    } else if (isRanglan) {
+      // Torso con corte diagonal Ranglan desde el cuello/capucha hasta las axilas
+      bodyPaths = `
+        <path class="hoodie-part" data-part="torso" d="M156 82 C175 90, 225 90, 244 82 C253 110, 262 138, 272 168 C273 222, 272 282, 268 325 C225 332, 175 332, 132 325 C128 282, 127 222, 128 168 C138 138, 147 110, 156 82 Z" stroke="#1e293b" stroke-width="1.8"/>
       `;
     } else {
       // Regular / Básico con caída anatómica suave
@@ -721,23 +756,51 @@
     }
 
     // D. CAPA DE SOMBRAS Y VOLUMEN DE TELA REALISTA (Multiplicada)
-    shadingPaths = `
-      <!-- Sombra debajo de las axilas y en el torso lateral -->
-      <path d="M125 95 C129 135, 128 175, 134 220 C138 270, 135 300, 134 325 C130 325, 126 280, 126 220 C125 175, 120 130, 125 95 Z" fill="rgba(0,0,0,0.12)"/>
-      <path d="M275 95 C271 135, 272 175, 266 220 C262 270, 265 300, 266 325 C270 325, 274 280, 274 220 C275 175, 280 130, 275 95 Z" fill="rgba(0,0,0,0.12)"/>
-      
-      <!-- Pliegues de flexión en los codos (mangas) -->
-      <path d="M56 225 C62 235, 75 238, 82 232" stroke="rgba(0,0,0,0.22)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      <path d="M344 225 C338 235, 325 238, 318 232" stroke="rgba(0,0,0,0.22)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      
-      <!-- Arrugas suaves sobre la pretina de la cintura -->
-      <path d="M145 320 C155 316, 168 318, 175 322" stroke="rgba(0,0,0,0.18)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-      <path d="M225 322 C232 318, 245 316, 255 320" stroke="rgba(0,0,0,0.18)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    if (isRanglan) {
+      shadingPaths = `
+        <!-- Pespunte doble deportivo a lo largo del corte diagonal Ranglan -->
+        <path d="M153 84 C144 111, 135 138, 126 167" stroke="rgba(255,255,255,0.22)" stroke-width="1.3" stroke-dasharray="3 2" fill="none" stroke-linecap="round"/>
+        <path d="M247 84 C256 111, 265 138, 274 167" stroke="rgba(255,255,255,0.22)" stroke-width="1.3" stroke-dasharray="3 2" fill="none" stroke-linecap="round"/>
 
-      <!-- Brillo sutil de tela en los hombros -->
-      <path d="M140 88 C165 94, 185 94, 195 92" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="none" stroke-linecap="round"/>
-      <path d="M205 92 C215 94, 235 94, 260 88" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="none" stroke-linecap="round"/>
-    `;
+        <!-- Sombra lateral bajo las axilas y costados del torso -->
+        <path d="M128 168 C132 195, 134 230, 135 270 C136 298, 135 315, 132 325 C129 300, 127 240, 128 168 Z" fill="rgba(0,0,0,0.14)"/>
+        <path d="M272 168 C268 195, 266 230, 265 270 C264 298, 265 315, 268 325 C271 300, 273 240, 272 168 Z" fill="rgba(0,0,0,0.14)"/>
+
+        <!-- Sombra suave en el interior de los brazos -->
+        <path d="M128 168 C112 208, 95 262, 82 303 L77 305 C91 260, 108 206, 125 166 Z" fill="rgba(0,0,0,0.1)"/>
+        <path d="M272 168 C288 208, 305 262, 318 303 L323 305 C309 260, 292 206, 275 166 Z" fill="rgba(0,0,0,0.1)"/>
+
+        <!-- Pliegues de flexión en los codos (mangas anchas) -->
+        <path d="M58 222 C66 232, 82 235, 92 228" stroke="rgba(0,0,0,0.22)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M342 222 C334 232, 318 235, 308 228" stroke="rgba(0,0,0,0.22)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Arrugas suaves sobre la pretina de la cintura -->
+        <path d="M145 320 C155 316, 168 318, 175 322" stroke="rgba(0,0,0,0.18)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <path d="M225 322 C232 318, 245 316, 255 320" stroke="rgba(0,0,0,0.18)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+        <!-- Brillo sutil de tela en la caída de hombros ranglan -->
+        <path d="M114 96 C124 87, 138 84, 152 84" stroke="rgba(255,255,255,0.16)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M248 84 C262 84, 276 87, 286 96" stroke="rgba(255,255,255,0.16)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      `;
+    } else {
+      shadingPaths = `
+        <!-- Sombra debajo de las axilas y en el torso lateral -->
+        <path d="M125 95 C129 135, 128 175, 134 220 C138 270, 135 300, 134 325 C130 325, 126 280, 126 220 C125 175, 120 130, 125 95 Z" fill="rgba(0,0,0,0.12)"/>
+        <path d="M275 95 C271 135, 272 175, 266 220 C262 270, 265 300, 266 325 C270 325, 274 280, 274 220 C275 175, 280 130, 275 95 Z" fill="rgba(0,0,0,0.12)"/>
+        
+        <!-- Pliegues de flexión en los codos (mangas) -->
+        <path d="M56 225 C62 235, 75 238, 82 232" stroke="rgba(0,0,0,0.22)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M344 225 C338 235, 325 238, 318 232" stroke="rgba(0,0,0,0.22)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        
+        <!-- Arrugas suaves sobre la pretina de la cintura -->
+        <path d="M145 320 C155 316, 168 318, 175 322" stroke="rgba(0,0,0,0.18)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <path d="M225 322 C232 318, 245 316, 255 320" stroke="rgba(0,0,0,0.18)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+
+        <!-- Brillo sutil de tela en los hombros -->
+        <path d="M140 88 C165 94, 185 94, 195 92" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M205 92 C215 94, 235 94, 260 88" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      `;
+    }
 
     return `
       <svg class="hoodie-svg" viewBox="0 0 400 370" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -995,6 +1058,21 @@
     if (elements.btnPosPechoIzq) {
       elements.btnPosPechoIzq.style.display = item.view === 'espalda' ? 'none' : '';
     }
+    if (elements.btnPosPechoDer) {
+      elements.btnPosPechoDer.style.display = item.view === 'espalda' ? 'none' : '';
+    }
+
+    const textPos = item.posPreset || (
+      (item.view === 'frente' && item.x === 240 && item.y === 145) ? 'pecho_izq' :
+      (item.view === 'frente' && item.x === 160 && item.y === 145) ? 'pecho_der' :
+      (item.y === 125) ? 'arriba' :
+      (item.y === 235) ? 'abajo' : 'centro'
+    );
+    if (elements.btnPosArriba) elements.btnPosArriba.classList.toggle('active', textPos === 'arriba');
+    if (elements.btnPosCentro) elements.btnPosCentro.classList.toggle('active', textPos === 'centro');
+    if (elements.btnPosAbajo) elements.btnPosAbajo.classList.toggle('active', textPos === 'abajo');
+    if (elements.btnPosPechoIzq) elements.btnPosPechoIzq.classList.toggle('active', textPos === 'pecho_izq');
+    if (elements.btnPosPechoDer) elements.btnPosPechoDer.classList.toggle('active', textPos === 'pecho_der');
 
     if (elements.btnTextStyleNormal && elements.btnTextStyleNick) {
       elements.btnTextStyleNormal.classList.toggle('active', !item.isNick);
@@ -1006,6 +1084,14 @@
     }
     if (elements.labelValTextSize) {
       elements.labelValTextSize.textContent = `${item.size}px`;
+    }
+
+    const rot = item.rotation || 0;
+    if (elements.sliderTextRotate) {
+      elements.sliderTextRotate.value = rot;
+    }
+    if (elements.labelValTextRotate) {
+      elements.labelValTextRotate.textContent = `${rot}°`;
     }
 
     if (elements.fontOptionBtns) {
@@ -1127,6 +1213,21 @@
     if (elements.btnImgPosPechoIzq) {
       elements.btnImgPosPechoIzq.style.display = item.view === 'espalda' ? 'none' : '';
     }
+    if (elements.btnImgPosPechoDer) {
+      elements.btnImgPosPechoDer.style.display = item.view === 'espalda' ? 'none' : '';
+    }
+
+    const imgPos = item.posPreset || (
+      (item.view === 'frente' && item.x === 240 && item.y === 140) ? 'pecho_izq' :
+      (item.view === 'frente' && item.x === 160 && item.y === 140) ? 'pecho_der' :
+      (item.y === 130 || item.y === 145) ? 'arriba' :
+      (item.y === 265) ? 'abajo' : 'centro'
+    );
+    if (elements.btnImgPosArriba) elements.btnImgPosArriba.classList.toggle('active', imgPos === 'arriba');
+    if (elements.btnImgPosCentro) elements.btnImgPosCentro.classList.toggle('active', imgPos === 'centro');
+    if (elements.btnImgPosAbajo) elements.btnImgPosAbajo.classList.toggle('active', imgPos === 'abajo');
+    if (elements.btnImgPosPechoIzq) elements.btnImgPosPechoIzq.classList.toggle('active', imgPos === 'pecho_izq');
+    if (elements.btnImgPosPechoDer) elements.btnImgPosPechoDer.classList.toggle('active', imgPos === 'pecho_der');
 
     if (elements.sliderImageSize) {
       elements.sliderImageSize.value = item.size;
@@ -1134,11 +1235,19 @@
     if (elements.labelValImageSize) {
       elements.labelValImageSize.textContent = `${item.size}px`;
     }
+
+    const imgRot = item.rotation || 0;
+    if (elements.sliderImageRotate) {
+      elements.sliderImageRotate.value = imgRot;
+    }
+    if (elements.labelValImageRotate) {
+      elements.labelValImageRotate.textContent = `${imgRot}°`;
+    }
   }
 
   function addNewImage(dataUrl, view) {
     const newId = 'img_' + Date.now();
-    const defaultPos = view === 'frente' ? { x: 155, y: 140 } : { x: 200, y: 220 };
+    const defaultPos = view === 'frente' ? { x: 240, y: 140 } : { x: 200, y: 220 };
     const defaultSize = view === 'frente' ? 45 : 95;
 
     const newImg = {
@@ -1183,10 +1292,11 @@
       if (!targetLayer) return;
 
       const isSelected = item.id === state.activeTextId;
+      const rot = item.rotation || 0;
       const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       g.setAttribute('class', `draggable-text-group ${isSelected ? 'layer-selected' : ''}`);
       g.setAttribute('id', `group-text-${item.id}`);
-      g.setAttribute('transform', `translate(${item.x}, ${item.y})`);
+      g.setAttribute('transform', `translate(${item.x}, ${item.y}) rotate(${rot})`);
       g.setAttribute('title', 'Haz clic para seleccionar o arrastra para mover');
 
       const color = item.color || '#ffffff';
@@ -1255,7 +1365,7 @@
       makeSvgDraggable(g, (dx, dy) => {
         item.x = Math.max(40, Math.min(360, item.x + dx));
         item.y = Math.max(60, Math.min(330, item.y + dy));
-        g.setAttribute('transform', `translate(${item.x}, ${item.y})`);
+        g.setAttribute('transform', `translate(${item.x}, ${item.y}) rotate(${item.rotation || 0})`);
       });
     });
   }
@@ -1272,10 +1382,11 @@
       if (!targetLayer) return;
 
       const isSelected = imgItem.id === state.activeImageId;
+      const rot = imgItem.rotation || 0;
       const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       g.setAttribute('class', `draggable-logo-group ${isSelected ? 'layer-selected' : ''}`);
       g.setAttribute('id', `group-img-${imgItem.id}`);
-      g.setAttribute('transform', `translate(${imgItem.x}, ${imgItem.y})`);
+      g.setAttribute('transform', `translate(${imgItem.x}, ${imgItem.y}) rotate(${rot})`);
       g.setAttribute('title', 'Haz clic para seleccionar o arrastra para mover');
 
       const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
@@ -1309,7 +1420,7 @@
       makeSvgDraggable(g, (dx, dy) => {
         imgItem.x = Math.max(40, Math.min(360, imgItem.x + dx));
         imgItem.y = Math.max(60, Math.min(330, imgItem.y + dy));
-        g.setAttribute('transform', `translate(${imgItem.x}, ${imgItem.y})`);
+        g.setAttribute('transform', `translate(${imgItem.x}, ${imgItem.y}) rotate(${imgItem.rotation || 0})`);
       });
     });
   }
@@ -1576,6 +1687,7 @@ ${extraDetails}
           item.view = 'frente';
           item.x = 200;
           item.y = 155;
+          item.posPreset = 'centro';
           renderTextList();
           updateTextOverlays();
           showToast('Texto movido a: FRENTE');
@@ -1590,6 +1702,7 @@ ${extraDetails}
           item.view = 'espalda';
           item.x = 200;
           item.y = 160;
+          item.posPreset = 'centro';
           renderTextList();
           updateTextOverlays();
           showToast('Texto movido a: ESPALDA');
@@ -1654,6 +1767,54 @@ ${extraDetails}
       });
     }
 
+    if (elements.sliderTextRotate) {
+      elements.sliderTextRotate.addEventListener('input', (e) => {
+        const item = getActiveText();
+        if (item) {
+          item.rotation = parseInt(e.target.value, 10) || 0;
+          if (elements.labelValTextRotate) elements.labelValTextRotate.textContent = `${item.rotation}°`;
+          updateTextOverlays();
+        }
+      });
+    }
+
+    if (elements.btnTextRotateLeft) {
+      elements.btnTextRotateLeft.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.rotation = Math.max(-180, (item.rotation || 0) - 15);
+          if (elements.sliderTextRotate) elements.sliderTextRotate.value = item.rotation;
+          if (elements.labelValTextRotate) elements.labelValTextRotate.textContent = `${item.rotation}°`;
+          updateTextOverlays();
+        }
+      });
+    }
+
+    if (elements.btnTextRotateRight) {
+      elements.btnTextRotateRight.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.rotation = Math.min(180, (item.rotation || 0) + 15);
+          if (elements.sliderTextRotate) elements.sliderTextRotate.value = item.rotation;
+          if (elements.labelValTextRotate) elements.labelValTextRotate.textContent = `${item.rotation}°`;
+          updateTextOverlays();
+        }
+      });
+    }
+
+    if (elements.btnTextRotateReset) {
+      elements.btnTextRotateReset.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item) {
+          item.rotation = 0;
+          if (elements.sliderTextRotate) elements.sliderTextRotate.value = 0;
+          if (elements.labelValTextRotate) elements.labelValTextRotate.textContent = '0°';
+          updateTextOverlays();
+          showToast('Texto enderezado (0°)');
+        }
+      });
+    }
+
     if (elements.fontOptionBtns) {
       elements.fontOptionBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1681,7 +1842,10 @@ ${extraDetails}
       elements.btnPosArriba.addEventListener('click', () => {
         const item = getActiveText();
         if (item) {
+          item.x = 200;
           item.y = 125;
+          item.posPreset = 'arriba';
+          renderActiveTextEditor();
           updateTextOverlays();
           showToast('Texto ubicado arriba');
         }
@@ -1694,6 +1858,8 @@ ${extraDetails}
         if (item) {
           item.x = 200;
           item.y = item.view === 'frente' ? 155 : 170;
+          item.posPreset = 'centro';
+          renderActiveTextEditor();
           updateTextOverlays();
           showToast('Texto centrado');
         }
@@ -1704,7 +1870,10 @@ ${extraDetails}
       elements.btnPosAbajo.addEventListener('click', () => {
         const item = getActiveText();
         if (item) {
+          item.x = 200;
           item.y = 235;
+          item.posPreset = 'abajo';
+          renderActiveTextEditor();
           updateTextOverlays();
           showToast('Texto ubicado abajo');
         }
@@ -1715,10 +1884,26 @@ ${extraDetails}
       elements.btnPosPechoIzq.addEventListener('click', () => {
         const item = getActiveText();
         if (item && item.view === 'frente') {
-          item.x = 150;
+          item.x = 240;
           item.y = 145;
+          item.posPreset = 'pecho_izq';
+          renderActiveTextEditor();
           updateTextOverlays();
           showToast('Texto ubicado en pecho izquierdo');
+        }
+      });
+    }
+
+    if (elements.btnPosPechoDer) {
+      elements.btnPosPechoDer.addEventListener('click', () => {
+        const item = getActiveText();
+        if (item && item.view === 'frente') {
+          item.x = 160;
+          item.y = 145;
+          item.posPreset = 'pecho_der';
+          renderActiveTextEditor();
+          updateTextOverlays();
+          showToast('Texto ubicado en pecho derecho');
         }
       });
     }
@@ -1771,8 +1956,9 @@ ${extraDetails}
         const item = getActiveImage();
         if (item) {
           item.view = 'frente';
-          item.x = 155;
+          item.x = 240;
           item.y = 140;
+          item.posPreset = 'pecho_izq';
           renderImageList();
           updateImagesOverlays();
           showToast('Imagen movida a: FRENTE');
@@ -1784,6 +1970,7 @@ ${extraDetails}
           item.view = 'espalda';
           item.x = 200;
           item.y = 220;
+          item.posPreset = 'centro';
           renderImageList();
           updateImagesOverlays();
           showToast('Imagen movida a: ESPALDA');
@@ -1826,12 +2013,62 @@ ${extraDetails}
       });
     }
 
+    if (elements.sliderImageRotate) {
+      elements.sliderImageRotate.addEventListener('input', (e) => {
+        const item = getActiveImage();
+        if (item) {
+          item.rotation = parseInt(e.target.value, 10) || 0;
+          if (elements.labelValImageRotate) elements.labelValImageRotate.textContent = `${item.rotation}°`;
+          updateImagesOverlays();
+        }
+      });
+    }
+
+    if (elements.btnImageRotateLeft) {
+      elements.btnImageRotateLeft.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.rotation = Math.max(-180, (item.rotation || 0) - 15);
+          if (elements.sliderImageRotate) elements.sliderImageRotate.value = item.rotation;
+          if (elements.labelValImageRotate) elements.labelValImageRotate.textContent = `${item.rotation}°`;
+          updateImagesOverlays();
+        }
+      });
+    }
+
+    if (elements.btnImageRotateRight) {
+      elements.btnImageRotateRight.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.rotation = Math.min(180, (item.rotation || 0) + 15);
+          if (elements.sliderImageRotate) elements.sliderImageRotate.value = item.rotation;
+          if (elements.labelValImageRotate) elements.labelValImageRotate.textContent = `${item.rotation}°`;
+          updateImagesOverlays();
+        }
+      });
+    }
+
+    if (elements.btnImageRotateReset) {
+      elements.btnImageRotateReset.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item) {
+          item.rotation = 0;
+          if (elements.sliderImageRotate) elements.sliderImageRotate.value = 0;
+          if (elements.labelValImageRotate) elements.labelValImageRotate.textContent = '0°';
+          updateImagesOverlays();
+          showToast('Imagen enderezada (0°)');
+        }
+      });
+    }
+
     if (elements.btnImgPosArriba) {
       elements.btnImgPosArriba.addEventListener('click', () => {
         const item = getActiveImage();
         if (item) {
           item.x = 200;
           item.y = item.view === 'frente' ? 130 : 145;
+          item.posPreset = 'arriba';
+          renderActiveImageEditor();
           updateImagesOverlays();
           showToast('Imagen ubicada arriba');
         }
@@ -1844,6 +2081,8 @@ ${extraDetails}
         if (item) {
           item.x = 200;
           item.y = item.view === 'frente' ? 160 : 220;
+          item.posPreset = 'centro';
+          renderActiveImageEditor();
           updateImagesOverlays();
           showToast('Imagen centrada');
         }
@@ -1856,6 +2095,8 @@ ${extraDetails}
         if (item) {
           item.x = 200;
           item.y = 265;
+          item.posPreset = 'abajo';
+          renderActiveImageEditor();
           updateImagesOverlays();
           showToast('Imagen ubicada abajo');
         }
@@ -1866,10 +2107,26 @@ ${extraDetails}
       elements.btnImgPosPechoIzq.addEventListener('click', () => {
         const item = getActiveImage();
         if (item && item.view === 'frente') {
-          item.x = 155;
+          item.x = 240;
           item.y = 140;
+          item.posPreset = 'pecho_izq';
+          renderActiveImageEditor();
           updateImagesOverlays();
           showToast('Imagen en pecho izquierdo');
+        }
+      });
+    }
+
+    if (elements.btnImgPosPechoDer) {
+      elements.btnImgPosPechoDer.addEventListener('click', () => {
+        const item = getActiveImage();
+        if (item && item.view === 'frente') {
+          item.x = 160;
+          item.y = 140;
+          item.posPreset = 'pecho_der';
+          renderActiveImageEditor();
+          updateImagesOverlays();
+          showToast('Imagen en pecho derecho');
         }
       });
     }
