@@ -1517,7 +1517,80 @@
   }
 
   // -------------------------------------------------------------------------
-  // 14. EXPORTAR A WHATSAPP CON DETALLES TÉCNICOS
+  // 14. GENERADOR DE LIENZO PNG (COMPARTIDO PARA DESCARGA Y WHATSAPP)
+  // -------------------------------------------------------------------------
+  function generateMockupCanvas() {
+    return new Promise((resolve, reject) => {
+      const frontSvg = document.querySelector('#frontSvgContainer svg');
+      const backSvg = document.querySelector('#backSvgContainer svg');
+
+      if (!frontSvg || !backSvg) {
+        reject(new Error('No se pudieron obtener las vistas del polerón'));
+        return;
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 1200;
+      canvas.height = 700;
+      const ctx = canvas.getContext('2d');
+
+      // Fondo oscuro premium
+      ctx.fillStyle = '#090d16';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Decoración de cabecera en la imagen
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 28px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('SERENDIPIA CREACIONES', 60, 60);
+
+      ctx.fillStyle = '#e33391';
+      ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('CONFECCIÓN & BORDADOS CHILLÁN • WHATSAPP: +56 9 4299 2424', 60, 90);
+
+      const sub = CATALOG[state.categoryKey].submodels.find(s => s.id === state.submodelId);
+      ctx.fillStyle = '#00b0d0';
+      ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(`Diseño: ${sub.name}`, 60, 130);
+
+      // Clonar SVGs para limpiar elementos de interacción (como cajas de arrastre)
+      const frontClone = frontSvg.cloneNode(true);
+      const backClone = backSvg.cloneNode(true);
+
+      frontClone.querySelectorAll('.drag-handle-box').forEach(el => el.remove());
+      backClone.querySelectorAll('.drag-handle-box').forEach(el => el.remove());
+      frontClone.querySelectorAll('.active-selected-part').forEach(el => el.classList.remove('active-selected-part'));
+      backClone.querySelectorAll('.active-selected-part').forEach(el => el.classList.remove('active-selected-part'));
+
+      const frontXml = new XMLSerializer().serializeToString(frontClone);
+      const backXml = new XMLSerializer().serializeToString(backClone);
+
+      const imgFront = new Image();
+      const imgBack = new Image();
+
+      imgFront.onload = () => {
+        // Dibujar vista frontal a la izquierda
+        ctx.drawImage(imgFront, 60, 160, 500, 460);
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 16px sans-serif';
+        ctx.fillText('VISTA FRENTE', 250, 650);
+
+        imgBack.onload = () => {
+          // Dibujar vista trasera a la derecha
+          ctx.drawImage(imgBack, 640, 160, 500, 460);
+          ctx.fillText('VISTA ESPALDA', 830, 650);
+          resolve(canvas);
+        };
+        imgBack.onerror = reject;
+        imgBack.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(backXml);
+      };
+      imgFront.onerror = reject;
+      imgFront.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(frontXml);
+    });
+  }
+
+  // -------------------------------------------------------------------------
+  // 15. EXPORTAR A WHATSAPP CON DETALLES TÉCNICOS + IMAGEN DEL DISEÑO
   // -------------------------------------------------------------------------
   function sendToWhatsApp() {
     const cat = CATALOG[state.categoryKey];
@@ -1538,7 +1611,8 @@
       state.texts.forEach((t) => {
         const viewStr = t.view === 'frente' ? 'Pecho/Frente' : 'Espalda';
         const typeStr = t.isNick ? 'Apodo (#)' : 'Texto';
-        extraDetails += `• [${viewStr}] ${typeStr}: *${t.text}*\n`;
+        const rotStr = t.rotation ? ` (Giro: ${t.rotation}°)` : '';
+        extraDetails += `• [${viewStr}] ${typeStr}: *${t.text}*${rotStr}\n`;
       });
     }
 
@@ -1546,7 +1620,8 @@
       extraDetails += `\n🖼️ *Imágenes y Estampados:*\n`;
       state.images.forEach((img, i) => {
         const viewStr = img.view === 'frente' ? 'Pecho/Frente' : 'Espalda';
-        extraDetails += `• [${viewStr}] Imagen ${i + 1} (${img.size}px)\n`;
+        const rotStr = img.rotation ? `, Giro: ${img.rotation}°` : '';
+        extraDetails += `• [${viewStr}] Imagen ${i + 1} (${img.size}px${rotStr})\n`;
       });
     }
 
@@ -1556,91 +1631,67 @@ Acabo de crear este diseño en su *Personalizador de Polerones* y quisiera cotiz
 🧥 *Modelo:* ${sub.name}
 
 🎨 *Combinación de Colores:*
-${colorsList}
-${extraDetails}
+${colorsList}${extraDetails}
+📎 *(Te adjunto aquí mismo la imagen del diseño recién generada)*
+
 ¿Podrían indicarme los valores por cantidad, tallas disponibles y tiempos de confección? ¡Muchas gracias!`;
 
-    const encoded = encodeURI(message);
+    const encoded = encodeURIComponent(message);
     const waUrl = `https://wa.me/56942992424?text=${encoded}`;
-    window.open(waUrl, '_blank');
+
+    showToast('📸 Preparando imagen y abriendo WhatsApp...');
+
+    const canvasPromise = generateMockupCanvas();
+
+    // Intentar copiar la imagen al portapapeles dentro del gesto del usuario
+    let clipboardPromise = Promise.resolve(false);
+    if (navigator.clipboard && window.ClipboardItem) {
+      try {
+        const blobPromise = canvasPromise.then(canvas => new Promise(res => canvas.toBlob(res, 'image/png')));
+        clipboardPromise = navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })])
+          .then(() => true)
+          .catch(() => false);
+      } catch (_) {
+        clipboardPromise = Promise.resolve(false);
+      }
+    }
+
+    canvasPromise.then(async (canvas) => {
+      // Descargar automáticamente el PNG para que lo tenga a mano en PC o celular
+      const link = document.createElement('a');
+      link.download = `mockup-${state.submodelId}-serendipia.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+
+      const copied = await clipboardPromise;
+      if (copied) {
+        showToast('📋 ¡Imagen copiada y descargada! En WhatsApp solo presiona Pegar (Ctrl+V)');
+      } else {
+        showToast('📥 ¡Imagen descargada! Adjúntala en el chat de WhatsApp que se abrirá');
+      }
+
+      setTimeout(() => {
+        window.open(waUrl, '_blank');
+      }, 450);
+    }).catch(() => {
+      window.open(waUrl, '_blank');
+    });
   }
 
   // -------------------------------------------------------------------------
-  // 15. DESCARGAR MOCKUP COMO IMAGEN PNG DE ALTA CALIDAD
+  // 16. DESCARGAR MOCKUP COMO IMAGEN PNG DE ALTA CALIDAD
   // -------------------------------------------------------------------------
   function downloadMockupPng() {
     showToast('Generando imagen de tu diseño...');
-
-    const canvas = document.createElement('canvas');
-    canvas.width = 1200;
-    canvas.height = 700;
-    const ctx = canvas.getContext('2d');
-
-    // Fondo oscuro premium
-    ctx.fillStyle = '#090d16';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Decoración de cabecera en la imagen
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 28px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('SERENDIPIA CREACIONES', 60, 60);
-
-    ctx.fillStyle = '#e33391';
-    ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('CONFECCIÓN & BORDADOS CHILLÁN • WHATSAPP: +56 9 4299 2424', 60, 90);
-
-    const sub = CATALOG[state.categoryKey].submodels.find(s => s.id === state.submodelId);
-    ctx.fillStyle = '#00b0d0';
-    ctx.font = 'bold 20px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText(`Diseño: ${sub.name}`, 60, 130);
-
-    // Serializar SVGs a imágenes
-    const frontSvg = document.querySelector('#frontSvgContainer svg');
-    const backSvg = document.querySelector('#backSvgContainer svg');
-
-    if (!frontSvg || !backSvg) {
+    generateMockupCanvas().then((canvas) => {
+      const link = document.createElement('a');
+      link.download = `mockup-${state.submodelId}-serendipia.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      showToast('¡Imagen descargada con éxito!');
+    }).catch(() => {
       alert('No se pudieron obtener las vistas del polerón');
-      return;
-    }
-
-    // Clonar SVGs para limpiar elementos de interacción (como cajas de arrastre)
-    const frontClone = frontSvg.cloneNode(true);
-    const backClone = backSvg.cloneNode(true);
-
-    frontClone.querySelectorAll('.drag-handle-box').forEach(el => el.remove());
-    backClone.querySelectorAll('.drag-handle-box').forEach(el => el.remove());
-    frontClone.querySelectorAll('.active-selected-part').forEach(el => el.classList.remove('active-selected-part'));
-    backClone.querySelectorAll('.active-selected-part').forEach(el => el.classList.remove('active-selected-part'));
-
-    const frontXml = new XMLSerializer().serializeToString(frontClone);
-    const backXml = new XMLSerializer().serializeToString(backClone);
-
-    const imgFront = new Image();
-    const imgBack = new Image();
-
-    imgFront.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(frontXml);
-    imgFront.onload = () => {
-      // Dibujar vista frontal a la izquierda
-      ctx.drawImage(imgFront, 60, 160, 500, 460);
-
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = 'bold 16px sans-serif';
-      ctx.fillText('VISTA FRENTE', 250, 650);
-
-      imgBack.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(backXml);
-      imgBack.onload = () => {
-        // Dibujar vista trasera a la derecha
-        ctx.drawImage(imgBack, 640, 160, 500, 460);
-        ctx.fillText('VISTA ESPALDA', 830, 650);
-
-        // Disparar descarga
-        const link = document.createElement('a');
-        link.download = `mockup-${state.submodelId}-serendipia.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        showToast('¡Imagen descargada con éxito!');
-      };
-    };
+    });
   }
 
   // -------------------------------------------------------------------------
