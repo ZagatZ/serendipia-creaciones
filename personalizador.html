@@ -437,24 +437,30 @@
   <!-- =========================================================================
        MODAL DE SELECCIÓN DE MODELOS Y CORTES
        ========================================================================= -->
-  <div class="model-picker-modal" id="modelPickerModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="model-picker-modal active" id="modelPickerModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-dialog">
       
       <!-- Cabecera del Modal -->
       <div class="modal-header">
-        <div class="modal-title-box">
-          <h3 id="modalTitle">Elige tu Modelo de Polerón</h3>
-          <p>Selecciona una categoría y el corte que deseas personalizar</p>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button type="button" class="btn-back-families" id="btnBackToFamilies" style="display: none;">
+            <span>←</span>
+            <span>Tipos</span>
+          </button>
+          <div class="modal-title-box">
+            <h3 id="modalTitle">Paso 1: Elige tu Tipo de Polerón</h3>
+            <p id="modalSubtitle">Selecciona una de nuestras 5 familias de polerones para ver sus cortes</p>
+          </div>
         </div>
-        <button type="button" class="btn-close-modal" id="btnCloseModal" aria-label="Cerrar ventana">✕</button>
+        <button type="button" class="btn-close-modal" id="btnCloseModal" aria-label="Cerrar ventana" style="display: none;">✕</button>
       </div>
 
-      <!-- Categorías de Modelos (Pestañas Superiores) -->
-      <nav class="modal-categories-nav" id="modalCategoriesNav">
+      <!-- Categorías de Modelos (Pestañas Superiores - Paso 2) -->
+      <nav class="modal-categories-nav" id="modalCategoriesNav" style="display: none;">
         <!-- Generado dinámicamente con JS (Americano, Canguro, Neck, Polo, Zipper) -->
       </nav>
 
-      <!-- Grilla de Cortes y Submodelos -->
+      <!-- Grilla de Familias (Paso 1) o Cortes y Submodelos (Paso 2) -->
       <div class="modal-body-submodels">
         <div class="submodels-grid" id="submodelsGrid">
           <!-- Generado dinámicamente con JS -->

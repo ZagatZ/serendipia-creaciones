@@ -1302,6 +1302,118 @@ body {
   background: var(--brand-magenta);
 }
 
+/* Paso 1: Tarjetas Grandes de Familias de Polerones */
+.btn-back-families {
+  background: var(--bg-input);
+  border: 1px solid var(--brand-cyan);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-back-families:hover {
+  background: var(--brand-cyan);
+  color: #090d16;
+}
+
+.submodels-grid.families-mode {
+  grid-template-columns: repeat(auto-fit, minmax(205px, 1fr));
+  gap: 18px;
+}
+
+.family-card {
+  background: linear-gradient(180deg, #161f33 0%, #0d131f 100%);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.family-card:hover {
+  border-color: var(--brand-cyan);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(0, 176, 208, 0.25);
+}
+
+.family-card-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(15, 23, 42, 0.88);
+  color: var(--brand-cyan);
+  border: 1px solid rgba(0, 176, 208, 0.35);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 9px;
+  border-radius: 999px;
+  z-index: 2;
+}
+
+.family-thumb-box {
+  background: radial-gradient(circle at center, #ffffff 0%, #e2e8f0 100%);
+  padding: 18px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 195px;
+}
+
+.family-thumb-box .hoodie-svg {
+  max-width: 175px;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.22));
+}
+
+.family-card-info {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: #111827;
+  border-top: 1px solid var(--border-subtle);
+  flex: 1;
+}
+
+.family-card-title {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.family-card-desc {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  line-height: 1.35;
+}
+
+.family-card-cta {
+  margin-top: 6px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: var(--brand-magenta);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.family-card:hover .family-card-cta {
+  color: var(--brand-cyan);
+}
+
 /* Notificación flotante Toast */
 .toast-notice {
   position: fixed;
