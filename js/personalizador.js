@@ -40,11 +40,11 @@
       icon: '🏈',
       colorTheme: '#3b82f6',
       submodels: [
-        { id: 'americano_basico', name: 'Americano / Básico', cuts: ['torso', 'mangas', 'cuello_pretinas', 'broches'] },
-        { id: 'americano_capucha', name: 'Americano / Con Capucha', cuts: ['torso', 'mangas', 'gorro_ext', 'gorro_int', 'cuello_pretinas', 'broches'] },
-        { id: 'americano_linea', name: 'Americano / Una Línea', cuts: ['torso', 'mangas', 'cuello_pretinas', 'lineas_rib', 'broches'] },
-        { id: 'americano_doble_linea', name: 'Americano / Doble Línea', cuts: ['torso', 'mangas', 'cuello_pretinas', 'lineas_rib', 'broches'] },
-        { id: 'americano_capucha_linea', name: 'Americano / Con Capucha + Líneas', cuts: ['torso', 'mangas', 'gorro_ext', 'gorro_int', 'cuello_pretinas', 'lineas_rib', 'broches'] }
+        { id: 'americano_basico', name: 'Americano / Básico', cuts: ['torso', 'mangas', 'cuello_pretinas', 'franja_botones', 'broches'] },
+        { id: 'americano_capucha', name: 'Americano / Con Capucha', cuts: ['torso', 'mangas', 'gorro_ext', 'gorro_int', 'cuello_pretinas', 'franja_botones', 'broches'] },
+        { id: 'americano_linea', name: 'Americano / Una Línea', cuts: ['torso', 'mangas', 'cuello_pretinas', 'lineas_rib', 'franja_botones', 'broches'] },
+        { id: 'americano_doble_linea', name: 'Americano / Doble Línea', cuts: ['torso', 'mangas', 'cuello_pretinas', 'lineas_rib', 'franja_botones', 'broches'] },
+        { id: 'americano_capucha_linea', name: 'Americano / Con Capucha + Líneas', cuts: ['torso', 'mangas', 'gorro_ext', 'gorro_int', 'cuello_pretinas', 'lineas_rib', 'franja_botones', 'broches'] }
       ]
     },
     canguro: {
@@ -133,7 +133,8 @@
     bolsillo: 'Bolsillo Canguro',
     bolsillos_laterales: 'Bolsillos Laterales',
     bolsillos_div: 'Bolsillos Delanteros',
-    broches: 'Broches Metálicos',
+    franja_botones: 'Franja de Botones / Broches',
+    broches: 'Botones / Broches Metálicos',
     cierre: 'Cierre Metálico 1/4',
     cierre_full: 'Cierre Frontal Completo',
     cordon: 'Cordón de Capucha',
@@ -716,7 +717,7 @@
       if (isAmericano) {
         detailsPaths += `
           <!-- Tira de Broches Tipo Béisbol Americano (Alineada del escote al borde inferior de la pretina) -->
-          <path d="M193 96 L193 356.5 C197.5 357, 202.5 357, 207 356.5 L207 96 Z" fill="rgba(255,255,255,0.92)" stroke="#1e293b" stroke-width="1.3" stroke-linejoin="round"/>
+          <path class="hoodie-part" data-part="franja_botones" d="M193 96 L193 356.5 C197.5 357, 202.5 357, 207 356.5 L207 96 Z" fill="#f8fafc" stroke="#1e293b" stroke-width="1.3" stroke-linejoin="round"/>
           <!-- Broches Metálicos con Brillo -->
           <circle class="hoodie-part" data-part="broches" cx="200" cy="115" r="4.3" fill="#f8fafc" stroke="#334155" stroke-width="1.2"/>
           <circle class="hoodie-part" data-part="broches" cx="200" cy="160" r="4.3" fill="#f8fafc" stroke="#334155" stroke-width="1.2"/>
@@ -1554,7 +1555,7 @@
           p.style.fill = '#f8fafc';
         } else if (part.includes('gorro_int')) {
           p.style.fill = '#334155';
-        } else if (part.includes('broches')) {
+        } else if (part.includes('broches') || part === 'franja_botones') {
           p.style.fill = '#f8fafc';
         } else {
           p.style.fill = '#1e293b';
