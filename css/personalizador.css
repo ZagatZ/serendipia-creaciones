@@ -87,6 +87,7 @@ body {
   letter-spacing: -0.02em;
   background: linear-gradient(135deg, #ffffff 40%, var(--brand-cyan) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -531,11 +532,13 @@ body {
   border-radius: 3px;
   background: #1e293b;
   outline: none;
+  appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
 }
 
 .range-slider::-webkit-slider-thumb {
+  appearance: none;
   -webkit-appearance: none;
   width: 18px;
   height: 18px;
