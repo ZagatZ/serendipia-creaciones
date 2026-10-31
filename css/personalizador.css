@@ -1578,3 +1578,92 @@ body {
     gap: 6px;
   }
 }
+
+
+/* ==========================================================================
+   PIE DE PÁGINA INFORMATIVO SEO (CATÁLOGO DE MODELOS Y CONFECCIÓN)
+   ========================================================================== */
+.customizer-seo-footer {
+  background: rgba(9, 13, 22, 0.95);
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 32px;
+  padding: 36px 20px 28px;
+}
+
+.seo-footer-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.seo-footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 960px) {
+  .seo-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.seo-footer-col {
+  background: rgba(17, 24, 39, 0.6);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: var(--radius-md);
+  padding: 18px;
+}
+
+.seo-footer-col h2 {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--brand-cyan);
+  margin-bottom: 8px;
+}
+
+.seo-footer-col p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.seo-footer-col a {
+  color: #f472b6;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.seo-footer-col a:hover {
+  text-decoration: underline;
+}
+
+.seo-footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(51, 65, 85, 0.5);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.seo-footer-bottom a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.seo-footer-bottom a:hover {
+  color: var(--brand-cyan);
+}
+
+.seo-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}

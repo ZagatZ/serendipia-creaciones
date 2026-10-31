@@ -32,7 +32,7 @@
   ];
 
   // -------------------------------------------------------------------------
-  // 2. CATÁLOGO COMPLETO DE MODELOS Y SUBMODELOS (Extraídos de las capturas)
+  // 2. CATÁLOGO COMPLETO DE MODELOS Y SUBMODELOS
   // -------------------------------------------------------------------------
   const CATALOG = {
     americano: {

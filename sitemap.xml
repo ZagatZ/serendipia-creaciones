@@ -3,48 +3,64 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://serendipiacreaciones.cl/</loc>
-    <lastmod>2026-10-25</lastmod>
+    <lastmod>2026-10-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://serendipiacreaciones.cl/assets/images/logo-serendipia.png</image:loc>
       <image:title>Logotipo Serendipia Creaciones Taller Textil Chillán</image:title>
-      <image:caption>Taller textil especializado en confección de polerones generacionales, buzos escolares, bordados industriales y matrices de bordado</image:caption>
+      <image:caption>Taller textil en Chillán especializado en confección de polerones generacionales, buzos escolares, ropa de trabajo, bordados industriales, matrices de bordado y estampado DTF</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://serendipiacreaciones.cl/assets/images/poleron-generacional.svg</image:loc>
-      <image:title>Polerones Generacionales y de Curso con Espalda Bordada</image:title>
-      <image:caption>Polerones de generación para todos los cursos y niveles (ej. 4° Medio, 8° Básico, kínder o universidades) con espalda bordada y apodos individuales en Chillán y todo Chile</image:caption>
+      <image:title>Polerones Generacionales y de Curso con Espalda Bordada en Chillán y Chile</image:title>
+      <image:caption>Confección de polerones de generación (4° Medio, 8° Básico, kínder y universidades) en modelos Americano, Canguro, Zipper, Polo y Neck con espalda bordada y apodos individuales</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://serendipiacreaciones.cl/assets/images/embroidery-matrix.svg</image:loc>
-      <image:title>Servicio de Bordado Industrial Textil</image:title>
-      <image:caption>Bordado computarizado de alta definición sobre prendas de confección propia o de terceros</image:caption>
+      <image:title>Servicio de Bordado Industrial Computarizado en Chillán</image:title>
+      <image:caption>Bordado computarizado de alta definición sobre polerones, buzos, jockeys, delantales, camisas y prendas de terceros</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://serendipiacreaciones.cl/assets/images/matrix-digitizing.svg</image:loc>
-      <image:title>Matrices de Bordado Digitalizadas DST PES EMB</image:title>
-      <image:caption>Diseño y digitalización computarizada de matrices de bordado para máquinas industriales</image:caption>
+      <image:title>Diseño y Digitalización de Matrices de Bordado DST PES EMB JEF</image:title>
+      <image:caption>Servicio técnico de ponchado y digitalización de matrices de bordado para máquinas industriales y domésticas en todo Chile</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://serendipiacreaciones.cl/assets/images/dtf-print.svg</image:loc>
-      <image:title>Estampado Textil DTF Direct to Film Full Color</image:title>
-      <image:caption>Estampado digital térmico de alta resolución y elasticidad para cualquier tipo de tela</image:caption>
+      <image:title>Estampado Textil DTF Full Color en Chillán</image:title>
+      <image:caption>Estampado digital térmico DTF de alta resolución 1440 DPI y gran elasticidad sobre poleras, polerones y prendas de algodón o poliéster</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://serendipiacreaciones.cl/assets/images/school-hoodie.svg</image:loc>
-      <image:title>Buzos Escolares e Institucionales Colegios</image:title>
-      <image:caption>Confección de buzos escolares en franela de algodón antipilling con insignias bordadas o estampadas</image:caption>
+      <image:title>Confección de Buzos Escolares e Institucionales en Chillán</image:title>
+      <image:caption>Fabricación de buzos escolares en franela de algodón antipilling con insignias bordadas o estampadas para colegios y liceos</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://serendipiacreaciones.cl/assets/images/workwear.svg</image:loc>
+      <image:title>Ropa de Trabajo e Indumentaria Corporativa Industrial</image:title>
+      <image:caption>Confección y personalización de ropa de trabajo, pantalones cargo, chalecos geólogos y uniformes para empresas con logo bordado</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://serendipiacreaciones.cl/assets/images/windbreaker.svg</image:loc>
-      <image:title>Chaquetas Cortaviento Institucionales con Bordado o DTF</image:title>
-      <image:caption>Confección de chaquetas cortaviento impermeables con forro térmico y personalización en bordado o DTF</image:caption>
+      <image:title>Chaquetas Cortaviento Institucionales y Corporativas con Bordado o DTF</image:title>
+      <image:caption>Confección de chaquetas cortaviento impermeables con forro térmico y personalización en bordado computarizado o estampado DTF</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://serendipiacreaciones.cl/assets/images/jockey-cap.svg</image:loc>
-      <image:title>Jockeys Personalizados con Bordado 3D y Estampado DTF</image:title>
-      <image:caption>Personalización de jockeys en gabardina y microfibra con bordado 3D en relieve o estampado DTF</image:caption>
+      <image:title>Jockeys y Gorros Personalizados con Bordado 3D y Estampado DTF</image:title>
+      <image:caption>Personalización de jockeys en gabardina y microfibra con bordado frontal 3D en relieve o estampado DTF para empresas, clubes y eventos</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://serendipiacreaciones.cl/personalizador.html</loc>
+    <lastmod>2026-10-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://serendipiacreaciones.cl/assets/images/poleron-generacional.svg</image:loc>
+      <image:title>Personalizador 2D Online de Polerones Generacionales - Serendipia Creaciones</image:title>
+      <image:caption>Simulador y creador de mockups interactivo para diseñar polerones de 4° Medio, 8° Básico y cursos en modelos Americano, Canguro, Zipper, Neck y Polo</image:caption>
     </image:image>
   </url>
 </urlset>
