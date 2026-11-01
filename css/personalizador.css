@@ -1584,64 +1584,18 @@ body {
 
 
 /* ==========================================================================
-   PIE DE PÁGINA INFORMATIVO SEO (CATÁLOGO DE MODELOS Y CONFECCIÓN)
+   PIE DE PÁGINA: COPYRIGHT Y ENLACES
    ========================================================================== */
 .customizer-seo-footer {
   background: rgba(9, 13, 22, 0.95);
   border-top: 1px solid var(--border-subtle);
-  margin-top: 32px;
-  padding: 36px 20px 28px;
+  margin-top: 24px;
+  padding: 18px 20px;
 }
 
 .seo-footer-container {
   max-width: 1600px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-.seo-footer-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
-@media (max-width: 960px) {
-  .seo-footer-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-
-.seo-footer-col {
-  background: rgba(17, 24, 39, 0.6);
-  border: 1px solid rgba(51, 65, 85, 0.6);
-  border-radius: var(--radius-md);
-  padding: 18px;
-}
-
-.seo-footer-col h2 {
-  font-size: 0.92rem;
-  font-weight: 800;
-  color: var(--brand-cyan);
-  margin-bottom: 8px;
-}
-
-.seo-footer-col p {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
-}
-
-.seo-footer-col a {
-  color: #f472b6;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.seo-footer-col a:hover {
-  text-decoration: underline;
 }
 
 .seo-footer-bottom {
@@ -1650,8 +1604,6 @@ body {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(51, 65, 85, 0.5);
   font-size: 0.78rem;
   color: var(--text-muted);
 }
@@ -1669,4 +1621,506 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
+}
+
+
+/* ==========================================================================
+   MODAL GESTOR DE LISTA DE CURSO (ALUMNOS, APODOS Y TALLAS)
+   ========================================================================== */
+.btn-roster-open {
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  color: #ffffff;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+}
+
+.btn-roster-open:hover {
+  background: linear-gradient(135deg, #0369a1, #0284c7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.5);
+  border-color: #38bdf8;
+}
+
+.roster-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.roster-modal.active {
+  display: flex;
+}
+
+.roster-dialog {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+  animation: modalPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.roster-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.roster-title-box h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.roster-title-box p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.btn-close-roster {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.btn-close-roster:hover {
+  color: #ffffff;
+  background: var(--bg-input);
+}
+
+.roster-summary-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  background: #0b0f19;
+  border-bottom: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.roster-stat-card {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  background: #111827;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.roster-stat-num {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--brand-cyan);
+}
+
+.roster-stat-label {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.roster-sizes-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.size-pill-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--border-subtle);
+  color: #94a3b8;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.size-pill-tag strong {
+  color: #ffffff;
+  margin-left: 3px;
+}
+
+.roster-input-section {
+  padding: 16px 24px;
+  background: rgba(15, 23, 42, 0.5);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.roster-add-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.roster-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.roster-field-group label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.roster-field-group input,
+.roster-field-group select {
+  padding: 9px 12px;
+  background: #0f172a;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.roster-field-group input:focus,
+.roster-field-group select:focus {
+  border-color: var(--brand-cyan);
+}
+
+.btn-add-student {
+  background: linear-gradient(135deg, var(--brand-magenta), #c02675);
+  color: #ffffff;
+  border: none;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  box-shadow: 0 2px 10px var(--brand-magenta-glow);
+  height: 38px;
+}
+
+.btn-add-student:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+.btn-toggle-bulk {
+  background: transparent;
+  border: none;
+  color: var(--brand-cyan);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.btn-toggle-bulk:hover {
+  color: #38bdf8;
+}
+
+.roster-bulk-container {
+  margin-top: 8px;
+  background: #0b0f19;
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bulk-hint {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.bulk-hint strong {
+  color: var(--brand-cyan);
+}
+
+.roster-bulk-container textarea {
+  width: 100%;
+  background: #0f172a;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.82rem;
+  padding: 8px 10px;
+  resize: vertical;
+  outline: none;
+}
+
+.bulk-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-process-bulk {
+  background: var(--brand-cyan);
+  color: #090d16;
+  border: none;
+  padding: 6px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-process-bulk:hover {
+  filter: brightness(1.1);
+}
+
+.btn-cancel-bulk {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  cursor: pointer;
+}
+
+.roster-table-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 42vh;
+  padding: 0 24px;
+  position: relative;
+}
+
+.roster-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.roster-table th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  padding: 10px 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--border-subtle);
+  z-index: 2;
+}
+
+.roster-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+  vertical-align: middle;
+}
+
+.roster-table tr:hover {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+.roster-student-name {
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.roster-student-nick {
+  font-weight: 800;
+  color: #f472b6;
+  background: rgba(227, 51, 145, 0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  font-size: 0.8rem;
+}
+
+.roster-student-size-badge {
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0, 176, 208, 0.15);
+  color: var(--brand-cyan);
+  border: 1px solid rgba(0, 176, 208, 0.3);
+  display: inline-block;
+  text-align: center;
+  min-width: 32px;
+}
+
+.btn-remove-student {
+  background: transparent;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: all 0.15s;
+}
+
+.btn-remove-student:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.roster-empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.roster-empty-state span {
+  font-size: 2.2rem;
+}
+
+.roster-empty-state p {
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.roster-footer {
+  padding: 16px 24px;
+  background: rgba(15, 23, 42, 0.9);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.roster-footer-left,
+.roster-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-roster-export {
+  background: #1e293b;
+  border: 1px solid var(--border-subtle);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-roster-export:hover {
+  border-color: var(--brand-cyan);
+  color: var(--brand-cyan);
+}
+
+.btn-roster-clear {
+  background: transparent;
+  border: 1px solid transparent;
+  color: #ef4444;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-roster-clear:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.btn-roster-done {
+  background: linear-gradient(135deg, var(--brand-cyan), #0284c7);
+  color: #ffffff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 0.86rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 10px var(--brand-cyan-glow);
+  transition: all 0.2s;
+}
+
+.btn-roster-done:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .roster-add-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .roster-field-group {
+    width: 100%;
+  }
+  .btn-add-student {
+    justify-content: center;
+    width: 100%;
+  }
+  .roster-table-wrapper {
+    padding: 0 12px;
+  }
+  .roster-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .roster-footer-left,
+  .roster-footer-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .btn-roster-done {
+    width: 100%;
+    justify-content: center;
+  }
 }

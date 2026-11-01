@@ -493,6 +493,7 @@
       <div class="stage-action-bar">
         <div class="action-buttons-group">
           <!-- Botón de Cotización por WhatsApp con Desglose -->
+          <button type="button" class="btn-action btn-roster-open" id="btnOpenRosterModal"><span>📋</span><span>Lista de Curso (<strong id="rosterCountBadge">0</strong>)</span></button>
           <button type="button" class="btn-action btn-whatsapp-quote" id="btnWhatsAppQuote">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
               <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
@@ -525,26 +526,6 @@
        ========================================================================= -->
   <footer class="customizer-seo-footer" aria-label="Información de confección de polerones generacionales">
     <div class="seo-footer-container">
-      <div class="seo-footer-grid">
-        <article class="seo-footer-col">
-          <h2>Confección de Polerones Generacionales en Chillán y Todo Chile</h2>
-          <p>
-            En <strong>Serendipia Creaciones</strong> somos fabricantes especialistas en <strong>polerones generacionales para 4° Medio, 8° Básico, Kínder, Educación Básica, Institutos y Carreras Universitarias</strong>. Confeccionamos cada prenda desde cero en nuestro taller textil en Chillán utilizando <strong>franela de algodón reactiva antipilling</strong> de alto gramaje, con despacho a Concepción, Región de Ñuble, Región del Biobío y todo Chile.
-          </p>
-        </article>
-        <article class="seo-footer-col">
-          <h2>5 Familias y 28 Cortes Personalizables</h2>
-          <p>
-            Nuestro simulador 2D incluye todos los diseños favoritos de los cursos: <strong>Polerón Americano Universitario</strong> (con broches metálicos, franja de botones personalizable, cuello rib con líneas de contraste y opción de capucha), <strong>Polerón Canguro</strong> (clásico, manga ranglan, bicolor, franjas y cortes en V o zigzag), <strong>Polerón Zipper</strong> con cierre frontal completo, <strong>Polerón Polo</strong> cuello redondo y <strong>Polerón Neck</strong> con cuello alto y cierre 1/4.
-          </p>
-        </article>
-        <article class="seo-footer-col">
-          <h2>Bordados Computarizados, Matrices y Estampado DTF</h2>
-          <p>
-            Personaliza tu polerón con <strong>espaldas bordadas completas</strong> (año de generación, lista de curso, diseños especiales), <strong>apodos individuales bordados</strong> e insignias escolares. Además ofrecemos <a href="index.html#personalizacion">servicio de bordado industrial</a> en prendas propias, <a href="index.html#personalizacion">diseño de matrices de bordado (.DST, .PES, .EMB)</a> y <a href="index.html#personalizacion">estampado textil DTF full color</a>.
-          </p>
-        </article>
-      </div>
       <div class="seo-footer-bottom">
         <span>&copy; 2026 Serendipia Creaciones • Taller Textil en Chillán, Región de Ñuble, Chile • WhatsApp: <a href="https://wa.me/56942992424">+56 9 4299 2424</a></span>
         <nav aria-label="Enlaces rápidos del taller" class="seo-footer-links">
@@ -558,6 +539,127 @@
       </div>
     </div>
   </footer>
+
+
+  <!-- =========================================================================
+       MODAL: GESTOR DE LISTA DE CURSO (ALUMNOS, APODOS Y TALLAS)
+       ========================================================================= -->
+  <div class="roster-modal" id="rosterModal" role="dialog" aria-modal="true" aria-labelledby="rosterModalTitle">
+    <div class="roster-dialog">
+      <!-- Cabecera -->
+      <div class="roster-header">
+        <div class="roster-title-box">
+          <h3 id="rosterModalTitle">📋 Lista de Curso: Apodos y Tallas</h3>
+          <p>Organiza los nombres, apodos a bordar y tallas de cada alumno para cotizar con precisión</p>
+        </div>
+        <button type="button" class="btn-close-roster" id="btnCloseRosterModal" aria-label="Cerrar ventana">✕</button>
+      </div>
+
+      <!-- Barra de Resumen en Tiempo Real -->
+      <div class="roster-summary-bar">
+        <div class="roster-stat-card">
+          <span class="roster-stat-num" id="rosterTotalStudents">0</span>
+          <span class="roster-stat-label">Total Alumnos</span>
+        </div>
+        <div class="roster-stat-card">
+          <span class="roster-stat-num" id="rosterTotalNicks">0</span>
+          <span class="roster-stat-label">Apodos a Bordar</span>
+        </div>
+        <div class="roster-sizes-pills" id="rosterSizesBreakdown">
+          <span class="size-pill-tag">Sin alumnos aún</span>
+        </div>
+      </div>
+
+      <!-- Formulario para agregar rápido -->
+      <div class="roster-input-section">
+        <form id="formAddStudent" class="roster-add-form" onsubmit="return false;">
+          <div class="roster-field-group" style="flex: 2;">
+            <label for="inputStudentName">Nombre del Alumno</label>
+            <input type="text" id="inputStudentName" placeholder="Ej. Matías González" autocomplete="off">
+          </div>
+          <div class="roster-field-group" style="flex: 1.5;">
+            <label for="inputStudentNick">Apodo a Bordar</label>
+            <input type="text" id="inputStudentNick" placeholder="Ej. #MATI" autocomplete="off">
+          </div>
+          <div class="roster-field-group" style="flex: 1;">
+            <label for="selectStudentSize">Talla</label>
+            <select id="selectStudentSize">
+              <option value="12">12 (Niño)</option>
+              <option value="14">14 (Niño)</option>
+              <option value="16">16 (Niño)</option>
+              <option value="XS">XS</option>
+              <option value="S" selected>S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="2XL">2XL</option>
+              <option value="3XL">3XL</option>
+            </select>
+          </div>
+          <button type="button" class="btn-add-student" id="btnAddStudent">
+            <span>➕</span>
+            <span>Agregar</span>
+          </button>
+        </form>
+
+        <!-- Pestaña colapsable para pegar desde Excel -->
+        <div class="roster-bulk-toggle">
+          <button type="button" class="btn-toggle-bulk" id="btnToggleBulk">
+            <span>📋</span>
+            <span>¿Tienes la lista en Excel o WhatsApp? Haz clic para pegar en bloque</span>
+          </button>
+          <div class="roster-bulk-container" id="rosterBulkContainer" style="display: none;">
+            <p class="bulk-hint">Pega los datos de tu curso (un alumno por línea). Formato: <strong>Nombre, Apodo, Talla</strong> (o separados por tabulaciones de Excel):</p>
+            <textarea id="textareaBulkRoster" rows="4" placeholder="Matías González, #MATI, M&#10;Valentina Silva, VALE, S&#10;Benjamín Rojas, BENJA, L"></textarea>
+            <div class="bulk-actions">
+              <button type="button" class="btn-process-bulk" id="btnProcessBulk">Procesar y Cargar Lista</button>
+              <button type="button" class="btn-cancel-bulk" id="btnCancelBulk">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de Alumnos -->
+      <div class="roster-table-wrapper">
+        <table class="roster-table" id="rosterTable">
+          <thead>
+            <tr>
+              <th style="width: 44px;">#</th>
+              <th>Nombre del Alumno</th>
+              <th>Apodo Bordado</th>
+              <th style="width: 90px; text-align: center;">Talla</th>
+              <th style="width: 60px; text-align: center;">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="rosterTableBody">
+            <!-- Renderizado dinámicamente -->
+          </tbody>
+        </table>
+        <div class="roster-empty-state" id="rosterEmptyState">
+          <span>👥</span>
+          <p>Aún no has agregado alumnos a la lista de curso.<br>Agrega uno arriba o pega tu lista desde Excel.</p>
+        </div>
+      </div>
+
+      <!-- Pie del Modal con Acciones de Exportación -->
+      <div class="roster-footer">
+        <div class="roster-footer-left">
+          <button type="button" class="btn-roster-export" id="btnExportCsv">
+            <span>📥</span>
+            <span>Descargar Lista en Excel (.CSV)</span>
+          </button>
+          <button type="button" class="btn-roster-clear" id="btnClearRoster">
+            <span>🗑️ Limpiar Lista</span>
+          </button>
+        </div>
+        <div class="roster-footer-right">
+          <button type="button" class="btn-roster-done" id="btnDoneRoster">
+            <span>✓ Guardar y Volver</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- =========================================================================
        MODAL DE SELECCIÓN DE MODELOS Y CORTES

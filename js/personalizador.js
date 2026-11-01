@@ -186,7 +186,8 @@
     newImageUploadTarget: 'frente',
 
     activeView: 'ambos', // 'ambos', 'frente', o 'espalda'
-    hasPickedInitialModel: false
+    hasPickedInitialModel: false,
+    students: []
   };
 
   // -------------------------------------------------------------------------
@@ -276,7 +277,32 @@
     btnDownloadPng: document.getElementById('btnDownloadPng'),
     btnResetAll: document.getElementById('btnResetAll'),
     toastNotice: document.getElementById('toastNotice'),
-    toastMessage: document.getElementById('toastMessage')
+    toastMessage: document.getElementById('toastMessage'),
+
+    // GESTOR DE LISTA DE CURSO (ROSTER)
+    btnOpenRosterModal: document.getElementById('btnOpenRosterModal'),
+    rosterCountBadge: document.getElementById('rosterCountBadge'),
+    rosterModal: document.getElementById('rosterModal'),
+    btnCloseRosterModal: document.getElementById('btnCloseRosterModal'),
+    rosterTotalStudents: document.getElementById('rosterTotalStudents'),
+    rosterTotalNicks: document.getElementById('rosterTotalNicks'),
+    rosterSizesBreakdown: document.getElementById('rosterSizesBreakdown'),
+    formAddStudent: document.getElementById('formAddStudent'),
+    btnAddStudent: document.getElementById('btnAddStudent'),
+    inputStudentName: document.getElementById('inputStudentName'),
+    inputStudentNick: document.getElementById('inputStudentNick'),
+    selectStudentSize: document.getElementById('selectStudentSize'),
+    btnToggleBulk: document.getElementById('btnToggleBulk'),
+    rosterBulkContainer: document.getElementById('rosterBulkContainer'),
+    textareaBulkRoster: document.getElementById('textareaBulkRoster'),
+    btnProcessBulk: document.getElementById('btnProcessBulk'),
+    btnCancelBulk: document.getElementById('btnCancelBulk'),
+    rosterTable: document.getElementById('rosterTable'),
+    rosterTableBody: document.getElementById('rosterTableBody'),
+    rosterEmptyState: document.getElementById('rosterEmptyState'),
+    btnExportCsv: document.getElementById('btnExportCsv'),
+    btnClearRoster: document.getElementById('btnClearRoster'),
+    btnDoneRoster: document.getElementById('btnDoneRoster')
   };
 
   // -------------------------------------------------------------------------
@@ -287,6 +313,7 @@
     setSubmodel('canguro', 'canguro_regular');
     renderTextList();
     renderImageList();
+    initRosterFromStorage();
     setupEventListeners();
     setupTabNavigation();
     // Mostrar Paso 1 (Elección de Tipo de Polerón) al abrir la página
@@ -1780,13 +1807,29 @@
       });
     }
 
+    let rosterDetails = '';
+    if (state.students.length > 0) {
+      const countsBySize = {};
+      state.students.forEach(s => {
+        const sz = s.size || 'M';
+        countsBySize[sz] = (countsBySize[sz] || 0) + 1;
+      });
+      const sizesSummary = Object.keys(countsBySize).map(sz => `${sz}: ${countsBySize[sz]}`).join(' | ');
+      rosterDetails += `\n📋 *Lista de Alumnos (${state.students.length} polerones):*\n`;
+      rosterDetails += `• *Desglose de tallas:* ${sizesSummary}\n`;
+      state.students.forEach((s, idx) => {
+        const nickPart = s.nick ? ` (Apodo: *${s.nick}*)` : '';
+        rosterDetails += `  ${idx + 1}. ${s.name} - Talla *${s.size}*${nickPart}\n`;
+      });
+    }
+
     const message = `¡Hola Serendipia Creaciones! 👋
 Acabo de crear este diseño en su *Personalizador de Polerones* y quisiera cotizarlo para mi curso:
 
 🧥 *Modelo:* ${sub.name}
 
 🎨 *Combinación de Colores:*
-${colorsList}${extraDetails}
+${colorsList}${extraDetails}${rosterDetails}
 📎 *(Te adjunto aquí mismo la imagen del diseño recién generada)*
 
 ¿Podrían indicarme los valores por cantidad, tallas disponibles y tiempos de confección? ¡Muchas gracias!`;
@@ -1852,8 +1895,291 @@ ${colorsList}${extraDetails}
   // -------------------------------------------------------------------------
   // 16. EVENT LISTENERS GENERALES
   // -------------------------------------------------------------------------
+  
+  // -------------------------------------------------------------------------
+  // GESTOR DE LISTA DE CURSO: ALUMNOS, APODOS Y TALLAS
+  // -------------------------------------------------------------------------
+  function initRosterFromStorage() {
+    state.students = [];
+    try {
+      const saved = localStorage.getItem('serendipia_curso_roster');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          state.students = parsed;
+        }
+      }
+    } catch (_) {}
+    renderRoster();
+  }
+
+  function saveRosterToStorage() {
+    try {
+      localStorage.setItem('serendipia_curso_roster', JSON.stringify(state.students));
+    } catch (_) {}
+    renderRoster();
+  }
+
+  function renderRoster() {
+    if (!Array.isArray(state.students)) state.students = [];
+    if (!elements.rosterTableBody) return;
+    elements.rosterTableBody.innerHTML = '';
+
+    const count = state.students.length;
+    if (elements.rosterCountBadge) elements.rosterCountBadge.textContent = count;
+    if (elements.rosterTotalStudents) elements.rosterTotalStudents.textContent = count;
+
+    const nicksCount = state.students.filter(s => s.nick && s.nick.trim().length > 0).length;
+    if (elements.rosterTotalNicks) elements.rosterTotalNicks.textContent = nicksCount;
+
+    // Desglose de tallas
+    if (elements.rosterSizesBreakdown) {
+      if (count === 0) {
+        elements.rosterSizesBreakdown.innerHTML = '<span class="size-pill-tag">Sin alumnos aún</span>';
+      } else {
+        const countsBySize = {};
+        state.students.forEach(s => {
+          const sz = s.size || 'M';
+          countsBySize[sz] = (countsBySize[sz] || 0) + 1;
+        });
+        const order = ['12', '14', '16', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'];
+        const sortedSizes = Object.keys(countsBySize).sort((a, b) => {
+          const ia = order.indexOf(a);
+          const ib = order.indexOf(b);
+          return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+        });
+        elements.rosterSizesBreakdown.innerHTML = sortedSizes
+          .map(sz => `<span class="size-pill-tag">${sz}: <strong>${countsBySize[sz]}</strong></span>`)
+          .join('');
+      }
+    }
+
+    if (count === 0) {
+      if (elements.rosterEmptyState) elements.rosterEmptyState.style.display = 'flex';
+      if (elements.rosterTable) elements.rosterTable.style.display = 'none';
+      return;
+    }
+
+    if (elements.rosterEmptyState) elements.rosterEmptyState.style.display = 'none';
+    if (elements.rosterTable) elements.rosterTable.style.display = 'table';
+
+    state.students.forEach((stu, index) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="color: var(--text-muted); font-size: 0.78rem;">${index + 1}</td>
+        <td><span class="roster-student-name">${stu.name}</span></td>
+        <td>${stu.nick ? `<span class="roster-student-nick">${stu.nick}</span>` : '<span style="color: var(--text-muted); font-size: 0.76rem;">(Sin apodo)</span>'}</td>
+        <td style="text-align: center;"><span class="roster-student-size-badge">${stu.size}</span></td>
+        <td style="text-align: center;">
+          <button type="button" class="btn-remove-student" title="Eliminar alumno" data-index="${index}">✕</button>
+        </td>
+      `;
+
+      const delBtn = tr.querySelector('.btn-remove-student');
+      if (delBtn) {
+        delBtn.addEventListener('click', () => {
+          state.students.splice(index, 1);
+          saveRosterToStorage();
+          showToast('Alumno eliminado de la lista');
+        });
+      }
+
+      elements.rosterTableBody.appendChild(tr);
+    });
+  }
+
+  function addStudent(name, nick, size) {
+    if (!name || !name.trim()) return;
+    state.students.push({
+      name: name.trim(),
+      nick: (nick || '').trim(),
+      size: (size || 'S').trim().toUpperCase()
+    });
+    saveRosterToStorage();
+    showToast(`${name.trim()} agregado a la lista`);
+  }
+
+  function processBulkRoster(rawText) {
+    if (!rawText || !rawText.trim()) return;
+    const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    let added = 0;
+
+    lines.forEach(line => {
+      // Separar por coma, tab o punto y coma
+      const parts = line.split(/[\t,;]+/).map(p => p.trim()).filter(Boolean);
+      if (parts.length >= 1) {
+        const name = parts[0];
+        let nick = '';
+        let size = 'M';
+
+        if (parts.length === 2) {
+          // Detectar si la segunda parte es talla o apodo
+          const candidateSize = parts[1].toUpperCase();
+          if (['12', '14', '16', 'XS', 'S', 'M', 'L', 'XL', '2XL', '3XL'].includes(candidateSize)) {
+            size = candidateSize;
+          } else {
+            nick = parts[1];
+          }
+        } else if (parts.length >= 3) {
+          nick = parts[1];
+          size = parts[2].toUpperCase();
+        }
+
+        state.students.push({ name, nick, size });
+        added++;
+      }
+    });
+
+    if (added > 0) {
+      saveRosterToStorage();
+      showToast(`¡${added} alumnos agregados en bloque!`);
+    }
+  }
+
+  function exportRosterToCsv() {
+    if (state.students.length === 0) {
+      alert('Aún no has agregado alumnos a la lista');
+      return;
+    }
+    const cat = CATALOG[state.categoryKey];
+    const sub = cat.submodels.find(s => s.id === state.submodelId);
+    let csv = `# LISTA DE CURSO - POLERONES GENERACIONALES\n`;
+    csv += `# Modelo: ${sub.name}\n`;
+    csv += `# Total Alumnos: ${state.students.length}\n\n`;
+    csv += `Numero,Nombre del Alumno,Apodo Bordado,Talla\n`;
+
+    state.students.forEach((s, idx) => {
+      const cleanName = `"${s.name.replace(/"/g, '""')}"`;
+      const cleanNick = `"${(s.nick || '').replace(/"/g, '""')}"`;
+      csv += `${idx + 1},${cleanName},${cleanNick},${s.size}\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `lista-alumnos-poleron-${state.submodelId}.csv`;
+    link.click();
+    showToast('Archivo CSV descargado para Excel');
+  }
+
+  function setupRosterListeners() {
+    if (elements.btnOpenRosterModal) {
+      elements.btnOpenRosterModal.addEventListener('click', () => {
+        if (elements.rosterModal) elements.rosterModal.classList.add('active');
+        renderRoster();
+      });
+    }
+
+    if (elements.btnCloseRosterModal) {
+      elements.btnCloseRosterModal.addEventListener('click', () => {
+        if (elements.rosterModal) elements.rosterModal.classList.remove('active');
+      });
+    }
+
+    if (elements.btnDoneRoster) {
+      elements.btnDoneRoster.addEventListener('click', () => {
+        if (elements.rosterModal) elements.rosterModal.classList.remove('active');
+        showToast('Lista de alumnos guardada');
+      });
+    }
+
+    if (elements.rosterModal) {
+      elements.rosterModal.addEventListener('click', (e) => {
+        if (e.target === elements.rosterModal) {
+          elements.rosterModal.classList.remove('active');
+        }
+      });
+    }
+
+    const handleAddStudent = () => {
+      const name = elements.inputStudentName ? elements.inputStudentName.value.trim() : '';
+      const nick = elements.inputStudentNick ? elements.inputStudentNick.value.trim() : '';
+      const size = elements.selectStudentSize ? elements.selectStudentSize.value : 'M';
+      if (!name) {
+        showToast('⚠️ Por favor escribe el nombre del alumno');
+        if (elements.inputStudentName) elements.inputStudentName.focus();
+        return;
+      }
+      addStudent(name, nick, size);
+      if (elements.inputStudentName) {
+        elements.inputStudentName.value = '';
+        elements.inputStudentName.focus();
+      }
+      if (elements.inputStudentNick) {
+        elements.inputStudentNick.value = '';
+      }
+    };
+
+    if (elements.btnAddStudent) {
+      elements.btnAddStudent.addEventListener('click', handleAddStudent);
+    }
+
+    if (elements.formAddStudent) {
+      elements.formAddStudent.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleAddStudent();
+      });
+    }
+
+    if (elements.inputStudentName) {
+      elements.inputStudentName.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAddStudent();
+        }
+      });
+    }
+
+    if (elements.inputStudentNick) {
+      elements.inputStudentNick.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAddStudent();
+        }
+      });
+    }
+
+    if (elements.btnToggleBulk && elements.rosterBulkContainer) {
+      elements.btnToggleBulk.addEventListener('click', () => {
+        const isHidden = elements.rosterBulkContainer.style.display === 'none';
+        elements.rosterBulkContainer.style.display = isHidden ? 'flex' : 'none';
+        if (isHidden && elements.textareaBulkRoster) elements.textareaBulkRoster.focus();
+      });
+    }
+
+    if (elements.btnCancelBulk && elements.rosterBulkContainer) {
+      elements.btnCancelBulk.addEventListener('click', () => {
+        elements.rosterBulkContainer.style.display = 'none';
+      });
+    }
+
+    if (elements.btnProcessBulk && elements.textareaBulkRoster) {
+      elements.btnProcessBulk.addEventListener('click', () => {
+        processBulkRoster(elements.textareaBulkRoster.value);
+        elements.textareaBulkRoster.value = '';
+        if (elements.rosterBulkContainer) elements.rosterBulkContainer.style.display = 'none';
+      });
+    }
+
+    if (elements.btnExportCsv) {
+      elements.btnExportCsv.addEventListener('click', exportRosterToCsv);
+    }
+
+    if (elements.btnClearRoster) {
+      elements.btnClearRoster.addEventListener('click', () => {
+        if (state.students.length === 0) return;
+        if (confirm('¿Estás seguro de que deseas vaciar toda la lista de alumnos?')) {
+          state.students = [];
+          saveRosterToStorage();
+          showToast('Lista vaciada');
+        }
+      });
+    }
+  }
+
   function setupEventListeners() {
     setupModalPicker();
+    setupRosterListeners();
 
     // Selector de parte desde dropdown
     elements.partSelectorDropdown.addEventListener('change', (e) => {
