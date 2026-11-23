@@ -1,52 +1,78 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%" fill="none">
   <defs>
-    <linearGradient id="hoodieBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#091b29" />
-      <stop offset="100%" stop-color="#0f293d" />
+    <radialGradient id="shBg" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#132544"/>
+      <stop offset="60%" stop-color="#0b1528"/>
+      <stop offset="100%" stop-color="#060b16"/>
+    </radialGradient>
+    <linearGradient id="shFabric" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#1e40af"/>
+      <stop offset="50%" stop-color="#1e3a8a"/>
+      <stop offset="100%" stop-color="#172554"/>
     </linearGradient>
-    <linearGradient id="hoodieFabric" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e3a8a" />
-      <stop offset="100%" stop-color="#172554" />
+    <linearGradient id="shSleeve" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#172554"/>
     </linearGradient>
+    <filter id="shShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#000000" flood-opacity="0.65"/>
+    </filter>
   </defs>
 
-  <rect width="400" height="260" rx="16" fill="url(#hoodieBg)"/>
+  <rect width="400" height="260" fill="url(#shBg)"/>
+  <ellipse cx="200" cy="130" rx="155" ry="95" fill="#3b82f6" opacity="0.1"/>
+  <ellipse cx="200" cy="240" rx="106" ry="8" fill="#000000" opacity="0.45"/>
 
-  <!-- Buzo Escolar Franela de Algodón con Costura Reforzada -->
-  <g transform="translate(110, 25)">
-    <!-- Cuerpo y mangas del buzo -->
-    <path d="M45 40 L10 75 L30 115 L50 95 V195 H130 V95 L150 115 L170 75 L135 40 Q90 55 45 40 Z" 
-          fill="url(#hoodieFabric)" 
-          stroke="#3b82f6" 
-          stroke-width="2"/>
-    
-    <!-- Cuello redondo con rib elástico -->
-    <path d="M60 40 Q90 60 120 40 Q90 50 60 40 Z" fill="#1d4ed8" stroke="#60a5fa" stroke-width="1.5"/>
+  <!-- Polerón / Chaqueta de Buzo Escolar Institucional -->
+  <g filter="url(#shShadow)">
+    <!-- Manga Izquierda con franja deportiva -->
+    <path d="M 134 52 C 110 60, 88 92, 74 178 L 98 184 C 110 136, 122 110, 136 102 Z"
+          fill="url(#shSleeve)" stroke="#3b82f6" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 122 60 C 102 82, 88 122, 80 176" stroke="#ffffff" stroke-width="2.5" opacity="0.85"/>
+    <path d="M 127 62 C 107 84, 93 124, 85 178" stroke="#ef4444" stroke-width="2.5" opacity="0.9"/>
+    <!-- Puño Izquierdo -->
+    <path d="M 74 178 L 98 184 L 95 196 C 86 196, 78 194, 72 190 Z" fill="#0f172a" stroke="#60a5fa" stroke-width="1"/>
 
-    <!-- Costuras dobles reforzadas en hombros y sisas -->
-    <path d="M45 43 L10 77 M48 47 L15 80" stroke="#93c5fd" stroke-width="1" stroke-dasharray="3 2"/>
-    <path d="M135 43 L170 77 M132 47 L165 80" stroke="#93c5fd" stroke-width="1" stroke-dasharray="3 2"/>
-    
-    <!-- Cintura y puños con ribbing elástico -->
-    <rect x="50" y="185" width="80" height="10" fill="#1d4ed8" stroke="#3b82f6" stroke-width="1"/>
-    
-    <!-- Escudo del colegio bordado en el pecho izquierdo -->
-    <rect x="65" y="70" width="22" height="26" rx="4" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
-    <path d="M71 78 H81 M71 83 H81 M76 75 V88" stroke="#b45309" stroke-width="1.2"/>
+    <!-- Manga Derecha con franja deportiva -->
+    <path d="M 266 52 C 290 60, 312 92, 326 178 L 302 184 C 290 136, 278 110, 264 102 Z"
+          fill="url(#shFabric)" stroke="#3b82f6" stroke-width="1.2" stroke-linejoin="round"/>
+    <path d="M 278 60 C 298 82, 312 122, 320 176" stroke="#ffffff" stroke-width="2.5" opacity="0.85"/>
+    <path d="M 273 62 C 293 84, 307 124, 315 178" stroke="#ef4444" stroke-width="2.5" opacity="0.9"/>
+    <!-- Puño Derecho -->
+    <path d="M 326 178 L 302 184 L 305 196 C 314 196, 322 194, 328 190 Z" fill="#0f172a" stroke="#60a5fa" stroke-width="1"/>
 
-    <!-- Detalle de vivos combinados institucionales -->
-    <line x1="50" y1="120" x2="130" y2="120" stroke="#ef4444" stroke-width="4"/>
-    <line x1="50" y1="126" x2="130" y2="126" stroke="#ffffff" stroke-width="2"/>
-  </g>
+    <!-- Cuerpo Principal -->
+    <path d="M 134 52 C 156 42, 244 42, 266 52 L 264 218 C 240 224, 160 224, 136 218 Z"
+          fill="url(#shFabric)" stroke="#3b82f6" stroke-width="1.3" stroke-linejoin="round"/>
 
-  <!-- Tag de terminaciones -->
-  <rect x="20" y="20" width="135" height="42" rx="8" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(59, 130, 246, 0.3)"/>
-  <text x="30" y="38" fill="#60a5fa" font-family="monospace" font-size="10" font-weight="bold">BUZOS ESCOLARES</text>
-  <text x="30" y="51" fill="#94a3b8" font-family="monospace" font-size="9">Franela Algodón • Antipilling</text>
+    <!-- Cuello alto institucional con rib -->
+    <path d="M 168 44 C 178 30, 222 30, 232 44 L 228 56 C 214 62, 186 62, 172 56 Z"
+          fill="#0f172a" stroke="#60a5fa" stroke-width="1.3"/>
+    <path d="M 173 43 C 188 49, 212 49, 227 43" stroke="#ffffff" stroke-width="1.6" opacity="0.85"/>
 
-  <!-- Sello de costuras -->
-  <g transform="translate(250, 205)">
-    <rect width="130" height="34" rx="17" fill="rgba(59, 130, 246, 0.15)" stroke="#3b82f6" stroke-width="1"/>
-    <text x="65" y="21" text-anchor="middle" fill="#93c5fd" font-family="sans-serif" font-size="11" font-weight="600">Costura 5 Hilos</text>
+    <!-- Cierre central sutil -->
+    <line x1="200" y1="54" x2="200" y2="220" stroke="#93c5fd" stroke-opacity="0.45" stroke-width="2"/>
+    <rect x="197.5" y="64" width="5" height="9" rx="2" fill="#e2e8f0"/>
+
+    <!-- Franjas horizontales institucionales en pecho -->
+    <rect x="136.5" y="132" width="127" height="7" fill="#ef4444"/>
+    <rect x="136.5" y="140" width="127" height="3.5" fill="#ffffff"/>
+
+    <!-- Escudo Institucional Bordado (Pecho Izquierdo del usuario / derecha visual) -->
+    <g transform="translate(228, 86)">
+      <path d="M 0 -14 L 13 -9 V 4 C 13 13, 0 19, 0 19 C 0 19, -13 13, -13 4 V -9 Z"
+            fill="#fbbf24" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M 0 -9 L 8 -5.5 V 3 C 8 9, 0 13, 0 13 C 0 13, -8 9, -8 3 V -5.5 Z"
+            fill="#1e3a8a"/>
+      <path d="M -4 2 L 0 -3 L 4 2 L 0 7 Z" fill="#fde047"/>
+    </g>
+
+    <!-- Bolsillos laterales -->
+    <line x1="150" y1="168" x2="162" y2="196" stroke="#60a5fa" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+    <line x1="250" y1="168" x2="238" y2="196" stroke="#60a5fa" stroke-opacity="0.55" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Pretina inferior rib -->
+    <path d="M 136 214 C 160 220, 240 220, 264 214 L 263 228 C 240 234, 160 234, 137 228 Z"
+          fill="#0f172a" stroke="#3b82f6" stroke-width="1.2"/>
   </g>
 </svg>

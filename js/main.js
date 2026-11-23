@@ -40,7 +40,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3. Filtrado Interactivo del Portafolio
+  // 3. Pestañas de Servicios (Confección | Bordado, Matrices y DTF)
+  const serviceTabBtns = document.querySelectorAll('.service-tab-btn');
+  const serviceTabPanels = document.querySelectorAll('.service-tab-panel');
+
+  serviceTabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetTab = btn.getAttribute('data-service-tab');
+
+      serviceTabBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+
+      serviceTabPanels.forEach(panel => {
+        if (panel.id === `panel-${targetTab}`) {
+          panel.hidden = false;
+          panel.classList.add('active');
+        } else {
+          panel.hidden = true;
+          panel.classList.remove('active');
+        }
+      });
+    });
+  });
+
+  // 4. Filtrado Interactivo del Portafolio
   const filterBtns = document.querySelectorAll('.filter-btn');
   const portfolioItems = document.querySelectorAll('.portfolio-item');
 

@@ -1,73 +1,74 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%" fill="none">
   <defs>
-    <linearGradient id="wbBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a1120" />
-      <stop offset="100%" stop-color="#111c33" />
+    <radialGradient id="wbStudio" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#11273a"/>
+      <stop offset="60%" stop-color="#0b1424"/>
+      <stop offset="100%" stop-color="#060a12"/>
+    </radialGradient>
+    <linearGradient id="wbDark" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#273549"/>
+      <stop offset="50%" stop-color="#152033"/>
+      <stop offset="100%" stop-color="#0c1322"/>
     </linearGradient>
-    <linearGradient id="wbFabric" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e293b" />
-      <stop offset="100%" stop-color="#0f172a" />
+    <linearGradient id="wbUpper" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0.18"/>
     </linearGradient>
-    <linearGradient id="cyanAccent" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#33c9e6" />
-      <stop offset="100%" stop-color="#00b0d0" />
-    </linearGradient>
-    <linearGradient id="magentaAccent" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f05cae" />
-      <stop offset="100%" stop-color="#e33391" />
-    </linearGradient>
+    <filter id="wbShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#000000" flood-opacity="0.65"/>
+    </filter>
   </defs>
 
-  <rect width="400" height="260" rx="16" fill="url(#wbBg)"/>
+  <rect width="400" height="260" fill="url(#wbStudio)"/>
+  <ellipse cx="200" cy="128" rx="160" ry="95" fill="#00b0d0" opacity="0.12"/>
+  <ellipse cx="200" cy="240" rx="108" ry="8" fill="#000000" opacity="0.45"/>
 
-  <!-- Cuadrícula técnica textil de fondo -->
-  <line x1="20" y1="130" x2="380" y2="130" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4 4"/>
-  <line x1="200" y1="20" x2="200" y2="240" stroke="rgba(255,255,255,0.06)" stroke-dasharray="4 4"/>
+  <!-- Chaqueta Cortaviento Técnica Impermeable -->
+  <g filter="url(#wbShadow)">
+    <!-- Capucha posterior integrada -->
+    <path d="M 164 42 C 174 18, 226 18, 236 42 Z" fill="#1e293b" stroke="#475569" stroke-width="1.2"/>
 
-  <!-- Chaqueta Cortaviento Técnica -->
-  <g transform="translate(105, 20)">
-    <!-- Cuerpo y Mangas impermeables -->
-    <path d="M50 45 L10 85 L32 125 L56 102 V200 H134 V102 L158 125 L180 85 L140 45 Z" 
-          fill="url(#wbFabric)" 
-          stroke="#334155" 
-          stroke-width="2"/>
-    
-    <!-- Cuello alto con capucha integrada -->
-    <path d="M50 45 Q95 28 140 45 L135 60 Q95 48 55 60 Z" fill="#334155" stroke="#475569" stroke-width="1.5"/>
+    <!-- Manga Izquierda -->
+    <path d="M 134 52 C 108 60, 86 94, 72 180 L 96 186 C 109 138, 122 110, 136 102 Z"
+          fill="url(#wbDark)" stroke="#475569" stroke-width="1.2" stroke-linejoin="round"/>
+    <!-- Puño elástico -->
+    <path d="M 72 180 L 96 186 L 94 195 L 71 189 Z" fill="#0f172a" stroke="#33c9e6" stroke-width="1"/>
 
-    <!-- Paneles de contraste en hombros y pecho (Cyan & Magenta Serendipia) -->
-    <path d="M50 45 L95 55 L95 85 L56 102 Z" fill="rgba(0, 176, 208, 0.25)" stroke="#00b0d0" stroke-width="1.2"/>
-    <path d="M140 45 L95 55 L95 85 L134 102 Z" fill="rgba(227, 51, 145, 0.25)" stroke="#e33391" stroke-width="1.2"/>
+    <!-- Manga Derecha -->
+    <path d="M 266 52 C 292 60, 314 94, 328 180 L 304 186 C 291 138, 278 110, 264 102 Z"
+          fill="url(#wbDark)" stroke="#475569" stroke-width="1.2" stroke-linejoin="round"/>
+    <!-- Puño elástico -->
+    <path d="M 328 180 L 304 186 L 306 195 L 329 189 Z" fill="#0f172a" stroke="#33c9e6" stroke-width="1"/>
+
+    <!-- Cuerpo Principal -->
+    <path d="M 134 52 C 156 42, 244 42, 266 52 L 266 220 C 240 227, 160 227, 134 220 Z"
+          fill="url(#wbDark)" stroke="#475569" stroke-width="1.3" stroke-linejoin="round"/>
+
+    <!-- Panel Chevron Superior Técnico -->
+    <path d="M 134 52 C 156 42, 244 42, 266 52 L 265 104 L 200 124 L 135 104 Z"
+          fill="url(#wbUpper)"/>
+    <!-- Costura termosellada reflectiva en V -->
+    <path d="M 135 104 L 200 124 L 265 104" stroke="#33c9e6" stroke-width="2" stroke-linecap="round"/>
+
+    <!-- Cuello alto cortaviento -->
+    <path d="M 168 44 C 180 34, 220 34, 232 44 L 230 60 C 214 66, 186 66, 170 60 Z"
+          fill="#1e293b" stroke="#64748b" stroke-width="1.3"/>
 
     <!-- Cierre central impermeable sellado -->
-    <line x1="95" y1="52" x2="95" y2="200" stroke="#00b0d0" stroke-width="3"/>
-    <rect x="92" y="70" width="6" height="12" rx="2" fill="#f8fafc"/>
+    <line x1="200" y1="54" x2="200" y2="224" stroke="#33c9e6" stroke-width="2.6"/>
+    <rect x="197" y="64" width="6" height="11" rx="2" fill="#f8fafc"/>
 
-    <!-- Costuras termoselladas -->
-    <path d="M56 102 L95 108 L134 102" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3 2"/>
+    <!-- Bolsillos con cierre sellado -->
+    <line x1="148" y1="158" x2="164" y2="192" stroke="#33c9e6" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="252" y1="158" x2="236" y2="192" stroke="#33c9e6" stroke-width="2.2" stroke-linecap="round"/>
 
-    <!-- Bolsillos laterales con cierre -->
-    <line x1="68" y1="150" x2="82" y2="175" stroke="#00b0d0" stroke-width="2" stroke-linecap="round"/>
-    <line x1="122" y1="150" x2="108" y2="175" stroke="#e33391" stroke-width="2" stroke-linecap="round"/>
+    <!-- Logo corporativo bordado en pecho -->
+    <g transform="translate(226, 82)">
+      <rect x="-10" y="-10" width="20" height="20" rx="5" fill="#0f172a" stroke="#33c9e6" stroke-width="1.4"/>
+      <path d="M -4 3 L 0 -5 L 4 3 Z" fill="#e33391"/>
+    </g>
 
-    <!-- Logo / Escudo bordado en el pecho izquierdo -->
-    <rect x="68" y="72" width="18" height="18" rx="4" fill="#0f172a" stroke="#00b0d0" stroke-width="1.2"/>
-    <circle cx="77" cy="81" r="5" fill="#e33391"/>
-
-    <!-- Pretina y puños elásticos ajustables -->
-    <rect x="56" y="194" width="78" height="8" rx="2" fill="#1e293b" stroke="#475569" stroke-width="1"/>
-    <rect x="12" y="80" width="12" height="7" rx="1" fill="#1e293b" stroke="#475569" stroke-width="1" transform="rotate(-30 12 80)"/>
-    <rect x="168" y="75" width="12" height="7" rx="1" fill="#1e293b" stroke="#475569" stroke-width="1" transform="rotate(30 168 75)"/>
-  </g>
-
-  <!-- Tag de prenda técnica -->
-  <rect x="20" y="20" width="155" height="42" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="rgba(0, 176, 208, 0.35)"/>
-  <text x="30" y="38" fill="#33c9e6" font-family="monospace" font-size="10" font-weight="bold">CHAQUETA CORTAVIENTO</text>
-  <text x="30" y="51" fill="#94a3b8" font-family="monospace" font-size="9">Impermeable • Bordado / DTF</text>
-
-  <!-- Sello de durabilidad térmica -->
-  <g transform="translate(235, 205)">
-    <rect width="145" height="34" rx="17" fill="rgba(0, 176, 208, 0.15)" stroke="#00b0d0" stroke-width="1"/>
-    <text x="72" y="21" text-anchor="middle" fill="#67e8f9" font-family="sans-serif" font-size="11" font-weight="600">Tela Cortaviento &amp; Forro</text>
+    <!-- Dobladillo inferior con cordón ajustable -->
+    <path d="M 134 214 C 160 221, 240 221, 266 214" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3 2"/>
   </g>
 </svg>

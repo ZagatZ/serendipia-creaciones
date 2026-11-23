@@ -1,60 +1,111 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" width="100%" height="100%" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="100%" fill="none">
   <defs>
-    <linearGradient id="hoodieGenBg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#111827" />
-      <stop offset="100%" stop-color="#1e1b4b" />
+    <radialGradient id="pgStudio" cx="50%" cy="45%" r="60%">
+      <stop offset="0%" stop-color="#261c3d"/>
+      <stop offset="55%" stop-color="#111827"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </radialGradient>
+    <radialGradient id="pgGlow" cx="50%" cy="48%" r="42%">
+      <stop offset="0%" stop-color="#e33391" stop-opacity="0.22"/>
+      <stop offset="60%" stop-color="#00b0d0" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#00b0d0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="pgBody" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#2a364f"/>
+      <stop offset="45%" stop-color="#1b2438"/>
+      <stop offset="100%" stop-color="#101726"/>
     </linearGradient>
-    <linearGradient id="hoodieFabricGen" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1e293b" />
-      <stop offset="100%" stop-color="#0f172a" />
+    <linearGradient id="pgSleeveL" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#33415c"/>
+      <stop offset="100%" stop-color="#141c2e"/>
     </linearGradient>
-    <linearGradient id="embroideryThread" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#fbbf24" />
-      <stop offset="50%" stop-color="#f59e0b" />
-      <stop offset="100%" stop-color="#ec4899" />
+    <linearGradient id="pgSleeveR" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#28354d"/>
+      <stop offset="100%" stop-color="#0f1624"/>
     </linearGradient>
+    <linearGradient id="pgHood" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#364663"/>
+      <stop offset="100%" stop-color="#182235"/>
+    </linearGradient>
+    <linearGradient id="pgGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="50%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <filter id="pgShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#000000" flood-opacity="0.65"/>
+    </filter>
+    <path id="genArc" d="M 152,118 Q 200,98 248,118"/>
   </defs>
 
-  <!-- Fondo base oscuro -->
-  <rect width="400" height="280" rx="16" fill="url(#hoodieGenBg)"/>
-  
-  <!-- Espalda de Polerón Generacional con Capucha y Gran Bordado -->
-  <g transform="translate(100, 25)">
-    <!-- Silueta de la espalda y mangas -->
-    <path d="M40 50 L10 90 L30 135 L50 115 V215 H150 V115 L170 135 L190 90 L160 50 Q100 65 40 50 Z" 
-          fill="url(#hoodieFabricGen)" 
-          stroke="#475569" 
-          stroke-width="2"/>
-    
-    <!-- Capucha caída sobre la espalda (vista posterior) -->
-    <path d="M65 50 Q100 80 135 50 Q100 100 65 50 Z" fill="#334155" stroke="#ec4899" stroke-width="1.8"/>
+  <!-- Fondo estudio -->
+  <rect width="400" height="260" fill="url(#pgStudio)"/>
+  <ellipse cx="200" cy="130" rx="170" ry="110" fill="url(#pgGlow)"/>
 
-    <!-- Costuras dobles de sisa y hombros -->
-    <path d="M42 52 L12 92 M158 52 L188 92" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <!-- Sombra en suelo -->
+  <ellipse cx="200" cy="240" rx="108" ry="9" fill="#000000" opacity="0.45"/>
 
-    <!-- Bordado de Espalda de Gran Formato: GENERACIÓN 2026 -->
-    <rect x="52" y="90" width="96" height="58" rx="6" fill="rgba(251, 191, 36, 0.08)" stroke="rgba(251, 191, 36, 0.3)" stroke-width="1" stroke-dasharray="4 2"/>
-    
-    <!-- Texto bordado en arco simulado con puntada tatami de alta densidad -->
-    <text x="100" y="112" text-anchor="middle" fill="url(#embroideryThread)" font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="900" letter-spacing="1.5">GENERACIÓN</text>
-    <text x="100" y="138" text-anchor="middle" fill="#ffffff" font-family="'Plus Jakarta Sans', sans-serif" font-size="22" font-weight="900" letter-spacing="3">2026</text>
+  <!-- Polerón Generacional (Vista Espalda Realista) -->
+  <g filter="url(#pgShadow)">
+    <!-- Manga Izquierda -->
+    <path d="M 134 56 C 110 64, 88 94, 72 178 L 96 184 C 109 138, 122 112, 136 104 Z"
+          fill="url(#pgSleeveL)" stroke="#475569" stroke-width="1.2" stroke-linejoin="round"/>
+    <!-- Puño Izquierdo Rib -->
+    <path d="M 72 178 L 96 184 L 93 196 C 84 196, 76 194, 70 190 Z"
+          fill="#0f172a" stroke="#e33391" stroke-width="1"/>
+    <line x1="72" y1="184" x2="94" y2="190" stroke="#f8fafc" stroke-width="1.3" opacity="0.7"/>
 
-    <!-- Apodo bordado individual del alumno en la parte baja de la espalda -->
-    <rect x="68" y="160" width="64" height="20" rx="10" fill="rgba(139, 92, 246, 0.2)" stroke="#8b5cf6" stroke-width="1"/>
-    <text x="100" y="174" text-anchor="middle" fill="#c084fc" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700">#MATI • 4° MEDIO</text>
+    <!-- Manga Derecha -->
+    <path d="M 266 56 C 290 64, 312 94, 328 178 L 304 184 C 291 138, 278 112, 264 104 Z"
+          fill="url(#pgSleeveR)" stroke="#475569" stroke-width="1.2" stroke-linejoin="round"/>
+    <!-- Puño Derecho Rib -->
+    <path d="M 328 178 L 304 184 L 307 196 C 316 196, 324 194, 330 190 Z"
+          fill="#0f172a" stroke="#e33391" stroke-width="1"/>
+    <line x1="328" y1="184" x2="306" y2="190" stroke="#f8fafc" stroke-width="1.3" opacity="0.7"/>
 
-    <!-- Cintura y puños con rib elástico resistente -->
-    <rect x="50" y="205" width="100" height="10" fill="#0f172a" stroke="#334155" stroke-width="1"/>
-  </g>
+    <!-- Cuerpo Principal -->
+    <path d="M 134 56 C 154 46, 246 46, 266 56 L 264 218 C 242 224, 158 224, 136 218 Z"
+          fill="url(#pgBody)" stroke="#475569" stroke-width="1.3" stroke-linejoin="round"/>
 
-  <!-- Tag identificador de polerones generacionales -->
-  <rect x="20" y="20" width="170" height="42" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="rgba(236, 72, 153, 0.4)"/>
-  <text x="30" y="38" fill="#f472b6" font-family="monospace" font-size="10" font-weight="bold">POLERONES DE GENERACIÓN</text>
-  <text x="30" y="51" fill="#94a3b8" font-family="monospace" font-size="9">Todos los Cursos • Espalda Bordada</text>
+    <!-- Pliegues suaves de franela -->
+    <path d="M 148 110 C 145 148, 146 184, 149 214" stroke="#ffffff" stroke-opacity="0.06" stroke-width="3" stroke-linecap="round"/>
+    <path d="M 252 110 C 255 148, 254 184, 251 214" stroke="#000000" stroke-opacity="0.22" stroke-width="4" stroke-linecap="round"/>
 
-  <!-- Tag de producción propia en máquina industrial -->
-  <g transform="translate(225, 225)">
-    <rect width="145" height="34" rx="17" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b" stroke-width="1"/>
-    <text x="72" y="21" text-anchor="middle" fill="#fbbf24" font-family="sans-serif" font-size="11" font-weight="700">Espalda Bordada</text>
+    <!-- Pretina Inferior Rib -->
+    <path d="M 136 214 C 158 220, 242 220, 264 214 L 263 229 C 240 235, 160 235, 137 229 Z"
+          fill="#0f172a" stroke="#334155" stroke-width="1.2"/>
+    <path d="M 137 222 C 160 228, 240 228, 263 222" stroke="#e33391" stroke-width="1.4" opacity="0.8"/>
+
+    <!-- Capucha caída en la espalda -->
+    <path d="M 164 46 C 178 24, 222 24, 236 46 C 244 64, 234 86, 200 88 C 166 86, 156 64, 164 46 Z"
+          fill="url(#pgHood)" stroke="#64748b" stroke-width="1.2"/>
+    <path d="M 172 48 C 184 36, 216 36, 228 48 C 222 68, 178 68, 172 48 Z"
+          fill="#111827" opacity="0.65"/>
+    <!-- Costura central capucha -->
+    <path d="M 200 29 L 200 86" stroke="#94a3b8" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="3 2"/>
+
+    <!-- Bordado de Espalda en Relieve -->
+    <text font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11.5" font-weight="800" fill="url(#pgGold)" letter-spacing="2.2">
+      <textPath href="#genArc" startOffset="50%" text-anchor="middle">GENERACIÓN</textPath>
+    </text>
+
+    <!-- 2026 con sombra de bordado 3D -->
+    <text x="200" y="148" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="34" font-weight="900" fill="#000000" opacity="0.45" letter-spacing="2">2026</text>
+    <text x="200" y="146" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="34" font-weight="900" fill="#ffffff" stroke="#e33391" stroke-width="1.2" letter-spacing="2">2026</text>
+
+    <!-- Detalle laurel / línea decorativa bordada -->
+    <line x1="166" y1="158" x2="234" y2="158" stroke="url(#pgGold)" stroke-width="1.5" stroke-linecap="round" opacity="0.85"/>
+    <circle cx="200" cy="158" r="2.5" fill="#fde68a"/>
+
+    <!-- Lista de nombres estilizada + Apodo -->
+    <g opacity="0.55" stroke="#cbd5e1" stroke-width="1.4" stroke-linecap="round">
+      <line x1="170" y1="169" x2="194" y2="169"/>
+      <line x1="206" y1="169" x2="230" y2="169"/>
+      <line x1="174" y1="176" x2="196" y2="176"/>
+      <line x1="204" y1="176" x2="226" y2="176"/>
+    </g>
+
+    <!-- Apodo bordado individual -->
+    <text x="200" y="198" text-anchor="middle" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="10.5" font-weight="800" fill="#38bdf8" letter-spacing="1.6">4° MEDIO</text>
   </g>
 </svg>
